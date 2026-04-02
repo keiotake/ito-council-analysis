@@ -1,0 +1,9 @@
+node_modules/
+subtitles/
+*.mjs
+raw_urls.txt
+video_data.json
+transcript_progress.json
+yt-dlp.exe
+package.json
+package-lock.json
