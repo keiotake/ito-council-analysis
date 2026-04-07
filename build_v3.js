@@ -22,6 +22,8 @@ try { questionSummaries = JSON.parse(fs.readFileSync('question_summaries.json', 
 // 第五次伊東市総合計画（構造化データ）
 let sougouPlan = null;
 try { sougouPlan = JSON.parse(fs.readFileSync('data/sougoukeikaku_v5.json', 'utf-8')); } catch(e) { console.warn('sougoukeikaku_v5.json not found'); }
+let memberPolicyMap = null;
+try { memberPolicyMap = JSON.parse(fs.readFileSync('data/member_policy_map.json', 'utf-8')); } catch(e) { console.warn('member_policy_map.json not found'); }
 
 const { videos, memberSummary } = analysis;
 
@@ -565,6 +567,42 @@ nav button.active{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff}
 .sub-list li::before{content:'・';position:absolute;left:0;color:#4a90e2}
 .sub-label.challenge ~ .sub-list li::before{color:#e67e22}
 .kpi-raw{font-size:.73rem;color:#555;background:#f9fafc;padding:.5rem .7rem;border-radius:6px;white-space:pre-wrap;font-family:monospace;line-height:1.5;margin-top:.3rem}
+/* 議員×施策ヒートマップ */
+.heat-wrap{background:var(--card);border-radius:12px;padding:1rem;box-shadow:0 2px 10px rgba(0,0,0,.07);overflow-x:auto;margin-bottom:1rem}
+.heat-disclaimer{background:#fff5e6;border-left:4px solid #f39c12;padding:.7rem 1rem;border-radius:8px;margin-bottom:.8rem;font-size:.78rem;color:#7a5a00;line-height:1.55}
+.heat-disclaimer strong{color:#c06500}
+.heat-controls{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.7rem;align-items:center}
+.heat-controls select,.heat-controls input{padding:.4rem .7rem;border:1px solid #d5dbe6;border-radius:8px;font-size:.82rem;background:#fff}
+.heat-controls label{font-size:.78rem;color:var(--sub);font-weight:600}
+.heat-table{border-collapse:collapse;font-size:.72rem;min-width:100%}
+.heat-table th,.heat-table td{border:1px solid #eef1f5;padding:0;text-align:center}
+.heat-table th.member-col,.heat-table td.member-col{position:sticky;left:0;background:#fff;z-index:2;text-align:left;padding:.3rem .5rem;white-space:nowrap;font-weight:600;min-width:100px;max-width:120px;overflow:hidden;text-overflow:ellipsis;border-right:2px solid #d5dbe6}
+.heat-table thead th{position:sticky;top:0;background:#f0f4f8;z-index:3;padding:.3rem .2rem;font-size:.66rem;writing-mode:vertical-rl;transform:rotate(180deg);height:80px;white-space:nowrap;border-bottom:2px solid #d5dbe6;font-weight:600;color:var(--sub)}
+.heat-table thead th.member-col{writing-mode:initial;transform:none;height:auto;z-index:4;background:#e8eef6;text-align:left}
+.heat-table thead th.goal-sep{background:#e8eef6;color:#4a90e2;font-weight:700;writing-mode:initial;transform:none;height:auto;padding:.3rem .5rem;font-size:.72rem}
+.heat-cell{width:22px;height:22px;cursor:pointer;transition:.1s;display:block}
+.heat-cell:hover{outline:2px solid #4a90e2;outline-offset:-1px;z-index:5;position:relative}
+.heat-0{background:#fafbfd}
+.heat-1{background:#e3edf8}
+.heat-2{background:#b8d1ef}
+.heat-3{background:#7faadb}
+.heat-4{background:#4a7fc4}
+.heat-5{background:#2a5ba5}
+.heat-legend{display:flex;gap:.4rem;align-items:center;margin-top:.7rem;font-size:.72rem;color:var(--sub);flex-wrap:wrap}
+.heat-legend .lg-box{display:inline-block;width:16px;height:16px;border:1px solid #d5dbe6;vertical-align:middle;margin-right:.2rem}
+/* モーダル */
+.heat-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center;padding:1rem}
+.heat-modal.open{display:flex}
+.heat-modal-box{background:#fff;border-radius:14px;max-width:560px;width:100%;max-height:80vh;overflow-y:auto;padding:1.2rem 1.3rem;box-shadow:0 10px 40px rgba(0,0,0,.3)}
+.heat-modal-head{font-size:1rem;font-weight:700;margin-bottom:.4rem;color:var(--text);border-bottom:2px solid #4a90e2;padding-bottom:.4rem}
+.heat-modal-sub{font-size:.8rem;color:var(--sub);margin-bottom:.7rem;line-height:1.5}
+.heat-modal-close{float:right;background:#f0f4f8;border:none;border-radius:20px;padding:.3rem .9rem;cursor:pointer;font-size:.82rem;font-weight:600;color:var(--sub)}
+.heat-modal-close:hover{background:#e3edf8;color:#4a90e2}
+.heat-vid-item{display:block;padding:.6rem .8rem;background:#f9fafc;border-left:3px solid #4a90e2;border-radius:6px;margin-bottom:.5rem;text-decoration:none;color:var(--text);transition:.15s}
+.heat-vid-item:hover{background:#e8f0fe;transform:translateX(2px)}
+.heat-vid-title{font-size:.82rem;font-weight:600;color:var(--text);margin-bottom:.25rem;line-height:1.4}
+.heat-vid-meta{font-size:.7rem;color:var(--sub);display:flex;gap:.5rem;flex-wrap:wrap;align-items:center}
+.heat-vid-kw{font-size:.68rem;background:#e8f0fe;color:#4a90e2;padding:.1rem .4rem;border-radius:8px;font-weight:600}
 .back-btn{padding:.5rem 1rem;border:none;border-radius:10px;background:#f0f4f8;font-size:.9rem;cursor:pointer;font-weight:600;margin-bottom:1rem}
 .back-btn:hover{background:#e5e7eb}
 .detail-panel{display:none}
@@ -1057,8 +1095,48 @@ footer{text-align:center;padding:2rem;color:var(--sub);font-size:.8rem}
         <div class="plan-h3">🎯 5つの政策目標（クリックで施策を展開）</div>
         <div class="goals-grid">${goalCards}</div>
         <div id="plan-sub-detail" class="sub-detail"></div>
+
+        ${memberPolicyMap ? `
+        <div class="plan-h3">🗺️ 議員×施策マッピング<span class="plan-count">${memberPolicyMap.meta.total_matches}件</span></div>
+        <div class="heat-disclaimer">
+          <strong>⚠ このヒートマップの見方・限界</strong><br>
+          ・動画タイトル・質問テキストに含まれる<strong>キーワードの機械的一致</strong>から「言及の有無」のみを示しています。<br>
+          ・発言の<strong>賛否・質・評価は含みません</strong>。色の濃さは言及回数の多さであり、議員の優劣や貢献度ではありません。<br>
+          ・文脈は必ず該当動画で確認してください。セルをクリックで関連動画を表示します。<br>
+          ・字幕の文字起こし精度により、実際には発言していても検出されない / 逆に無関係な発言が混入する場合があります。
+        </div>
+        <div class="heat-controls">
+          <label>並び順:</label>
+          <select id="heat-sort" onchange="renderHeatmap()">
+            <option value="coverage">言及施策数が多い順</option>
+            <option value="mentions">総言及回数が多い順</option>
+            <option value="name">議員名順</option>
+          </select>
+          <label>絞り込み:</label>
+          <input type="text" id="heat-filter" placeholder="議員名..." oninput="renderHeatmap()">
+        </div>
+        <div class="heat-wrap" id="heat-wrap"></div>
+        <div class="heat-legend">
+          <span>言及回数:</span>
+          <span><span class="lg-box heat-0"></span>0</span>
+          <span><span class="lg-box heat-1"></span>1</span>
+          <span><span class="lg-box heat-2"></span>2</span>
+          <span><span class="lg-box heat-3"></span>3-4</span>
+          <span><span class="lg-box heat-4"></span>5-9</span>
+          <span><span class="lg-box heat-5"></span>10+</span>
+        </div>
+        ` : ''}
       `;
     })() : '<div style="text-align:center;padding:2rem;color:var(--sub)">総合計画データが見つかりません。data/sougoukeikaku_v5.json を生成してください。</div>'}
+  </div>
+  <!-- ヒートマップ詳細モーダル -->
+  <div class="heat-modal" id="heat-modal" onclick="if(event.target===this)closeHeatModal()">
+    <div class="heat-modal-box">
+      <button class="heat-modal-close" onclick="closeHeatModal()">閉じる ✕</button>
+      <div class="heat-modal-head" id="heat-modal-head"></div>
+      <div class="heat-modal-sub" id="heat-modal-sub"></div>
+      <div id="heat-modal-body"></div>
+    </div>
   </div>
   <div id="tab-voice" class="tab-panel">
     <div class="voice-intro">
@@ -1306,6 +1384,65 @@ const COMPARE_DATA = ${JSON.stringify(compareData)};
 const SEARCH_INDEX = ${JSON.stringify(searchIndex)};
 const CAT_COLORS = ${JSON.stringify(catColors)};
 const SUB_POLICIES = ${JSON.stringify(sougouPlan ? sougouPlan.sub_policies : [])};
+const MEMBER_POLICY_MAP = ${JSON.stringify(memberPolicyMap || null)};
+function heatLevel(n){ if(!n)return 0; if(n===1)return 1; if(n===2)return 2; if(n<=4)return 3; if(n<=9)return 4; return 5; }
+function renderHeatmap(){
+  if(!MEMBER_POLICY_MAP)return;
+  const wrap = document.getElementById('heat-wrap');
+  if(!wrap)return;
+  const sortKey = document.getElementById('heat-sort')?.value || 'coverage';
+  const filter = (document.getElementById('heat-filter')?.value || '').trim();
+  let members = Object.keys(MEMBER_POLICY_MAP.member_map);
+  if(filter) members = members.filter(m=>m.includes(filter));
+  const cov = MEMBER_POLICY_MAP.member_coverage;
+  if(sortKey==='coverage') members.sort((a,b)=>cov[b].mentioned_sub_count-cov[a].mentioned_sub_count);
+  else if(sortKey==='mentions') members.sort((a,b)=>cov[b].total_mentions-cov[a].total_mentions);
+  else members.sort((a,b)=>a.localeCompare(b,'ja'));
+  // 列はSUB_POLICIES順
+  const goalHeaderMap = {};
+  SUB_POLICIES.forEach(s=>{ const k=s.goal_num||'base'; if(!goalHeaderMap[k])goalHeaderMap[k]=[]; goalHeaderMap[k].push(s); });
+  let html = '<table class="heat-table"><thead><tr><th class="member-col">議員 ('+members.length+'名)</th>';
+  SUB_POLICIES.forEach(s=>{
+    html += '<th title="'+escHtml(s.id+' '+s.title)+'">'+escHtml(s.title)+'</th>';
+  });
+  html += '<th class="goal-sep">計</th></tr></thead><tbody>';
+  members.forEach(m=>{
+    html += '<tr><td class="member-col" title="'+escHtml(m)+'">'+escHtml(m)+'</td>';
+    SUB_POLICIES.forEach(s=>{
+      const cell = MEMBER_POLICY_MAP.member_map[m]?.[s.id];
+      const n = cell?.count || 0;
+      const lvl = heatLevel(n);
+      html += '<td class="heat-'+lvl+'"><div class="heat-cell" data-m="'+escHtml(m)+'" data-s="'+s.id+'" onclick="openHeatCell(this)" title="'+escHtml(m)+' × '+escHtml(s.title)+' : '+n+'回">'+(n||'')+'</div></td>';
+    });
+    html += '<td class="goal-sep">'+(cov[m]?.mentioned_sub_count||0)+'</td></tr>';
+  });
+  html += '</tbody></table>';
+  wrap.innerHTML = html;
+}
+function openHeatCell(el){
+  const m = el.dataset.m, subId = el.dataset.s;
+  const cell = MEMBER_POLICY_MAP.member_map[m]?.[subId];
+  const sub = SUB_POLICIES.find(s=>s.id===subId);
+  const head = document.getElementById('heat-modal-head');
+  const subEl = document.getElementById('heat-modal-sub');
+  const body = document.getElementById('heat-modal-body');
+  head.textContent = m + ' × ' + (sub?.title || subId);
+  if(!cell || cell.count===0){
+    subEl.textContent = '';
+    body.innerHTML = '<div style="padding:1rem;text-align:center;color:#888">該当施策に関する言及は検出されませんでした。<br><small>※キーワード機械一致の結果です。実際の発言はあるかもしれません。</small></div>';
+  } else {
+    subEl.innerHTML = '言及回数: <strong>'+cell.count+'回</strong>（全'+cell.videos.length+'件中 直近 '+Math.min(cell.videos.length,5)+' 件を表示）';
+    body.innerHTML = cell.videos.map(v=>{
+      const kws = (v.matchedKeywords||[]).slice(0,4).map(k=>'<span class="heat-vid-kw">'+escHtml(k)+'</span>').join(' ');
+      return '<a href="'+escHtml(v.url||'#')+'" target="_blank" class="heat-vid-item">'+
+        '<div class="heat-vid-title">'+escHtml(v.title||v.videoId)+'</div>'+
+        '<div class="heat-vid-meta">'+(v.date?'<span>'+escHtml(v.date)+'</span>':'')+
+        '<span>'+escHtml(v.sessionType||'')+'</span>'+kws+'</div></a>';
+    }).join('');
+  }
+  document.getElementById('heat-modal').classList.add('open');
+}
+function closeHeatModal(){ document.getElementById('heat-modal').classList.remove('open'); }
 function selectPlanGoal(num,btn){
   document.querySelectorAll('.goal-card').forEach(c=>c.classList.remove('selected'));
   btn.classList.add('selected');
@@ -1339,6 +1476,7 @@ function switchTab(id,btn){
   btn.classList.add('active');
   if(id==='all'){vCount=30;showVids();}
   if(id==='voice' && !voicesLoaded){loadVoices();}
+  if(id==='plan'){ renderHeatmap(); }
 }
 
 // ============ 市民の声タブ ============
