@@ -23,7 +23,7 @@ const CONFIG = {
   SHEET_ID: '1mlU1Tz43ISzCCaEuT9j3gYcR7__ytuvve5BGLiPUCyA',
   SHEET_NAME: '投稿',
   ADMIN_EMAIL: 'ka@oh-life.co.jp',
-  SHARED_SECRET: 'REDACTED_OLD_SECRET', // CF Workerと共有
+  SHARED_SECRET: 'REPLACE_WITH_SHARED_SECRET', // CF Workerと共有（実値はGAS上のみ。gitには絶対コミットしない）
   MAX_POSTS_PER_DAY_PER_IP: 5,
   SITE_URL: 'https://keiotake.github.io/ito-council-analysis/',
 };
