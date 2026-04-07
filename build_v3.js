@@ -650,6 +650,50 @@ footer{text-align:center;padding:2rem;color:var(--sub);font-size:.8rem}
 .trend-kw-year-lbl{font-size:.8rem;font-weight:700;color:var(--accent);margin-bottom:.3rem}
 .trend-kw-item{font-size:.72rem;color:#444;padding:.15rem 0;display:flex;justify-content:space-between}
 .trend-kw-item span:last-child{color:var(--sub);font-weight:600}
+
+/* 市民の声タブ */
+.voice-intro{background:linear-gradient(135deg,#667eea15,#764ba215);border-left:4px solid var(--accent);padding:1rem 1.2rem;border-radius:12px;margin-bottom:1rem}
+.voice-intro h3{font-size:1rem;color:var(--accent);margin-bottom:.5rem}
+.voice-intro p{font-size:.85rem;color:#444;line-height:1.6}
+.voice-actions{display:flex;gap:.6rem;margin-bottom:1rem;flex-wrap:wrap;align-items:center}
+.voice-btn-post{padding:.7rem 1.5rem;border:none;border-radius:10px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;font-weight:700;cursor:pointer;font-size:.92rem;box-shadow:0 2px 8px rgba(102,126,234,.3)}
+.voice-btn-post:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(102,126,234,.4)}
+.voice-cat-filter{padding:.6rem 1rem;border:2px solid #e5e7eb;border-radius:10px;font-size:.88rem;background:#fff}
+.voice-list{display:flex;flex-direction:column;gap:.8rem}
+.voice-item{background:var(--card);border-radius:12px;padding:1rem 1.2rem;box-shadow:0 1px 4px rgba(0,0,0,.05);border-left:4px solid var(--accent)}
+.voice-item-head{display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem;flex-wrap:wrap}
+.voice-cat-pill{display:inline-block;padding:.15rem .6rem;border-radius:8px;font-size:.7rem;color:#fff;font-weight:600}
+.voice-title{font-size:1rem;font-weight:700;color:var(--text);margin-bottom:.3rem}
+.voice-body{font-size:.85rem;color:#444;line-height:1.6;white-space:pre-wrap;word-break:break-all}
+.voice-meta{display:flex;gap:.5rem;font-size:.72rem;color:var(--sub);margin-top:.5rem;flex-wrap:wrap}
+.voice-empty{text-align:center;padding:2rem;color:var(--sub);background:#fff;border-radius:12px}
+.voice-loading{text-align:center;padding:1rem;color:var(--sub);font-size:.85rem}
+
+/* モーダル */
+.modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);z-index:1000;align-items:flex-start;justify-content:center;padding:2rem 1rem;overflow-y:auto}
+.modal-overlay.open{display:flex}
+.modal-box{background:#fff;border-radius:16px;max-width:600px;width:100%;padding:1.5rem;box-shadow:0 20px 60px rgba(0,0,0,.3);max-height:calc(100vh - 4rem);overflow-y:auto}
+.modal-box h2{font-size:1.2rem;margin-bottom:.8rem;color:var(--accent)}
+.modal-rules{background:#fef3c7;border-left:4px solid #f59e0b;padding:1rem;border-radius:8px;margin-bottom:1rem;font-size:.78rem;color:#444;line-height:1.7}
+.modal-rules strong{color:#92400e;display:block;margin-bottom:.3rem}
+.modal-rules ul{padding-left:1.2rem;margin:.4rem 0}
+.modal-rules li{margin-bottom:.15rem}
+.modal-form-row{margin-bottom:.8rem}
+.modal-form-row label{display:block;font-size:.78rem;font-weight:600;color:var(--sub);margin-bottom:.25rem}
+.modal-form-row input,.modal-form-row select,.modal-form-row textarea{width:100%;padding:.6rem .8rem;border:2px solid #e5e7eb;border-radius:8px;font-size:.88rem;font-family:inherit;outline:none;box-sizing:border-box}
+.modal-form-row input:focus,.modal-form-row select:focus,.modal-form-row textarea:focus{border-color:var(--accent)}
+.modal-form-row textarea{resize:vertical;min-height:120px}
+.modal-form-row .char-count{font-size:.7rem;color:var(--sub);text-align:right;margin-top:.2rem}
+.modal-agree{display:flex;align-items:flex-start;gap:.5rem;background:#f0f9ff;padding:.8rem;border-radius:8px;margin:.8rem 0;font-size:.82rem}
+.modal-agree input{margin-top:.2rem;flex-shrink:0}
+.modal-buttons{display:flex;gap:.6rem;margin-top:1rem}
+.modal-buttons button{flex:1;padding:.8rem;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-size:.92rem}
+.modal-cancel{background:#f3f4f6;color:#444}
+.modal-submit{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff}
+.modal-submit:disabled{opacity:.5;cursor:not-allowed}
+.modal-msg{padding:.8rem;border-radius:8px;margin-top:.8rem;font-size:.85rem;text-align:center}
+.modal-msg.success{background:#dcfce7;color:#166534}
+.modal-msg.error{background:#fee2e2;color:#991b1b}
 .load-btn{display:block;margin:1rem auto;padding:.7rem 2rem;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:12px;cursor:pointer;font-size:.95rem;font-weight:600}
 .load-btn:hover{opacity:.9}
 /* タブレット */
@@ -757,6 +801,7 @@ footer{text-align:center;padding:2rem;color:var(--sub);font-size:.8rem}
   <button onclick="switchTab('compare',this)">比較</button>
   <button onclick="switchTab('search',this)">検索</button>
   <button onclick="switchTab('trend',this)">トレンド</button>
+  <button onclick="switchTab('voice',this)">市民の声</button>
   <button onclick="switchTab('stats',this)">統計</button>
 </nav>
 <div class="container">
@@ -878,6 +923,108 @@ footer{text-align:center;padding:2rem;color:var(--sub);font-size:.8rem}
       </div>
     </div>
   </div>
+  <div id="tab-voice" class="tab-panel">
+    <div class="voice-intro">
+      <h3>💬 市民の声 — 伊東市政への提案・問題提起</h3>
+      <p>伊東市の道路・福祉・観光・教育・防災など、市政について感じていることを匿名で投稿できます。投稿は運営者(大竹圭)の確認後に公開されます。建設的な議論の場として、ぜひご活用ください。</p>
+    </div>
+    <div class="voice-actions">
+      <button class="voice-btn-post" onclick="openVoiceModal()">＋ 新しい投稿</button>
+      <select class="voice-cat-filter" id="voice-cat" onchange="renderVoices()">
+        <option value="">全カテゴリ</option>
+        <option value="道路・交通">道路・交通</option>
+        <option value="福祉・医療">福祉・医療</option>
+        <option value="教育・子育て">教育・子育て</option>
+        <option value="観光・経済">観光・経済</option>
+        <option value="防災・安全">防災・安全</option>
+        <option value="環境・衛生">環境・衛生</option>
+        <option value="行政サービス">行政サービス</option>
+        <option value="その他">その他</option>
+      </select>
+      <button class="voice-cat-filter" onclick="loadVoices()">🔄 更新</button>
+    </div>
+    <div id="voice-list" class="voice-list">
+      <div class="voice-loading">投稿を読み込み中...</div>
+    </div>
+  </div>
+
+  <!-- 投稿モーダル -->
+  <div class="modal-overlay" id="voice-modal">
+    <div class="modal-box">
+      <h2>市政への投稿</h2>
+      <div class="modal-rules">
+        <strong>⚠ 投稿前に必ずお読みください</strong>
+        以下の内容を含む投稿は<strong>削除・通報の対象</strong>となります：
+        <ul>
+          <li>特定の個人(議員・市職員・市民)への誹謗中傷</li>
+          <li>個人情報(氏名・住所・電話番号など)の記載</li>
+          <li>差別的・侮蔑的な表現</li>
+          <li>虚偽の情報・デマ</li>
+          <li>営業・宣伝・スパム・選挙運動</li>
+          <li>わいせつな内容</li>
+        </ul>
+        悪質な投稿(脅迫・名誉毀損等)については、IPアドレス・接続情報をもとに<strong>伊東警察署および静岡県警サイバー犯罪対策課への被害届提出、発信者情報開示請求</strong>を行う場合があります。
+      </div>
+      <form id="voice-form" onsubmit="submitVoice(event)">
+        <div class="modal-form-row">
+          <label>カテゴリ *</label>
+          <select name="category" required>
+            <option value="">選択してください</option>
+            <option value="道路・交通">道路・交通</option>
+            <option value="福祉・医療">福祉・医療</option>
+            <option value="教育・子育て">教育・子育て</option>
+            <option value="観光・経済">観光・経済</option>
+            <option value="防災・安全">防災・安全</option>
+            <option value="環境・衛生">環境・衛生</option>
+            <option value="行政サービス">行政サービス</option>
+            <option value="その他">その他</option>
+          </select>
+        </div>
+        <div class="modal-form-row">
+          <label>タイトル * (50文字以内)</label>
+          <input type="text" name="title" maxlength="50" required oninput="updateCharCount(this,'tc')">
+          <div class="char-count" id="tc">0/50</div>
+        </div>
+        <div class="modal-form-row">
+          <label>本文 * (500文字以内)</label>
+          <textarea name="body" maxlength="500" required oninput="updateCharCount(this,'bc')"></textarea>
+          <div class="char-count" id="bc">0/500</div>
+        </div>
+        <div class="modal-form-row">
+          <label>ニックネーム (任意・空欄なら「匿名」)</label>
+          <input type="text" name="nickname" maxlength="20">
+        </div>
+        <div class="modal-form-row">
+          <label>居住地区 (任意)</label>
+          <select name="area">
+            <option value="">未指定</option>
+            <option value="湯川">湯川</option>
+            <option value="松原">松原</option>
+            <option value="玖須美">玖須美</option>
+            <option value="鎌田">鎌田</option>
+            <option value="大原">大原</option>
+            <option value="宇佐美">宇佐美</option>
+            <option value="川奈">川奈</option>
+            <option value="池">池</option>
+            <option value="十足">十足</option>
+            <option value="赤沢">赤沢</option>
+            <option value="伊東市内その他">伊東市内その他</option>
+            <option value="市外">市外</option>
+          </select>
+        </div>
+        <div class="modal-agree">
+          <input type="checkbox" id="agree" required>
+          <label for="agree">上記の禁止事項・通報方針をすべて読み、同意します。投稿内容は公開され、IPアドレス等の接続情報が記録されることを了承します。</label>
+        </div>
+        <div class="modal-buttons">
+          <button type="button" class="modal-cancel" onclick="closeVoiceModal()">キャンセル</button>
+          <button type="submit" class="modal-submit" id="voice-submit-btn">投稿する</button>
+        </div>
+        <div id="voice-msg"></div>
+      </form>
+    </div>
+  </div>
+
   <div id="tab-stats" class="tab-panel">
     <div class="stats-panel">
       <div class="stats-box">
@@ -992,7 +1139,18 @@ footer{text-align:center;padding:2rem;color:var(--sub);font-size:.8rem}
   <h4>8. 免責</h4>
   <p>本サイトの利用によって生じたいかなる損害についても、サイト運営者は一切の責任を負いません。掲載情報に基づく判断・行動は、利用者ご自身の責任において行ってください。</p>
 
-  <h4>9. お問い合わせ・情報の修正・削除について</h4>
+  <h4>9. 「市民の声」投稿機能について</h4>
+  <ul>
+    <li><strong>承認制：</strong>投稿は運営者が確認後、承認されたもののみが公開されます。投稿即時公開ではありません。</li>
+    <li><strong>禁止事項：</strong>特定の個人(議員・市職員・市民)への誹謗中傷、個人情報の記載、差別的表現、虚偽情報、営業・宣伝、わいせつ表現、選挙運動等は禁止します。該当する投稿は予告なく削除します。</li>
+    <li><strong>記録される情報：</strong>投稿者のIPアドレス、ブラウザ情報、投稿日時、投稿内容のハッシュ値を保存します。これらは公開されませんが、悪質な投稿への対応のため永続的に保存されます。</li>
+    <li><strong>悪質投稿への対応：</strong>脅迫・名誉毀損・威力業務妨害等に該当すると判断した投稿については、保存している接続情報をもとに、<strong>伊東警察署および静岡県警察本部サイバー犯罪対策課への被害届提出、ならびにプロバイダ責任制限法に基づく発信者情報開示請求</strong>を行う場合があります。</li>
+    <li><strong>運営者の責任：</strong>プロバイダ責任制限法第3条に基づき、運営者は権利侵害のある投稿を認識した後、速やかに削除等の対応を行います。</li>
+    <li><strong>削除依頼：</strong>掲載中の投稿について削除をご希望の場合は ka@oh-life.co.jp までご連絡ください。</li>
+    <li><strong>免責：</strong>投稿内容の真実性・正確性について運営者は一切の責任を負いません。投稿は投稿者個人の意見であり、運営者の見解ではありません。</li>
+  </ul>
+
+  <h4>10. お問い合わせ・情報の修正・削除について</h4>
   <p>掲載内容に誤りを発見された場合、掲載情報の修正・削除のご希望、またはご意見・ご感想等がございましたら、下記までご連絡ください。確認の上、速やかに対応いたします。</p>
   <ul>
     <li><strong>メール:</strong> <a href="mailto:ka@oh-life.co.jp" style="color:var(--accent)">ka@oh-life.co.jp</a></li>
@@ -1017,6 +1175,97 @@ function switchTab(id,btn){
   document.getElementById('tab-'+id).classList.add('active');
   btn.classList.add('active');
   if(id==='all'){vCount=30;showVids();}
+  if(id==='voice' && !voicesLoaded){loadVoices();}
+}
+
+// ============ 市民の声タブ ============
+const VOICE_API='https://ito-voice.your-subdomain.workers.dev'; // ← Cloudflare Workerデプロイ後に書き換え
+const VOICE_CAT_COLORS={
+  '道路・交通':'#3498db','福祉・医療':'#e91e63','教育・子育て':'#9b59b6',
+  '観光・経済':'#f39c12','防災・安全':'#e74c3c','環境・衛生':'#27ae60',
+  '行政サービス':'#34495e','その他':'#95a5a6'
+};
+let voiceData=[];
+let voicesLoaded=false;
+async function loadVoices(){
+  const list=document.getElementById('voice-list');
+  list.innerHTML='<div class="voice-loading">投稿を読み込み中...</div>';
+  try{
+    const res=await fetch(VOICE_API+'/posts');
+    if(!res.ok)throw new Error('読み込み失敗');
+    const data=await res.json();
+    voiceData=data.posts||[];
+    voicesLoaded=true;
+    renderVoices();
+  }catch(e){
+    list.innerHTML='<div class="voice-empty">投稿の読み込みに失敗しました。バックエンドが設定されていない可能性があります。<br><small>'+escHtml(e.message)+'</small></div>';
+  }
+}
+function renderVoices(){
+  const list=document.getElementById('voice-list');
+  const cat=document.getElementById('voice-cat').value;
+  const filtered=cat?voiceData.filter(v=>v.category===cat):voiceData;
+  if(filtered.length===0){
+    list.innerHTML='<div class="voice-empty">まだ投稿はありません。最初の投稿をしてみませんか？</div>';
+    return;
+  }
+  list.innerHTML=filtered.map(v=>{
+    const col=VOICE_CAT_COLORS[v.category]||'#95a5a6';
+    return '<div class="voice-item" style="border-left-color:'+col+'">'
+      +'<div class="voice-item-head"><span class="voice-cat-pill" style="background:'+col+'">'+escHtml(v.category)+'</span></div>'
+      +'<div class="voice-title">'+escHtml(v.title)+'</div>'
+      +'<div class="voice-body">'+escHtml(v.body)+'</div>'
+      +'<div class="voice-meta"><span>— '+escHtml(v.nickname||'匿名')+'さん</span>'+(v.area?'<span>'+escHtml(v.area)+'</span>':'')+'<span>'+escHtml(v.date)+'</span></div>'
+      +'</div>';
+  }).join('');
+}
+function openVoiceModal(){
+  document.getElementById('voice-modal').classList.add('open');
+  document.getElementById('voice-msg').innerHTML='';
+  document.getElementById('voice-form').reset();
+  document.getElementById('tc').textContent='0/50';
+  document.getElementById('bc').textContent='0/500';
+}
+function closeVoiceModal(){
+  document.getElementById('voice-modal').classList.remove('open');
+}
+function updateCharCount(el,id){
+  document.getElementById(id).textContent=el.value.length+'/'+el.maxLength;
+}
+async function submitVoice(e){
+  e.preventDefault();
+  const form=e.target;
+  const btn=document.getElementById('voice-submit-btn');
+  const msg=document.getElementById('voice-msg');
+  btn.disabled=true;
+  msg.innerHTML='<div class="modal-msg">送信中...</div>';
+  const fd=new FormData(form);
+  const payload={
+    category:fd.get('category'),
+    title:fd.get('title'),
+    body:fd.get('body'),
+    nickname:fd.get('nickname'),
+    area:fd.get('area'),
+    agreed:document.getElementById('agree').checked,
+  };
+  try{
+    const res=await fetch(VOICE_API+'/submit',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(payload),
+    });
+    const result=await res.json();
+    if(result.ok){
+      msg.innerHTML='<div class="modal-msg success">'+escHtml(result.message||'投稿を受け付けました')+'</div>';
+      setTimeout(()=>{closeVoiceModal();loadVoices();},2500);
+    }else{
+      msg.innerHTML='<div class="modal-msg error">'+escHtml(result.error||'送信に失敗しました')+'</div>';
+      btn.disabled=false;
+    }
+  }catch(err){
+    msg.innerHTML='<div class="modal-msg error">通信エラー: '+escHtml(err.message)+'</div>';
+    btn.disabled=false;
+  }
 }
 
 // ============ 比較タブ ============
