@@ -1,0 +1,376 @@
+{
+  "metadata": {
+    "title": "伊東市議会 第21期 議員情報",
+    "term": "第21期",
+    "term_period": "令和7年10月19日～令和11年10月18日",
+    "member_list_date": "令和7年11月26日現在",
+    "faction_list_date": "令和7年10月31日現在",
+    "committee_list_date": "令和7年11月26日現在",
+    "total_members": 20,
+    "source_urls": {
+      "top_page": "https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/itoshigikai/index.html",
+      "member_list_page": "https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/itoshigikai/13945.html",
+      "member_pdf": "https://www.city.ito.shizuoka.jp/material/files/group/32/R071126_giin_shokai1.pdf",
+      "faction_pdf": "https://www.city.ito.shizuoka.jp/material/files/group/32/R071031_kaihabetu_meibo1.pdf",
+      "committee_pdf": "https://www.city.ito.shizuoka.jp/material/files/group/32/R71126_iinkaiiin_ichiran2.pdf",
+      "speaker_page": "https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/itoshigikai/3701.html"
+    }
+  },
+  "leadership": {
+    "speaker": {
+      "title": "議長",
+      "name": "中島弘道",
+      "reading": "なかじま ひろみち",
+      "term_number": 78,
+      "appointed_date": "令和7年10月31日"
+    },
+    "vice_speaker": {
+      "title": "副議長",
+      "name": "青木敬博",
+      "reading": "あおき よしひろ",
+      "term_number": 74,
+      "appointed_date": "令和7年10月31日"
+    }
+  },
+  "members": [
+    {
+      "name": "青木敬博",
+      "reading": "あおき よしひろ",
+      "birth_year": "昭和45年",
+      "terms": 4,
+      "faction": "伊東未来",
+      "faction_role": null,
+      "special_role": "副議長",
+      "committees": [
+        {"name": "常任観光建設委員会", "role": "委員"},
+        {"name": "予算・決算特別委員会", "role": "委員長"}
+      ]
+    },
+    {
+      "name": "浅田良弘",
+      "reading": "あさだ よしひろ",
+      "birth_year": "昭和35年",
+      "terms": 7,
+      "faction": "政和会",
+      "faction_role": null,
+      "special_role": null,
+      "committees": [
+        {"name": "常任総務委員会", "role": "委員"}
+      ]
+    },
+    {
+      "name": "井戸清司",
+      "reading": "いど きよし",
+      "birth_year": "昭和41年",
+      "terms": 6,
+      "faction": "自由民主 伊東",
+      "faction_role": "代表",
+      "special_role": null,
+      "committees": [
+        {"name": "常任観光建設委員会", "role": "委員長"}
+      ]
+    },
+    {
+      "name": "犬飼このり",
+      "reading": "いぬかい このり",
+      "birth_year": "昭和46年",
+      "terms": 3,
+      "faction": "政和会",
+      "faction_role": null,
+      "special_role": null,
+      "committees": [
+        {"name": "常任福祉文教委員会", "role": "委員"},
+        {"name": "議会報編集委員会", "role": "委員"}
+      ]
+    },
+    {
+      "name": "大川勝弘",
+      "reading": "おおかわ かつひろ",
+      "birth_year": "昭和56年",
+      "terms": 4,
+      "faction": "伊東未来",
+      "faction_role": null,
+      "special_role": null,
+      "committees": [
+        {"name": "常任総務委員会", "role": "委員"},
+        {"name": "議会運営委員会", "role": "委員長"},
+        {"name": "予算・決算特別委員会", "role": "副委員長"}
+      ]
+    },
+    {
+      "name": "大竹圭",
+      "reading": "おおたけ けい",
+      "birth_year": "平成2年",
+      "terms": 1,
+      "faction": "伊東未来",
+      "faction_role": null,
+      "special_role": null,
+      "committees": [
+        {"name": "常任福祉文教委員会", "role": "委員"},
+        {"name": "議会報編集委員会", "role": "委員"}
+      ]
+    },
+    {
+      "name": "片桐基至",
+      "reading": "かたぎり もとゆき",
+      "birth_year": "昭和55年",
+      "terms": 1,
+      "faction": null,
+      "faction_role": null,
+      "special_role": null,
+      "committees": [
+        {"name": "常任福祉文教委員会", "role": "委員"}
+      ]
+    },
+    {
+      "name": "河島紀美恵",
+      "reading": "かわしま きみえ",
+      "birth_year": "昭和41年",
+      "terms": 2,
+      "faction": "伊東未来",
+      "faction_role": null,
+      "special_role": null,
+      "committees": [
+        {"name": "常任観光建設委員会", "role": "委員"},
+        {"name": "議会運営委員会", "role": "委員"}
+      ]
+    },
+    {
+      "name": "佐藤周",
+      "reading": "さとう しゅう",
+      "birth_year": "昭和47年",
+      "terms": 3,
+      "faction": "正風クラブ",
+      "faction_role": "代表",
+      "special_role": null,
+      "committees": [
+        {"name": "常任総務委員会", "role": "委員"},
+        {"name": "議会運営委員会", "role": "副委員長"}
+      ]
+    },
+    {
+      "name": "重岡秀子",
+      "reading": "しげおか ひでこ",
+      "birth_year": "昭和25年",
+      "terms": 6,
+      "faction": null,
+      "faction_role": null,
+      "special_role": null,
+      "committees": [
+        {"name": "常任総務委員会", "role": "委員"}
+      ]
+    },
+    {
+      "name": "篠原峰子",
+      "reading": "しのはら みねこ",
+      "birth_year": "昭和45年",
+      "terms": 4,
+      "faction": "公明党",
+      "faction_role": null,
+      "special_role": null,
+      "committees": [
+        {"name": "常任福祉文教委員会", "role": "委員"}
+      ]
+    },
+    {
+      "name": "四宮和彦",
+      "reading": "しのみや かずひこ",
+      "birth_year": "昭和37年",
+      "terms": 6,
+      "faction": "政和会",
+      "faction_role": "代表",
+      "special_role": null,
+      "committees": [
+        {"name": "常任観光建設委員会", "role": "委員"},
+        {"name": "議会運営委員会", "role": "委員"}
+      ]
+    },
+    {
+      "name": "杉本一彦",
+      "reading": "すぎもと かずひこ",
+      "birth_year": "昭和40年",
+      "terms": 5,
+      "faction": "伊東未来",
+      "faction_role": "代表",
+      "special_role": null,
+      "committees": [
+        {"name": "常任総務委員会", "role": "委員長"}
+      ]
+    },
+    {
+      "name": "鈴木絢子",
+      "reading": "すずき あやこ",
+      "birth_year": "昭和52年",
+      "terms": 3,
+      "faction": "正風クラブ",
+      "faction_role": null,
+      "special_role": null,
+      "committees": [
+        {"name": "常任福祉文教委員会", "role": "委員長"}
+      ]
+    },
+    {
+      "name": "竹本力哉",
+      "reading": "たけもと りきや",
+      "birth_year": "昭和35年",
+      "terms": 2,
+      "faction": "公明党",
+      "faction_role": null,
+      "special_role": null,
+      "committees": [
+        {"name": "常任観光建設委員会", "role": "委員"},
+        {"name": "議会報編集委員会", "role": "委員長"}
+      ]
+    },
+    {
+      "name": "長沢正",
+      "reading": "ながさわ まさし",
+      "birth_year": "昭和35年",
+      "terms": 5,
+      "faction": "公明党",
+      "faction_role": "代表",
+      "special_role": null,
+      "committees": [
+        {"name": "常任総務委員会", "role": "副委員長"},
+        {"name": "議会運営委員会", "role": "委員"}
+      ]
+    },
+    {
+      "name": "中島弘道",
+      "reading": "なかじま ひろみち",
+      "birth_year": "昭和35年",
+      "terms": 4,
+      "faction": "自由民主 伊東",
+      "faction_role": null,
+      "special_role": "議長",
+      "committees": [
+        {"name": "常任総務委員会", "role": "委員（活動辞退・議長職専念）"}
+      ]
+    },
+    {
+      "name": "宮﨑雅薫",
+      "reading": "みやざき まさしげ",
+      "birth_year": "昭和31年",
+      "terms": 7,
+      "faction": "正風クラブ",
+      "faction_role": null,
+      "special_role": null,
+      "committees": [
+        {"name": "常任総務委員会", "role": "委員"}
+      ]
+    },
+    {
+      "name": "虫明弘雄",
+      "reading": "むしあき ひろお",
+      "birth_year": "昭和51年",
+      "terms": 2,
+      "faction": "自由民主 伊東",
+      "faction_role": null,
+      "special_role": null,
+      "committees": [
+        {"name": "常任福祉文教委員会", "role": "副委員長"},
+        {"name": "議会運営委員会", "role": "委員"},
+        {"name": "議会報編集委員会", "role": "委員"}
+      ]
+    },
+    {
+      "name": "村上祥平",
+      "reading": "むらかみ しょうへい",
+      "birth_year": "昭和60年",
+      "terms": 2,
+      "faction": "正風クラブ",
+      "faction_role": null,
+      "special_role": null,
+      "committees": [
+        {"name": "常任観光建設委員会", "role": "副委員長"},
+        {"name": "議会報編集委員会", "role": "副委員長"}
+      ]
+    }
+  ],
+  "factions": [
+    {
+      "name": "伊東未来",
+      "member_count": 5,
+      "representative": "杉本一彦",
+      "members": ["河島紀美恵", "大竹圭", "青木敬博", "大川勝弘", "杉本一彦"]
+    },
+    {
+      "name": "正風クラブ",
+      "member_count": 4,
+      "representative": "佐藤周",
+      "members": ["村上祥平", "鈴木絢子", "佐藤周", "宮﨑雅薫"]
+    },
+    {
+      "name": "公明党",
+      "member_count": 3,
+      "representative": "長沢正",
+      "members": ["長沢正", "竹本力哉", "篠原峰子"]
+    },
+    {
+      "name": "政和会",
+      "member_count": 3,
+      "representative": "四宮和彦",
+      "members": ["犬飼このり", "四宮和彦", "浅田良弘"]
+    },
+    {
+      "name": "自由民主 伊東",
+      "member_count": 3,
+      "representative": "井戸清司",
+      "members": ["中島弘道", "虫明弘雄", "井戸清司"]
+    },
+    {
+      "name": "無所属（会派に所属していない議員）",
+      "member_count": 2,
+      "representative": null,
+      "members": ["片桐基至", "重岡秀子"]
+    }
+  ],
+  "committees": {
+    "standing_committees": [
+      {
+        "name": "常任総務委員会",
+        "chair": "杉本一彦",
+        "vice_chair": "長沢正",
+        "members": ["大川勝弘", "宮﨑雅薫", "佐藤周", "浅田良弘", "重岡秀子"]
+      },
+      {
+        "name": "常任観光建設委員会",
+        "chair": "井戸清司",
+        "vice_chair": "村上祥平",
+        "members": ["青木敬博", "河島紀美恵", "竹本力哉", "四宮和彦"]
+      },
+      {
+        "name": "常任福祉文教委員会",
+        "chair": "鈴木絢子",
+        "vice_chair": "虫明弘雄",
+        "members": ["大竹圭", "篠原峰子", "犬飼このり", "片桐基至"]
+      }
+    ],
+    "steering_committee": {
+      "name": "議会運営委員会",
+      "chair": "大川勝弘",
+      "vice_chair": "佐藤周",
+      "members": ["河島紀美恵", "長沢正", "四宮和彦", "虫明弘雄"]
+    },
+    "special_committees": [
+      {
+        "name": "予算・決算特別委員会",
+        "chair": "青木敬博",
+        "vice_chair": "大川勝弘",
+        "members": "議長を除く全議員（19名）",
+        "note": "議長（中島弘道）を除く全議員が所属"
+      }
+    ],
+    "editorial_committee": {
+      "name": "議会報編集委員会",
+      "chair": "竹本力哉",
+      "vice_chair": "村上祥平",
+      "members": ["大竹圭", "犬飼このり", "虫明弘雄"]
+    }
+  },
+  "notes": {
+    "speaker_note": "議長（中島弘道）は常任委員に選任されているが、常任委員としての活動は一切辞退し、議長の職務に専念する",
+    "budget_committee_note": "予算・決算特別委員会は、議長を除く全議員が所属",
+    "faction_order_note": "会派は代表者会議席順、会派内は議席順"
+  }
+}

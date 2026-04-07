@@ -20,10 +20,10 @@
 
 // ============ 設定 ============
 const CONFIG = {
-  SHEET_ID: 'ここにスプレッドシートIDを入れる',
+  SHEET_ID: '1mlU1Tz43ISzCCaEuT9j3gYcR7__ytuvve5BGLiPUCyA',
   SHEET_NAME: '投稿',
   ADMIN_EMAIL: 'ka@oh-life.co.jp',
-  SHARED_SECRET: 'ここにランダム文字列を入れる_例:abc123xyz789', // CF Workerと共有
+  SHARED_SECRET: 'REDACTED_OLD_SECRET', // CF Workerと共有
   MAX_POSTS_PER_DAY_PER_IP: 5,
   SITE_URL: 'https://keiotake.github.io/ito-council-analysis/',
 };

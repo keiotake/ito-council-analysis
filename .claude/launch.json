@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "council-site",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["http-server", "/c/Users/ka/ito-council-summary", "-p", "8092", "-c-1"],
+      "port": 8092
+    }
+  ]
+}
