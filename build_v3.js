@@ -19,6 +19,9 @@ let responsesData = null;
 try { responsesData = JSON.parse(fs.readFileSync('analysis_with_responses.json', 'utf-8')); } catch(e) {}
 let questionSummaries = {};
 try { questionSummaries = JSON.parse(fs.readFileSync('question_summaries.json', 'utf-8')); } catch(e) {}
+// 第五次伊東市総合計画（構造化データ）
+let sougouPlan = null;
+try { sougouPlan = JSON.parse(fs.readFileSync('data/sougoukeikaku_v5.json', 'utf-8')); } catch(e) { console.warn('sougoukeikaku_v5.json not found'); }
 
 const { videos, memberSummary } = analysis;
 
@@ -501,6 +504,67 @@ nav button.active{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff}
 
 .tab-panel{display:none}
 .tab-panel.active{display:block}
+/* 総合計画タブ */
+.plan-hero{background:linear-gradient(135deg,#4a90e2,#7b68ee);color:#fff;border-radius:16px;padding:1.5rem;margin-bottom:1.2rem;box-shadow:0 4px 20px rgba(74,144,226,.25)}
+.plan-hero h2{font-size:1.3rem;margin-bottom:.4rem;font-weight:700}
+.plan-hero .plan-vision{font-size:1.05rem;font-weight:600;margin:.6rem 0 .2rem;line-height:1.5}
+.plan-hero .plan-sub{font-size:.85rem;opacity:.92;line-height:1.5}
+.plan-meta{display:flex;gap:.8rem;flex-wrap:wrap;margin-top:.8rem;font-size:.78rem}
+.plan-meta span{background:rgba(255,255,255,.22);padding:.3rem .7rem;border-radius:20px}
+.plan-warn{background:#fff5e6;border-left:4px solid #f39c12;padding:.7rem 1rem;border-radius:8px;margin-bottom:1rem;font-size:.8rem;color:#7a5a00;line-height:1.5}
+.plan-warn strong{color:#c06500}
+.plan-h3{font-size:1.1rem;font-weight:700;margin:1.8rem 0 .8rem;padding:.5rem .9rem;background:linear-gradient(90deg,#e8f0fe,#fff);border-left:5px solid #4a90e2;border-radius:0 8px 8px 0}
+.plan-h3 .plan-count{float:right;background:#4a90e2;color:#fff;font-size:.75rem;padding:.15rem .6rem;border-radius:12px;font-weight:600}
+.kadai-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:.9rem}
+.kadai-card{background:var(--card);border-radius:12px;padding:1rem 1.1rem;box-shadow:0 2px 10px rgba(0,0,0,.07);border-top:4px solid #4a90e2;transition:.2s}
+.kadai-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.12)}
+.kadai-num{display:inline-block;background:#4a90e2;color:#fff;font-weight:700;font-size:.72rem;padding:.18rem .6rem;border-radius:12px;margin-bottom:.5rem}
+.kadai-title{font-size:.95rem;font-weight:700;color:var(--text);line-height:1.45;margin-bottom:.5rem}
+.kadai-summary{font-size:.8rem;color:var(--sub);line-height:1.55;margin-bottom:.6rem}
+.kadai-points{list-style:none;padding:0;margin:0}
+.kadai-points li{font-size:.76rem;color:#555;padding:.3rem .5rem .3rem 1.2rem;position:relative;line-height:1.5}
+.kadai-points li::before{content:'▸';position:absolute;left:.3rem;color:#4a90e2;font-weight:700}
+.kadai-src{font-size:.7rem;color:#999;margin-top:.5rem;padding-top:.5rem;border-top:1px dashed #e0e0e0}
+/* 将来人口 */
+.pop-box{background:var(--card);border-radius:12px;padding:1.2rem;box-shadow:0 2px 10px rgba(0,0,0,.07);margin-bottom:1rem}
+.pop-row{display:flex;align-items:center;gap:.6rem;margin-bottom:.3rem;font-size:.78rem}
+.pop-year{width:46px;text-align:right;color:var(--sub);font-weight:600}
+.pop-bar-wrap{flex:1;height:22px;background:#f0f4f8;border-radius:11px;position:relative;overflow:hidden}
+.pop-bar-proj{position:absolute;left:0;top:0;height:100%;background:linear-gradient(90deg,#5d9cec,#a0b9d4);border-radius:11px;display:flex;align-items:center;justify-content:flex-end;padding-right:.5rem;color:#fff;font-size:.68rem;font-weight:600;transition:.8s}
+.pop-bar-target{position:absolute;top:0;height:100%;border-right:3px dashed #e74c3c}
+.pop-legend{display:flex;gap:1rem;flex-wrap:wrap;margin-top:.8rem;font-size:.75rem;color:var(--sub)}
+.pop-legend span::before{content:'';display:inline-block;width:14px;height:10px;margin-right:.3rem;vertical-align:middle;border-radius:2px}
+.pop-legend .lg-proj::before{background:linear-gradient(90deg,#5d9cec,#a0b9d4)}
+.pop-legend .lg-target::before{background:transparent;border:2px dashed #e74c3c;height:8px}
+.pop-note{font-size:.72rem;color:var(--sub);margin-top:.6rem;line-height:1.5;background:#f9fafc;padding:.5rem .7rem;border-radius:6px}
+/* 政策目標 */
+.goals-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.8rem}
+.goal-card{background:var(--card);border-radius:12px;padding:1rem;box-shadow:0 2px 10px rgba(0,0,0,.07);cursor:pointer;transition:.2s;text-align:center;border:2px solid transparent}
+.goal-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.13);border-color:#4a90e2}
+.goal-card.selected{border-color:#4a90e2;background:#f0f6ff}
+.goal-num{display:inline-block;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;width:32px;height:32px;line-height:32px;border-radius:50%;font-weight:700;margin-bottom:.5rem}
+.goal-title{font-size:.95rem;font-weight:700;line-height:1.4;margin-bottom:.35rem;color:var(--text)}
+.goal-theme{font-size:.72rem;color:#4a90e2;font-weight:600;margin-bottom:.4rem}
+.goal-desc{font-size:.73rem;color:var(--sub);line-height:1.5}
+/* 施策詳細 */
+.sub-detail{margin-top:1rem}
+.sub-card{background:var(--card);border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:.8rem;overflow:hidden}
+.sub-head{padding:.8rem 1rem;background:linear-gradient(90deg,#f0f6ff,#fff);cursor:pointer;display:flex;justify-content:space-between;align-items:center;border-left:4px solid #4a90e2}
+.sub-head-title{font-size:.92rem;font-weight:700;color:var(--text)}
+.sub-head-id{font-size:.7rem;color:#4a90e2;background:#e8f0fe;padding:.15rem .5rem;border-radius:10px;margin-right:.5rem;font-weight:600}
+.sub-toggle{color:#4a90e2;font-size:.9rem;font-weight:700}
+.sub-body{display:none;padding:.8rem 1rem;border-top:1px solid #eef1f5}
+.sub-card.open .sub-body{display:block}
+.sub-card.open .sub-toggle{transform:rotate(180deg)}
+.sub-section{margin-bottom:.9rem}
+.sub-label{font-size:.75rem;font-weight:700;color:#4a90e2;margin-bottom:.35rem;padding:.2rem .6rem;background:#e8f0fe;border-radius:10px;display:inline-block}
+.sub-label.challenge{color:#c06500;background:#fff5e6}
+.sub-label.kpi{color:#27ae60;background:#e8f8ef}
+.sub-list{list-style:none;padding:0;margin:0}
+.sub-list li{font-size:.8rem;color:#444;line-height:1.55;padding:.3rem 0 .3rem 1rem;position:relative}
+.sub-list li::before{content:'・';position:absolute;left:0;color:#4a90e2}
+.sub-label.challenge ~ .sub-list li::before{color:#e67e22}
+.kpi-raw{font-size:.73rem;color:#555;background:#f9fafc;padding:.5rem .7rem;border-radius:6px;white-space:pre-wrap;font-family:monospace;line-height:1.5;margin-top:.3rem}
 .back-btn{padding:.5rem 1rem;border:none;border-radius:10px;background:#f0f4f8;font-size:.9rem;cursor:pointer;font-weight:600;margin-bottom:1rem}
 .back-btn:hover{background:#e5e7eb}
 .detail-panel{display:none}
@@ -801,6 +865,7 @@ footer{text-align:center;padding:2rem;color:var(--sub);font-size:.8rem}
   <button onclick="switchTab('compare',this)">比較</button>
   <button onclick="switchTab('search',this)">検索</button>
   <button onclick="switchTab('trend',this)">トレンド</button>
+  <button onclick="switchTab('plan',this)">総合計画</button>
   <button onclick="switchTab('voice',this)">市民の声</button>
   <button onclick="switchTab('stats',this)">統計</button>
 </nav>
@@ -922,6 +987,78 @@ footer{text-align:center;padding:2rem;color:var(--sub);font-size:.8rem}
         }).join('')}
       </div>
     </div>
+  </div>
+  <div id="tab-plan" class="tab-panel">
+    ${sougouPlan ? (() => {
+      const p = sougouPlan;
+      const maxPop = Math.max(...p.future_population.projection.map(x=>x.total));
+      const targetMap = {};
+      const tgt = p.future_population.target || {};
+      if (tgt.year_2025) targetMap[2025] = tgt.year_2025.total;
+      if (tgt.year_2030) targetMap[2030] = tgt.year_2030.total;
+      const popRows = p.future_population.projection.map(pt => {
+        const pct = (pt.total/maxPop)*100;
+        const tv = targetMap[pt.year];
+        const tgtPct = tv ? (tv/maxPop)*100 : null;
+        const diff = tv ? (tv - pt.total) : 0;
+        return `<div class="pop-row">
+          <div class="pop-year">${pt.year}<br><span style="font-size:.65rem;opacity:.7">${esc(pt.label||'')}</span></div>
+          <div class="pop-bar-wrap">
+            <div class="pop-bar-proj" style="width:${pct.toFixed(1)}%">${pt.total.toLocaleString()}人 (高齢化率${pt.elderly_rate}%)</div>
+            ${tv ? `<div class="pop-bar-target" style="left:${tgtPct.toFixed(1)}%" title="目標 ${tv.toLocaleString()}人 (+${diff.toLocaleString()})"></div>` : ''}
+          </div>
+        </div>`;
+      }).join('');
+      const kadaiCards = p.machizukuri_kadai.map(k => `
+        <div class="kadai-card">
+          <span class="kadai-num">課題 ${k.num}</span>
+          <div class="kadai-title">${esc(k.title)}</div>
+          <div class="kadai-summary">${esc(k.summary)}</div>
+          <ul class="kadai-points">${(k.key_points||[]).map(pt=>`<li>${esc(pt)}</li>`).join('')}</ul>
+          <div class="kadai-src">📖 根拠: 計画書 p.${k.source_page}</div>
+        </div>`).join('');
+      const goalCards = p.policy_goals.map(g => `
+        <div class="goal-card" data-goal="${g.num}" onclick="selectPlanGoal(${g.num},this)">
+          <div class="goal-num">${g.num}</div>
+          <div class="goal-title">${esc(g.title)}</div>
+          <div class="goal-theme">${esc(g.theme||'')}</div>
+          <div class="goal-desc">${esc(g.description||'')}</div>
+        </div>`).join('');
+      return `
+        <div class="plan-hero">
+          <div style="font-size:.8rem;opacity:.9">${esc(p.meta.title)} (${esc(p.meta.period)})</div>
+          <div class="plan-vision">${esc(p.meta.vision)}</div>
+          <div class="plan-sub">${esc(p.meta.vision_tagline||'')}</div>
+          <div class="plan-meta">
+            <span>発行: ${esc(p.meta.issued_date||'')}</span>
+            <span>発行者: ${esc(p.meta.issued_by||'')}</span>
+            <span>出典: ${esc(p.meta.source_document||'')}</span>
+          </div>
+        </div>
+        <div class="plan-warn">
+          <strong>⚠ この計画書について</strong><br>
+          ${(p.meta.known_limitations||[]).map(l=>'・'+esc(l)).join('<br>')}<br>
+          ・データは計画書本体から機械抽出したもので、正式情報は<a href="https://www.city.ito.shizuoka.jp/" target="_blank">伊東市公式サイト</a>をご確認ください。
+        </div>
+
+        <div class="plan-h3">🗺️ 伊東市が抱える9つのまちづくり課題<span class="plan-count">${p.machizukuri_kadai.length}</span></div>
+        <div class="kadai-grid">${kadaiCards}</div>
+
+        <div class="plan-h3">📉 将来人口推計</div>
+        <div class="pop-box">
+          ${popRows}
+          <div class="pop-legend">
+            <span class="lg-proj">社人研推計（このまま推移した場合）</span>
+            <span class="lg-target">目標人口（総合計画の目指す値）</span>
+          </div>
+          <div class="pop-note">${esc(p.future_population.note||'')}</div>
+        </div>
+
+        <div class="plan-h3">🎯 5つの政策目標（クリックで施策を展開）</div>
+        <div class="goals-grid">${goalCards}</div>
+        <div id="plan-sub-detail" class="sub-detail"></div>
+      `;
+    })() : '<div style="text-align:center;padding:2rem;color:var(--sub)">総合計画データが見つかりません。data/sougoukeikaku_v5.json を生成してください。</div>'}
   </div>
   <div id="tab-voice" class="tab-panel">
     <div class="voice-intro">
@@ -1168,6 +1305,32 @@ footer{text-align:center;padding:2rem;color:var(--sub);font-size:.8rem}
 const COMPARE_DATA = ${JSON.stringify(compareData)};
 const SEARCH_INDEX = ${JSON.stringify(searchIndex)};
 const CAT_COLORS = ${JSON.stringify(catColors)};
+const SUB_POLICIES = ${JSON.stringify(sougouPlan ? sougouPlan.sub_policies : [])};
+function selectPlanGoal(num,btn){
+  document.querySelectorAll('.goal-card').forEach(c=>c.classList.remove('selected'));
+  btn.classList.add('selected');
+  const subs = SUB_POLICIES.filter(s=>s.goal_num===num);
+  const area = document.getElementById('plan-sub-detail');
+  if(!subs.length){ area.innerHTML='<div style="text-align:center;color:#888;padding:1rem">該当する施策がありません</div>'; return; }
+  area.innerHTML = '<div class="plan-h3">▼ 政策目標'+num+'の施策 <span class="plan-count">'+subs.length+'</span></div>' +
+    subs.map((s,i)=>{
+      const cs = (s.current_state||[]).map(x=>'<li>'+escHtml(x)+'</li>').join('');
+      const ch = (s.challenges||[]).map(x=>'<li>'+escHtml(x)+'</li>').join('');
+      const kp = (s.kpis_raw||[]).map(k=>'<div class="kpi-raw">'+escHtml(k.raw||'')+'</div>').join('');
+      return '<div class="sub-card" id="sub-'+s.id+'">'+
+        '<div class="sub-head" onclick="this.parentElement.classList.toggle(\\'open\\')">'+
+          '<div><span class="sub-head-id">'+escHtml(s.id)+'</span><span class="sub-head-title">'+escHtml(s.title)+'</span></div>'+
+          '<span class="sub-toggle">▼</span>'+
+        '</div>'+
+        '<div class="sub-body">'+
+          (cs?'<div class="sub-section"><div class="sub-label">現状</div><ul class="sub-list">'+cs+'</ul></div>':'')+
+          (ch?'<div class="sub-section"><div class="sub-label challenge">課題</div><ul class="sub-list">'+ch+'</ul></div>':'')+
+          (kp?'<div class="sub-section"><div class="sub-label kpi">KPI（原文）</div>'+kp+'</div>':'')+
+        '</div>'+
+      '</div>';
+    }).join('');
+  area.scrollIntoView({behavior:'smooth',block:'start'});
+}
 let vCount=30;
 function switchTab(id,btn){
   document.querySelectorAll('.tab-panel').forEach(e=>e.classList.remove('active'));
