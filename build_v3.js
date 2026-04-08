@@ -1357,25 +1357,26 @@ footer{text-align:center;padding:2rem;color:var(--sub);font-size:.8rem}
   <div class="concierge-header">
     <div class="concierge-header-icon">🏙️</div>
     <div class="concierge-header-text">
-      <div class="concierge-title">伊東市総合計画ガイド</div>
-      <div class="concierge-subtitle">第五次総合計画の内容をAIが案内します</div>
+      <div class="concierge-title">みんなの伊東市 AIコンシェルジュ</div>
+      <div class="concierge-subtitle">議員・質問・総合計画などサイト全体を案内します</div>
     </div>
     <button class="concierge-close" onclick="conciergeToggle()" aria-label="閉じる">✕</button>
   </div>
   <div class="concierge-body" id="concierge-body">
     <div class="concierge-disclaimer">
       <strong>⚠ ご利用にあたって</strong><br>
-      ・回答は第五次伊東市総合計画（令和3年3月策定）の記述に基づきます。最新情報と異なる場合があります。<br>
-      ・重要事項は必ず<a href="https://www.city.ito.shizuoka.jp/" target="_blank">伊東市公式サイト</a>でご確認ください。<br>
-      ・議員個人の評価・賛否は行いません。
+      ・本サイト掲載情報（議員・質問・総合計画）のみを根拠に回答します。<br>
+      ・質問要約は自動字幕の機械抽出、議員評価は行いません。<br>
+      ・正確な情報は<a href="https://www.city.ito.shizuoka.jp/" target="_blank">伊東市公式</a>・<a href="https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/itoshigikai/index.html" target="_blank">市議会公式</a>でご確認ください。
     </div>
-    <div class="concierge-msg bot">こんにちは！伊東市総合計画ガイドです 🏙️<br>人口の見通し・防災・子育て・観光など、気になることを日本語で質問してください。</div>
+    <div class="concierge-msg bot">こんにちは！「みんなの伊東市」AIコンシェルジュです 🏙️<br>議員情報・質問ランキング・会派・総合計画など、サイトに掲載された情報について日本語で質問してください。</div>
     <div class="concierge-samples" id="concierge-samples">
-      <button class="concierge-sample" onclick="conciergeAsk('伊東市のこれからの人口はどうなりますか？')">人口の見通し</button>
-      <button class="concierge-sample" onclick="conciergeAsk('伊東市の防災対策について教えてください')">防災対策</button>
+      <button class="concierge-sample" onclick="conciergeAsk('質問数が多い議員は誰ですか？')">質問数ランキング</button>
+      <button class="concierge-sample" onclick="conciergeAsk('伊東市議会の会派構成を教えて')">会派構成</button>
+      <button class="concierge-sample" onclick="conciergeAsk('伊東市のこれからの人口はどうなりますか？')">将来人口</button>
+      <button class="concierge-sample" onclick="conciergeAsk('防災対策について教えて')">防災対策</button>
       <button class="concierge-sample" onclick="conciergeAsk('子育て支援はどうなっていますか？')">子育て支援</button>
-      <button class="concierge-sample" onclick="conciergeAsk('観光振興の方針は？')">観光振興</button>
-      <button class="concierge-sample" onclick="conciergeAsk('伊東市が抱える課題は何ですか？')">市の課題</button>
+      <button class="concierge-sample" onclick="conciergeAsk('このサイトは何ができますか？')">サイトの使い方</button>
     </div>
   </div>
   <div class="concierge-footer">
