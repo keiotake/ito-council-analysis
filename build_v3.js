@@ -603,27 +603,47 @@ nav button.active{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff}
 .heat-vid-title{font-size:.82rem;font-weight:600;color:var(--text);margin-bottom:.25rem;line-height:1.4}
 .heat-vid-meta{font-size:.7rem;color:var(--sub);display:flex;gap:.5rem;flex-wrap:wrap;align-items:center}
 .heat-vid-kw{font-size:.68rem;background:#e8f0fe;color:#4a90e2;padding:.1rem .4rem;border-radius:8px;font-weight:600}
-/* チャットボット */
-.chat-box{background:var(--card);border-radius:12px;padding:1.2rem;box-shadow:0 2px 10px rgba(0,0,0,.07);margin-bottom:1rem}
-.chat-head{font-size:1.05rem;font-weight:700;color:#4a90e2;margin-bottom:.3rem}
-.chat-sub{font-size:.78rem;color:var(--sub);margin-bottom:.8rem;line-height:1.5}
-.chat-disclaimer{background:#fff5e6;border-left:4px solid #f39c12;padding:.6rem .9rem;border-radius:6px;margin-bottom:.8rem;font-size:.72rem;color:#7a5a00;line-height:1.5}
-.chat-samples{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.7rem}
-.chat-sample{background:#e8f0fe;border:1px solid #c9dcf7;color:#4a90e2;padding:.3rem .7rem;border-radius:16px;font-size:.74rem;cursor:pointer;transition:.15s;font-weight:600}
-.chat-sample:hover{background:#4a90e2;color:#fff}
-.chat-inputwrap{display:flex;gap:.5rem;align-items:flex-end;margin-bottom:.5rem}
-.chat-input{flex:1;padding:.6rem .8rem;border:1.5px solid #d5dbe6;border-radius:10px;font-size:.88rem;resize:vertical;min-height:54px;max-height:160px;font-family:inherit;line-height:1.5}
-.chat-input:focus{outline:none;border-color:#4a90e2}
-.chat-send{padding:.7rem 1.3rem;background:#4a90e2;color:#fff;border:none;border-radius:10px;font-size:.9rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:.15s}
-.chat-send:hover:not(:disabled){background:#3a7bc8}
-.chat-send:disabled{background:#a8b8c8;cursor:not-allowed}
-.chat-counter{font-size:.7rem;color:var(--sub);text-align:right;margin-bottom:.5rem}
-.chat-answer{background:#f9fafc;border-left:4px solid #4a90e2;padding:.9rem 1.1rem;border-radius:8px;margin-top:.8rem;font-size:.88rem;line-height:1.7;white-space:pre-wrap;color:var(--text)}
-.chat-answer.err{border-left-color:#e74c3c;background:#fef2f2;color:#a33}
-.chat-loading{display:flex;align-items:center;gap:.5rem;color:var(--sub);font-size:.82rem;padding:.8rem 0}
-.chat-spinner{width:14px;height:14px;border:2px solid #e3edf8;border-top-color:#4a90e2;border-radius:50%;animation:chat-spin .8s linear infinite}
-@keyframes chat-spin{to{transform:rotate(360deg)}}
-.chat-usage{font-size:.68rem;color:var(--sub);margin-top:.4rem;text-align:right}
+/* コンシェルジュ・チャットボット（フロート型） */
+.concierge-fab{position:fixed;bottom:24px;right:24px;width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;box-shadow:0 6px 20px rgba(102,126,234,.45);cursor:pointer;font-size:1.8rem;z-index:9998;display:flex;align-items:center;justify-content:center;transition:transform .2s, box-shadow .2s}
+.concierge-fab:hover{transform:scale(1.08);box-shadow:0 10px 28px rgba(102,126,234,.55)}
+.concierge-fab.open{background:#6b7280}
+.concierge-fab-label{position:absolute;right:78px;bottom:14px;background:#fff;color:#4a90e2;padding:.5rem .9rem;border-radius:20px;font-size:.78rem;font-weight:700;box-shadow:0 4px 12px rgba(0,0,0,.15);white-space:nowrap;pointer-events:none;animation:cfab-pulse 2.5s ease-in-out infinite}
+@keyframes cfab-pulse{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+.concierge-panel{position:fixed;bottom:100px;right:24px;width:380px;max-width:calc(100vw - 32px);height:min(620px, calc(100vh - 140px));background:#fff;border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,.25);z-index:9999;display:none;flex-direction:column;overflow:hidden;border:1px solid #e5e7eb}
+.concierge-panel.open{display:flex;animation:cpanel-in .25s ease-out}
+@keyframes cpanel-in{from{opacity:0;transform:translateY(20px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+.concierge-header{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:1rem 1.2rem;display:flex;align-items:center;gap:.7rem;flex-shrink:0}
+.concierge-header-icon{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.concierge-header-text{flex:1;min-width:0}
+.concierge-title{font-size:.95rem;font-weight:700;line-height:1.2}
+.concierge-subtitle{font-size:.68rem;opacity:.9;margin-top:.15rem}
+.concierge-close{background:rgba(255,255,255,.2);color:#fff;border:none;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:background .15s}
+.concierge-close:hover{background:rgba(255,255,255,.35)}
+.concierge-body{flex:1;overflow-y:auto;padding:1rem 1.1rem;background:#f9fafc;display:flex;flex-direction:column;gap:.7rem}
+.concierge-disclaimer{background:#fff5e6;border-left:3px solid #f39c12;padding:.5rem .7rem;border-radius:5px;font-size:.68rem;color:#7a5a00;line-height:1.55}
+.concierge-msg{max-width:88%;padding:.6rem .85rem;border-radius:14px;font-size:.82rem;line-height:1.6;white-space:pre-wrap;word-wrap:break-word}
+.concierge-msg.bot{background:#fff;border:1px solid #e5e7eb;align-self:flex-start;border-top-left-radius:4px;color:#222}
+.concierge-msg.user{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;align-self:flex-end;border-top-right-radius:4px}
+.concierge-msg.err{background:#fef2f2;border:1px solid #fecaca;color:#a33;align-self:flex-start}
+.concierge-samples{display:flex;flex-wrap:wrap;gap:.35rem;padding:.2rem 0}
+.concierge-sample{background:#fff;border:1px solid #c9dcf7;color:#4a90e2;padding:.35rem .7rem;border-radius:14px;font-size:.7rem;cursor:pointer;font-weight:600;transition:.15s}
+.concierge-sample:hover{background:#4a90e2;color:#fff;border-color:#4a90e2}
+.concierge-loading{display:flex;align-items:center;gap:.5rem;color:var(--sub);font-size:.75rem;align-self:flex-start;padding:.4rem 0}
+.concierge-spinner{width:14px;height:14px;border:2px solid #e3edf8;border-top-color:#4a90e2;border-radius:50%;animation:cchat-spin .8s linear infinite}
+@keyframes cchat-spin{to{transform:rotate(360deg)}}
+.concierge-footer{padding:.7rem .9rem;border-top:1px solid #e5e7eb;background:#fff;flex-shrink:0}
+.concierge-inputwrap{display:flex;gap:.4rem;align-items:flex-end}
+.concierge-input{flex:1;padding:.55rem .7rem;border:1.5px solid #d5dbe6;border-radius:10px;font-size:.82rem;resize:none;min-height:38px;max-height:100px;font-family:inherit;line-height:1.4;outline:none}
+.concierge-input:focus{border-color:#667eea}
+.concierge-send{padding:.55rem .95rem;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:10px;font-size:.8rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:.15s}
+.concierge-send:hover:not(:disabled){opacity:.9;transform:translateY(-1px)}
+.concierge-send:disabled{background:#a8b8c8;cursor:not-allowed;transform:none}
+.concierge-counter{font-size:.65rem;color:var(--sub);text-align:right;margin-top:.3rem}
+@media (max-width:480px){
+  .concierge-panel{width:calc(100vw - 20px);right:10px;bottom:90px;height:calc(100vh - 120px)}
+  .concierge-fab{bottom:16px;right:16px;width:56px;height:56px;font-size:1.5rem}
+  .concierge-fab-label{display:none}
+}
 .back-btn{padding:.5rem 1rem;border:none;border-radius:10px;background:#f0f4f8;font-size:.9rem;cursor:pointer;font-weight:600;margin-bottom:1rem}
 .back-btn:hover{background:#e5e7eb}
 .detail-panel{display:none}
@@ -1100,30 +1120,6 @@ footer{text-align:center;padding:2rem;color:var(--sub);font-size:.8rem}
           ・データは計画書本体から機械抽出したもので、正式情報は<a href="https://www.city.ito.shizuoka.jp/" target="_blank">伊東市公式サイト</a>をご確認ください。
         </div>
 
-        <div class="chat-box">
-          <div class="chat-head">💬 総合計画ガイドに質問する（AI）</div>
-          <div class="chat-sub">第五次伊東市総合計画の内容について、AIがやさしく答えます。人口の見通し・防災・子育て・観光など、気になることを日本語で入力してください。</div>
-          <div class="chat-disclaimer">
-            <strong>⚠ ご利用にあたって</strong><br>
-            ・回答は計画書（令和3年3月策定）の記述に基づきます。COVID-19後の状況や最新の人口等は反映されていない場合があります。<br>
-            ・AIが生成した回答のため、重要な事項は必ず<a href="https://www.city.ito.shizuoka.jp/" target="_blank">伊東市公式サイト</a>や計画書本体でご確認ください。<br>
-            ・議員個人の評価・賛否・政治的判断は行いません。計画書と無関係の質問にはお答えできません。
-          </div>
-          <div class="chat-samples">
-            <button class="chat-sample" onclick="chatFillSample('伊東市のこれからの人口はどうなりますか？')">伊東市の人口は？</button>
-            <button class="chat-sample" onclick="chatFillSample('伊東市の防災対策について教えてください')">防災対策は？</button>
-            <button class="chat-sample" onclick="chatFillSample('子育て支援はどうなっていますか？')">子育て支援は？</button>
-            <button class="chat-sample" onclick="chatFillSample('観光振興の方針は？')">観光振興の方針は？</button>
-            <button class="chat-sample" onclick="chatFillSample('伊東市が抱える課題は何ですか？')">市の課題は？</button>
-          </div>
-          <div class="chat-inputwrap">
-            <textarea class="chat-input" id="chat-input" maxlength="300" placeholder="質問を入力..." oninput="chatUpdateCounter()" onkeydown="if(event.ctrlKey&&event.key==='Enter')chatSend()"></textarea>
-            <button class="chat-send" id="chat-send-btn" onclick="chatSend()">送信</button>
-          </div>
-          <div class="chat-counter"><span id="chat-counter">0</span> / 300 文字　<span style="opacity:.7">(Ctrl+Enterで送信)</span></div>
-          <div id="chat-result"></div>
-        </div>
-
         <div class="plan-h3">🗺️ 伊東市が抱える9つのまちづくり課題<span class="plan-count">${p.machizukuri_kadai.length}</span></div>
         <div class="kadai-grid">${kadaiCards}</div>
 
@@ -1351,6 +1347,46 @@ footer{text-align:center;padding:2rem;color:var(--sub);font-size:.8rem}
     </div>
   </div>
 </div>
+
+<!-- コンシェルジュチャットボット（全ページ共通・フロート型） -->
+<button class="concierge-fab" id="concierge-fab" onclick="conciergeToggle()" aria-label="AIコンシェルジュに質問">
+  <span id="concierge-fab-icon">💬</span>
+  <span class="concierge-fab-label" id="concierge-fab-label">AIに聞く</span>
+</button>
+<div class="concierge-panel" id="concierge-panel" role="dialog" aria-label="AIコンシェルジュ">
+  <div class="concierge-header">
+    <div class="concierge-header-icon">🏙️</div>
+    <div class="concierge-header-text">
+      <div class="concierge-title">伊東市総合計画ガイド</div>
+      <div class="concierge-subtitle">第五次総合計画の内容をAIが案内します</div>
+    </div>
+    <button class="concierge-close" onclick="conciergeToggle()" aria-label="閉じる">✕</button>
+  </div>
+  <div class="concierge-body" id="concierge-body">
+    <div class="concierge-disclaimer">
+      <strong>⚠ ご利用にあたって</strong><br>
+      ・回答は第五次伊東市総合計画（令和3年3月策定）の記述に基づきます。最新情報と異なる場合があります。<br>
+      ・重要事項は必ず<a href="https://www.city.ito.shizuoka.jp/" target="_blank">伊東市公式サイト</a>でご確認ください。<br>
+      ・議員個人の評価・賛否は行いません。
+    </div>
+    <div class="concierge-msg bot">こんにちは！伊東市総合計画ガイドです 🏙️<br>人口の見通し・防災・子育て・観光など、気になることを日本語で質問してください。</div>
+    <div class="concierge-samples" id="concierge-samples">
+      <button class="concierge-sample" onclick="conciergeAsk('伊東市のこれからの人口はどうなりますか？')">人口の見通し</button>
+      <button class="concierge-sample" onclick="conciergeAsk('伊東市の防災対策について教えてください')">防災対策</button>
+      <button class="concierge-sample" onclick="conciergeAsk('子育て支援はどうなっていますか？')">子育て支援</button>
+      <button class="concierge-sample" onclick="conciergeAsk('観光振興の方針は？')">観光振興</button>
+      <button class="concierge-sample" onclick="conciergeAsk('伊東市が抱える課題は何ですか？')">市の課題</button>
+    </div>
+  </div>
+  <div class="concierge-footer">
+    <div class="concierge-inputwrap">
+      <textarea class="concierge-input" id="concierge-input" maxlength="300" placeholder="質問を入力..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();conciergeSend();}"></textarea>
+      <button class="concierge-send" id="concierge-send-btn" onclick="conciergeSend()">送信</button>
+    </div>
+    <div class="concierge-counter"><span id="concierge-counter">0</span> / 300　<span style="opacity:.6">Enterで送信</span></div>
+  </div>
+</div>
+
 <div class="disclaimer">
   <h3>免責事項</h3>
 
@@ -1513,28 +1549,68 @@ function selectPlanGoal(num,btn){
     }).join('');
   area.scrollIntoView({behavior:'smooth',block:'start'});
 }
-/* ========== 総合計画チャットボット ========== */
-function chatFillSample(t){
-  const ta=document.getElementById('chat-input');
-  if(!ta) return;
-  ta.value=t; chatUpdateCounter(); ta.focus();
+/* ========== コンシェルジュ・チャットボット（全ページ共通） ========== */
+function conciergeEscHtml(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function conciergeToggle(){
+  const panel=document.getElementById('concierge-panel');
+  const fab=document.getElementById('concierge-fab');
+  const icon=document.getElementById('concierge-fab-icon');
+  const label=document.getElementById('concierge-fab-label');
+  if(!panel || !fab) return;
+  const isOpen=panel.classList.toggle('open');
+  fab.classList.toggle('open', isOpen);
+  if(icon) icon.textContent = isOpen ? '✕' : '💬';
+  if(label) label.style.display = isOpen ? 'none' : '';
+  if(isOpen){
+    setTimeout(()=>{
+      const input=document.getElementById('concierge-input');
+      if(input) input.focus();
+    }, 250);
+  }
 }
-function chatUpdateCounter(){
-  const ta=document.getElementById('chat-input');
-  const c=document.getElementById('chat-counter');
+function conciergeAppendMsg(text, cls){
+  const body=document.getElementById('concierge-body');
+  if(!body) return null;
+  const div=document.createElement('div');
+  div.className='concierge-msg '+(cls||'bot');
+  div.textContent=text;
+  body.appendChild(div);
+  body.scrollTop=body.scrollHeight;
+  return div;
+}
+function conciergeHideSamples(){
+  const s=document.getElementById('concierge-samples');
+  if(s) s.style.display='none';
+}
+function conciergeAsk(q){
+  const panel=document.getElementById('concierge-panel');
+  if(panel && !panel.classList.contains('open')) conciergeToggle();
+  const input=document.getElementById('concierge-input');
+  if(input){ input.value=q; conciergeUpdateCounter(); }
+  conciergeSend();
+}
+function conciergeUpdateCounter(){
+  const ta=document.getElementById('concierge-input');
+  const c=document.getElementById('concierge-counter');
   if(ta && c) c.textContent=ta.value.length;
 }
-function chatEscHtml(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-async function chatSend(){
-  const ta=document.getElementById('chat-input');
-  const btn=document.getElementById('chat-send-btn');
-  const result=document.getElementById('chat-result');
-  if(!ta || !btn || !result) return;
+async function conciergeSend(){
+  const ta=document.getElementById('concierge-input');
+  const btn=document.getElementById('concierge-send-btn');
+  const body=document.getElementById('concierge-body');
+  if(!ta || !btn || !body) return;
   const q=ta.value.trim();
-  if(q.length<2){ result.innerHTML='<div class="chat-answer err">質問を2文字以上入力してください。</div>'; return; }
-  if(q.length>300){ result.innerHTML='<div class="chat-answer err">質問は300文字以内でお願いします。</div>'; return; }
-  btn.disabled=true; btn.textContent='送信中...';
-  result.innerHTML='<div class="chat-loading"><div class="chat-spinner"></div>AIが計画書を参照して回答を作成しています...（10〜20秒かかります）</div>';
+  if(q.length<2){ conciergeAppendMsg('質問を2文字以上入力してください。','err'); return; }
+  if(q.length>300){ conciergeAppendMsg('質問は300文字以内でお願いします。','err'); return; }
+  conciergeHideSamples();
+  conciergeAppendMsg(q,'user');
+  ta.value=''; conciergeUpdateCounter();
+  btn.disabled=true; btn.textContent='…';
+  const loading=document.createElement('div');
+  loading.className='concierge-loading';
+  loading.innerHTML='<div class="concierge-spinner"></div>AIが計画書を参照中...';
+  body.appendChild(loading);
+  body.scrollTop=body.scrollHeight;
   try{
     const resp=await fetch(VOICE_API+'/chat',{
       method:'POST',
@@ -1542,23 +1618,26 @@ async function chatSend(){
       body:JSON.stringify({question:q})
     });
     const data=await resp.json();
+    loading.remove();
     if(!resp.ok || !data.ok){
       const msg=data && data.error ? data.error : ('エラー: '+resp.status);
-      result.innerHTML='<div class="chat-answer err">❌ '+chatEscHtml(msg)+'</div>';
+      conciergeAppendMsg('❌ '+msg,'err');
     } else {
-      const usage=data.usage||{};
-      const usageStr=(usage.input!=null && usage.output!=null)
-        ? '使用トークン: 入力'+usage.input+' / 出力'+usage.output
-        : '';
-      result.innerHTML='<div class="chat-answer">'+chatEscHtml(data.answer)+'</div>'+
-        (usageStr?'<div class="chat-usage">'+usageStr+'</div>':'');
+      conciergeAppendMsg(data.answer || '(応答なし)','bot');
     }
   }catch(e){
-    result.innerHTML='<div class="chat-answer err">❌ 通信エラー: '+chatEscHtml(e.message||String(e))+'</div>';
+    loading.remove();
+    conciergeAppendMsg('❌ 通信エラー: '+(e.message||String(e)),'err');
   }finally{
     btn.disabled=false; btn.textContent='送信';
+    ta.focus();
   }
 }
+// 入力カウンタのリスナー登録
+document.addEventListener('DOMContentLoaded',()=>{
+  const ta=document.getElementById('concierge-input');
+  if(ta) ta.addEventListener('input', conciergeUpdateCounter);
+});
 let vCount=30;
 function switchTab(id,btn){
   document.querySelectorAll('.tab-panel').forEach(e=>e.classList.remove('active'));
