@@ -53,6 +53,35 @@ const SUB_KEYWORDS = {
 // 議員正規化マップ（全角スペース等を除去するだけ）
 const normName = n => (n||'').replace(/\s+/g,'').trim();
 
+// 同姓議員の曖昧性解消: 既存 speakers 抽出ロジックが同姓を両方付与してしまうため、
+// タイトルに完全一致する名前があればそれのみを採用する
+const AMBIGUOUS_PAIRS = [
+  ['杉本憲也','杉本一彦'],
+  ['佐藤周','佐藤龍彦'],
+  ['鈴木絢子','鈴木克政'],
+  ['稲葉正仁','稲葉富士憲'],
+];
+function disambiguateSpeakers(speakers, title) {
+  const sp = speakers.slice();
+  for (const [a, b] of AMBIGUOUS_PAIRS) {
+    if (sp.includes(a) && sp.includes(b)) {
+      const hasA = title && title.includes(a);
+      const hasB = title && title.includes(b);
+      if (hasA && !hasB) {
+        const idx = sp.indexOf(b); sp.splice(idx, 1);
+      } else if (hasB && !hasA) {
+        const idx = sp.indexOf(a); sp.splice(idx, 1);
+      } else if (!hasA && !hasB) {
+        // タイトルにどちらも明示されない場合（本会議・委員会等の複数登壇）は
+        // 誤帰属を避けるため両方とも除外する
+        const ia = sp.indexOf(a); if (ia>=0) sp.splice(ia, 1);
+        const ib = sp.indexOf(b); if (ib>=0) sp.splice(ib, 1);
+      }
+    }
+  }
+  return sp;
+}
+
 // 結果構造
 // map[memberName][subId] = { count, videos: [{videoId, date, title, url, matchedKeywords, snippet}] }
 const memberMap = {};
@@ -67,7 +96,8 @@ for (const v of analysis.videos) {
   const fullText = texts.join('\n');
   if (!fullText) continue;
 
-  const speakers = (v.speakers||[]).map(normName).filter(Boolean);
+  const rawSpeakers = (v.speakers||[]).map(normName).filter(Boolean);
+  const speakers = disambiguateSpeakers(rawSpeakers, v.title||'');
   if (speakers.length===0) continue;
 
   // この動画が言及した施策を判定
