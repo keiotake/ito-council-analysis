@@ -603,6 +603,27 @@ nav button.active{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff}
 .heat-vid-title{font-size:.82rem;font-weight:600;color:var(--text);margin-bottom:.25rem;line-height:1.4}
 .heat-vid-meta{font-size:.7rem;color:var(--sub);display:flex;gap:.5rem;flex-wrap:wrap;align-items:center}
 .heat-vid-kw{font-size:.68rem;background:#e8f0fe;color:#4a90e2;padding:.1rem .4rem;border-radius:8px;font-weight:600}
+/* チャットボット */
+.chat-box{background:var(--card);border-radius:12px;padding:1.2rem;box-shadow:0 2px 10px rgba(0,0,0,.07);margin-bottom:1rem}
+.chat-head{font-size:1.05rem;font-weight:700;color:#4a90e2;margin-bottom:.3rem}
+.chat-sub{font-size:.78rem;color:var(--sub);margin-bottom:.8rem;line-height:1.5}
+.chat-disclaimer{background:#fff5e6;border-left:4px solid #f39c12;padding:.6rem .9rem;border-radius:6px;margin-bottom:.8rem;font-size:.72rem;color:#7a5a00;line-height:1.5}
+.chat-samples{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.7rem}
+.chat-sample{background:#e8f0fe;border:1px solid #c9dcf7;color:#4a90e2;padding:.3rem .7rem;border-radius:16px;font-size:.74rem;cursor:pointer;transition:.15s;font-weight:600}
+.chat-sample:hover{background:#4a90e2;color:#fff}
+.chat-inputwrap{display:flex;gap:.5rem;align-items:flex-end;margin-bottom:.5rem}
+.chat-input{flex:1;padding:.6rem .8rem;border:1.5px solid #d5dbe6;border-radius:10px;font-size:.88rem;resize:vertical;min-height:54px;max-height:160px;font-family:inherit;line-height:1.5}
+.chat-input:focus{outline:none;border-color:#4a90e2}
+.chat-send{padding:.7rem 1.3rem;background:#4a90e2;color:#fff;border:none;border-radius:10px;font-size:.9rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:.15s}
+.chat-send:hover:not(:disabled){background:#3a7bc8}
+.chat-send:disabled{background:#a8b8c8;cursor:not-allowed}
+.chat-counter{font-size:.7rem;color:var(--sub);text-align:right;margin-bottom:.5rem}
+.chat-answer{background:#f9fafc;border-left:4px solid #4a90e2;padding:.9rem 1.1rem;border-radius:8px;margin-top:.8rem;font-size:.88rem;line-height:1.7;white-space:pre-wrap;color:var(--text)}
+.chat-answer.err{border-left-color:#e74c3c;background:#fef2f2;color:#a33}
+.chat-loading{display:flex;align-items:center;gap:.5rem;color:var(--sub);font-size:.82rem;padding:.8rem 0}
+.chat-spinner{width:14px;height:14px;border:2px solid #e3edf8;border-top-color:#4a90e2;border-radius:50%;animation:chat-spin .8s linear infinite}
+@keyframes chat-spin{to{transform:rotate(360deg)}}
+.chat-usage{font-size:.68rem;color:var(--sub);margin-top:.4rem;text-align:right}
 .back-btn{padding:.5rem 1rem;border:none;border-radius:10px;background:#f0f4f8;font-size:.9rem;cursor:pointer;font-weight:600;margin-bottom:1rem}
 .back-btn:hover{background:#e5e7eb}
 .detail-panel{display:none}
@@ -1079,6 +1100,30 @@ footer{text-align:center;padding:2rem;color:var(--sub);font-size:.8rem}
           ・データは計画書本体から機械抽出したもので、正式情報は<a href="https://www.city.ito.shizuoka.jp/" target="_blank">伊東市公式サイト</a>をご確認ください。
         </div>
 
+        <div class="chat-box">
+          <div class="chat-head">💬 総合計画ガイドに質問する（AI）</div>
+          <div class="chat-sub">第五次伊東市総合計画の内容について、AIがやさしく答えます。人口の見通し・防災・子育て・観光など、気になることを日本語で入力してください。</div>
+          <div class="chat-disclaimer">
+            <strong>⚠ ご利用にあたって</strong><br>
+            ・回答は計画書（令和3年3月策定）の記述に基づきます。COVID-19後の状況や最新の人口等は反映されていない場合があります。<br>
+            ・AIが生成した回答のため、重要な事項は必ず<a href="https://www.city.ito.shizuoka.jp/" target="_blank">伊東市公式サイト</a>や計画書本体でご確認ください。<br>
+            ・議員個人の評価・賛否・政治的判断は行いません。計画書と無関係の質問にはお答えできません。
+          </div>
+          <div class="chat-samples">
+            <button class="chat-sample" onclick="chatFillSample('伊東市のこれからの人口はどうなりますか？')">伊東市の人口は？</button>
+            <button class="chat-sample" onclick="chatFillSample('伊東市の防災対策について教えてください')">防災対策は？</button>
+            <button class="chat-sample" onclick="chatFillSample('子育て支援はどうなっていますか？')">子育て支援は？</button>
+            <button class="chat-sample" onclick="chatFillSample('観光振興の方針は？')">観光振興の方針は？</button>
+            <button class="chat-sample" onclick="chatFillSample('伊東市が抱える課題は何ですか？')">市の課題は？</button>
+          </div>
+          <div class="chat-inputwrap">
+            <textarea class="chat-input" id="chat-input" maxlength="300" placeholder="質問を入力..." oninput="chatUpdateCounter()" onkeydown="if(event.ctrlKey&&event.key==='Enter')chatSend()"></textarea>
+            <button class="chat-send" id="chat-send-btn" onclick="chatSend()">送信</button>
+          </div>
+          <div class="chat-counter"><span id="chat-counter">0</span> / 300 文字　<span style="opacity:.7">(Ctrl+Enterで送信)</span></div>
+          <div id="chat-result"></div>
+        </div>
+
         <div class="plan-h3">🗺️ 伊東市が抱える9つのまちづくり課題<span class="plan-count">${p.machizukuri_kadai.length}</span></div>
         <div class="kadai-grid">${kadaiCards}</div>
 
@@ -1467,6 +1512,52 @@ function selectPlanGoal(num,btn){
       '</div>';
     }).join('');
   area.scrollIntoView({behavior:'smooth',block:'start'});
+}
+/* ========== 総合計画チャットボット ========== */
+function chatFillSample(t){
+  const ta=document.getElementById('chat-input');
+  if(!ta) return;
+  ta.value=t; chatUpdateCounter(); ta.focus();
+}
+function chatUpdateCounter(){
+  const ta=document.getElementById('chat-input');
+  const c=document.getElementById('chat-counter');
+  if(ta && c) c.textContent=ta.value.length;
+}
+function chatEscHtml(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+async function chatSend(){
+  const ta=document.getElementById('chat-input');
+  const btn=document.getElementById('chat-send-btn');
+  const result=document.getElementById('chat-result');
+  if(!ta || !btn || !result) return;
+  const q=ta.value.trim();
+  if(q.length<2){ result.innerHTML='<div class="chat-answer err">質問を2文字以上入力してください。</div>'; return; }
+  if(q.length>300){ result.innerHTML='<div class="chat-answer err">質問は300文字以内でお願いします。</div>'; return; }
+  btn.disabled=true; btn.textContent='送信中...';
+  result.innerHTML='<div class="chat-loading"><div class="chat-spinner"></div>AIが計画書を参照して回答を作成しています...（10〜20秒かかります）</div>';
+  try{
+    const resp=await fetch(VOICE_API+'/chat',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({question:q})
+    });
+    const data=await resp.json();
+    if(!resp.ok || !data.ok){
+      const msg=data && data.error ? data.error : ('エラー: '+resp.status);
+      result.innerHTML='<div class="chat-answer err">❌ '+chatEscHtml(msg)+'</div>';
+    } else {
+      const usage=data.usage||{};
+      const usageStr=(usage.input!=null && usage.output!=null)
+        ? '使用トークン: 入力'+usage.input+' / 出力'+usage.output
+        : '';
+      result.innerHTML='<div class="chat-answer">'+chatEscHtml(data.answer)+'</div>'+
+        (usageStr?'<div class="chat-usage">'+usageStr+'</div>':'');
+    }
+  }catch(e){
+    result.innerHTML='<div class="chat-answer err">❌ 通信エラー: '+chatEscHtml(e.message||String(e))+'</div>';
+  }finally{
+    btn.disabled=false; btn.textContent='送信';
+  }
 }
 let vCount=30;
 function switchTab(id,btn){
