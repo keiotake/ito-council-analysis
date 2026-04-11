@@ -577,7 +577,7 @@ nav button.active{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff}
 .heat-table{border-collapse:collapse;font-size:.72rem;min-width:100%}
 .heat-table th,.heat-table td{border:1px solid #eef1f5;padding:0;text-align:center}
 .heat-table th.member-col,.heat-table td.member-col{position:sticky;left:0;background:#fff;z-index:2;text-align:left;padding:.3rem .5rem;white-space:nowrap;font-weight:600;min-width:100px;max-width:120px;overflow:hidden;text-overflow:ellipsis;border-right:2px solid #d5dbe6}
-.heat-table thead th{position:sticky;top:0;background:#f0f4f8;z-index:3;padding:.3rem .2rem;font-size:.66rem;writing-mode:vertical-rl;transform:rotate(180deg);height:80px;white-space:nowrap;border-bottom:2px solid #d5dbe6;font-weight:600;color:var(--sub)}
+.heat-table thead th{position:sticky;top:0;background:#f0f4f8;z-index:3;padding:.3rem .2rem;font-size:.66rem;writing-mode:vertical-rl;height:80px;white-space:nowrap;border-bottom:2px solid #d5dbe6;font-weight:600;color:var(--sub)}
 .heat-table thead th.member-col{writing-mode:initial;transform:none;height:auto;z-index:4;background:#e8eef6;text-align:left}
 .heat-table thead th.goal-sep{background:#e8eef6;color:#4a90e2;font-weight:700;writing-mode:initial;transform:none;height:auto;padding:.3rem .5rem;font-size:.72rem}
 .heat-cell{width:22px;height:22px;cursor:pointer;transition:.1s;display:block}
@@ -586,8 +586,8 @@ nav button.active{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff}
 .heat-1{background:#e3edf8}
 .heat-2{background:#b8d1ef}
 .heat-3{background:#7faadb}
-.heat-4{background:#4a7fc4}
-.heat-5{background:#2a5ba5}
+.heat-4{background:#4a7fc4;color:#fff}
+.heat-5{background:#2a5ba5;color:#fff}
 .heat-legend{display:flex;gap:.4rem;align-items:center;margin-top:.7rem;font-size:.72rem;color:var(--sub);flex-wrap:wrap}
 .heat-legend .lg-box{display:inline-block;width:16px;height:16px;border:1px solid #d5dbe6;vertical-align:middle;margin-right:.2rem}
 /* モーダル */
@@ -930,7 +930,7 @@ footer{text-align:center;padding:2rem;color:var(--sub);font-size:.8rem}
 <body>
 <header>
   <h1>みんなの伊東市</h1>
-  <div class="header-sub">第21期（令和7年〜）</div>
+  <div class="header-sub">第21期（令和7年〜） ｜ 伊東市議会議員 大竹圭 が制作・運営しています</div>
   <div class="stats-row">
     <div class="stat-card"><div class="stat-val">${videos.length}</div><div class="stat-lbl">動画数</div></div>
     <div class="stat-card"><div class="stat-val">${currentMembersList.length}</div><div class="stat-lbl">現職議員</div></div>
@@ -1459,7 +1459,7 @@ footer{text-align:center;padding:2rem;color:var(--sub);font-size:.8rem}
 </div>
 <footer>
   <div>データ出典: <a href="https://www.youtube.com/channel/UC9FGDfo93b_dpu_7-AnN4wQ" target="_blank" style="color:var(--accent)">伊東市議会インターネット中継放送</a> | <a href="https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/itoshigikai/index.html" target="_blank" style="color:var(--accent)">伊東市議会HP</a></div>
-  <div style="margin-top:.3rem">最終更新: ${new Date().toLocaleDateString('ja-JP')}</div>
+  <div style="margin-top:.3rem">制作・運営: 伊東市議会議員 大竹圭 ｜ 最終更新: ${new Date().toLocaleDateString('ja-JP')}</div>
 </footer>
 <script>
 const COMPARE_DATA = ${JSON.stringify(compareData)};
