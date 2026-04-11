@@ -289,7 +289,7 @@ function radarChart(topicData, size = 280) {
 
   return `<svg viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" style="max-width:100%">
     ${gridLines}${axes}${scaleLabels}
-    <polygon points="${dataPts.join(' ')}" fill="rgba(102,126,234,0.25)" stroke="#667eea" stroke-width="2"/>
+    <polygon points="${dataPts.join(' ')}" fill="rgba(37,99,235,0.25)" stroke="#2563eb" stroke-width="2"/>
     ${labels}
   </svg>`;
 }
@@ -460,20 +460,20 @@ const html = `<!DOCTYPE html>
 <title>みんなの伊東市</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#f0f4f8;--card:#fff;--text:#1a1a2e;--sub:#6b7280;--radius:16px;--accent:#667eea}
-body{font-family:-apple-system,'Hiragino Sans','Meiryo',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
-header{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;padding:2.5rem 1rem 2rem;text-align:center}
-header h1{font-size:1.8rem;font-weight:800;letter-spacing:.08em}
-.header-sub{opacity:.85;font-size:.85rem;margin-top:.3rem}
-.stats-row{display:flex;justify-content:center;gap:1.5rem;margin-top:1.2rem;flex-wrap:wrap}
-.stat-card{background:rgba(255,255,255,.15);border-radius:12px;padding:.6rem 1.2rem;backdrop-filter:blur(10px)}
-.stat-val{font-size:1.8rem;font-weight:800}
-.stat-lbl{font-size:.75rem;opacity:.85}
-nav{display:flex;justify-content:center;gap:.5rem;padding:.8rem 1rem;background:#fff;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.06)}
-nav button{padding:.5rem 1.2rem;border:none;border-radius:25px;font-size:.9rem;font-weight:600;cursor:pointer;transition:.2s;background:transparent;color:var(--sub)}
-nav button:hover{background:#f0f4f8}
-nav button.active{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff}
-.container{max-width:1200px;margin:0 auto;padding:1rem}
+:root{--bg:#f8fafc;--card:#fff;--text:#1e293b;--sub:#64748b;--radius:14px;--accent:#2563eb}
+body{font-family:-apple-system,'Hiragino Sans','Meiryo',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;-webkit-text-size-adjust:100%}
+header{background:linear-gradient(135deg,#1e40af 0%,#2563eb 100%);color:#fff;padding:1.4rem 1rem 1.1rem;text-align:center}
+header h1{font-size:1.5rem;font-weight:700;letter-spacing:.06em}
+.header-sub{opacity:.88;font-size:.82rem;margin-top:.25rem}
+.header-stats{display:flex;justify-content:center;gap:.4rem;margin-top:.6rem;flex-wrap:wrap;font-size:.78rem;opacity:.9}
+.header-stats span{background:rgba(255,255,255,.18);padding:.25rem .7rem;border-radius:20px}
+nav{display:flex;justify-content:flex-start;gap:.3rem;padding:.6rem 1rem;background:#fff;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,.06);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+nav button{padding:.5rem 1rem;border:none;border-radius:8px;font-size:.85rem;font-weight:600;cursor:pointer;transition:.2s;background:transparent;color:var(--sub);white-space:nowrap;flex-shrink:0;position:relative}
+nav button:hover{background:#f0f4f8;color:var(--text)}
+nav button.active{color:var(--accent);background:#eff6ff}
+nav button.active::after{content:'';position:absolute;bottom:0;left:20%;right:20%;height:3px;background:var(--accent);border-radius:3px}
+.container{max-width:1200px;margin:0 auto;padding:1rem 1.2rem}
 .search-row{display:flex;gap:.8rem;margin:1rem 0;flex-wrap:wrap}
 .search-input{flex:1;min-width:200px;padding:.8rem 1.2rem;border:2px solid #e5e7eb;border-radius:12px;font-size:1rem;outline:none;transition:.2s}
 .search-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(102,126,234,.15)}
@@ -485,20 +485,20 @@ nav button.active{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff}
 .faction-count{font-size:.8rem;color:var(--sub);background:#f0f4f8;padding:.2rem .6rem;border-radius:8px}
 .faction-rep{font-size:.75rem;color:var(--sub);margin-left:auto}
 
-.m-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;margin-bottom:1rem}
-.m-card{background:var(--card);border-radius:var(--radius);padding:1.2rem;text-align:center;cursor:pointer;transition:.3s;box-shadow:0 2px 8px rgba(0,0,0,.06);border:2px solid transparent;overflow:hidden}
-.m-card:hover{transform:translateY(-4px);box-shadow:0 8px 25px rgba(0,0,0,.12)}
+.m-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem;margin-bottom:1rem}
+.m-card{background:var(--card);border-radius:var(--radius);padding:1.2rem;text-align:center;cursor:pointer;transition:.2s;box-shadow:0 2px 8px rgba(0,0,0,.06);border:2px solid transparent;overflow:hidden}
+.m-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.1);border-color:#e0e7ff}
 .m-avatar{width:72px;height:72px;border-radius:50%;margin:0 auto .6rem;display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:800;color:#fff}
 .m-avatar-photo{width:72px;height:72px;border-radius:50%;margin:0 auto .6rem;overflow:hidden;border:3px solid}
 .m-avatar-photo img{width:100%;height:100%;object-fit:cover}
 .m-avatar-fb{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:800;color:#fff}
-.m-name{font-size:1.1rem;font-weight:700;margin-bottom:.2rem}
-.m-faction{font-size:.8rem;font-weight:600;margin-bottom:.3rem}
-.m-committee{font-size:.72rem;color:var(--sub);margin-bottom:.3rem}
-.role-tag{display:inline-block;padding:.15rem .5rem;border-radius:10px;font-size:.7rem;background:#fef3c7;color:#92400e;font-weight:600;margin-bottom:.3rem;margin-right:.2rem}
-.m-stats-mini{display:flex;justify-content:center;gap:.8rem;font-size:.78rem;color:var(--sub);margin:.4rem 0}
+.m-name{font-size:1.05rem;font-weight:700;margin-bottom:.2rem}
+.m-faction{font-size:.82rem;font-weight:600;margin-bottom:.3rem}
+.m-committee{font-size:.76rem;color:var(--sub);margin-bottom:.3rem}
+.role-tag{display:inline-block;padding:.15rem .5rem;border-radius:10px;font-size:.72rem;background:#fef3c7;color:#92400e;font-weight:600;margin-bottom:.3rem;margin-right:.2rem}
+.m-stats-mini{display:flex;justify-content:center;gap:.8rem;font-size:.82rem;color:var(--sub);margin:.4rem 0}
 .m-top-cats{display:flex;flex-wrap:wrap;justify-content:center;gap:.3rem;margin-top:.4rem}
-.cat-pill{display:inline-block;padding:.12rem .5rem;border-radius:8px;font-size:.65rem;color:#fff;font-weight:500}
+.cat-pill{display:inline-block;padding:.15rem .5rem;border-radius:8px;font-size:.7rem;color:#fff;font-weight:500}
 
 .current-badge{display:inline-block;padding:.15rem .7rem;border-radius:10px;font-size:.75rem;background:#dcfce7;color:#166534;font-weight:600;margin:.4rem 0}
 .former-badge{display:inline-block;padding:.15rem .7rem;border-radius:10px;font-size:.75rem;background:#f3f4f6;color:#6b7280;font-weight:600;margin:.4rem 0}
@@ -507,7 +507,7 @@ nav button.active{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff}
 .tab-panel{display:none}
 .tab-panel.active{display:block}
 /* 総合計画タブ */
-.plan-hero{background:linear-gradient(135deg,#4a90e2,#7b68ee);color:#fff;border-radius:16px;padding:1.5rem;margin-bottom:1.2rem;box-shadow:0 4px 20px rgba(74,144,226,.25)}
+.plan-hero{background:linear-gradient(135deg,#1e40af,#2563eb);color:#fff;border-radius:16px;padding:1.5rem;margin-bottom:1.2rem;box-shadow:0 4px 20px rgba(37,99,235,.25)}
 .plan-hero h2{font-size:1.3rem;margin-bottom:.4rem;font-weight:700}
 .plan-hero .plan-vision{font-size:1.05rem;font-weight:600;margin:.6rem 0 .2rem;line-height:1.5}
 .plan-hero .plan-sub{font-size:.85rem;opacity:.92;line-height:1.5}
@@ -544,7 +544,7 @@ nav button.active{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff}
 .goal-card{background:var(--card);border-radius:12px;padding:1rem;box-shadow:0 2px 10px rgba(0,0,0,.07);cursor:pointer;transition:.2s;text-align:center;border:2px solid transparent}
 .goal-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.13);border-color:#4a90e2}
 .goal-card.selected{border-color:#4a90e2;background:#f0f6ff}
-.goal-num{display:inline-block;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;width:32px;height:32px;line-height:32px;border-radius:50%;font-weight:700;margin-bottom:.5rem}
+.goal-num{display:inline-block;background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;width:32px;height:32px;line-height:32px;border-radius:50%;font-weight:700;margin-bottom:.5rem}
 .goal-title{font-size:.95rem;font-weight:700;line-height:1.4;margin-bottom:.35rem;color:var(--text)}
 .goal-theme{font-size:.72rem;color:#4a90e2;font-weight:600;margin-bottom:.4rem}
 .goal-desc{font-size:.73rem;color:var(--sub);line-height:1.5}
@@ -695,17 +695,17 @@ nav button.active{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff}
 .v-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:36px;height:36px;background:rgba(0,0,0,.6);border-radius:50%;display:flex;align-items:center;justify-content:center}
 .v-play::after{content:'';border-style:solid;border-width:7px 0 7px 12px;border-color:transparent transparent transparent #fff;margin-left:2px}
 .v-info{padding:.6rem .8rem;flex:1;min-width:0}
-.v-title{font-weight:600;font-size:.88rem;color:var(--text);text-decoration:none;display:block;margin-bottom:.3rem}
+.v-title{font-weight:600;font-size:.92rem;color:var(--text);text-decoration:none;display:block;margin-bottom:.3rem;line-height:1.5}
 .v-title:hover{color:var(--accent)}
 .v-meta{display:flex;gap:.4rem;flex-wrap:wrap;align-items:center;margin-bottom:.4rem}
-.v-date{font-size:.78rem;color:var(--sub)}
-.v-type{display:inline-block;padding:.1rem .5rem;border-radius:6px;font-size:.7rem;color:#fff;font-weight:500}
+.v-date{font-size:.82rem;color:var(--sub)}
+.v-type{display:inline-block;padding:.12rem .5rem;border-radius:6px;font-size:.74rem;color:#fff;font-weight:500}
 
 /* 質問箇条書き（常に表示） */
 .q-list-always{list-style:none;padding:0;margin:0}
-.q-list-always li{font-size:.82rem;color:#444;padding:.4rem .6rem;background:#f8f9ff;border-radius:8px;margin-bottom:.4rem;border-left:3px solid var(--accent);position:relative;padding-left:1.2rem}
-.q-list-always li::before{content:'\\25CF';position:absolute;left:.4rem;top:.4rem;color:var(--accent);font-size:.5rem}
-.q-bullet{margin-bottom:.2rem;line-height:1.5;word-break:break-all;overflow-wrap:break-word}
+.q-list-always li{font-size:.85rem;color:#444;padding:.4rem .6rem;background:#f8f9ff;border-radius:8px;margin-bottom:.4rem;border-left:3px solid var(--accent);position:relative;padding-left:1.2rem;line-height:1.6}
+.q-list-always li::before{content:'\\25CF';position:absolute;left:.4rem;top:.45rem;color:var(--accent);font-size:.5rem}
+.q-bullet{margin-bottom:.2rem;line-height:1.6;word-break:break-all;overflow-wrap:break-word}
 .resp-box{margin-top:.3rem;padding:.4rem .6rem;background:#fff8f0;border-radius:8px;border-left:3px solid #f39c12;font-size:.78rem;color:#666;cursor:pointer}
 .resp-box .resp-full{display:none}
 .resp-box.expanded .resp-full{display:block}
@@ -720,17 +720,17 @@ nav button.active{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff}
 .qs-list{display:none;list-style:none;padding:0;margin-top:.3rem}
 .qs-list li{word-break:break-all;overflow-wrap:break-word}
 .qs-box.open .qs-list{display:block}
-.qs-list li{font-size:.8rem;color:#444;padding:.35rem .6rem;background:#f8f9ff;border-radius:6px;margin-bottom:.3rem;border-left:3px solid var(--accent);padding-left:1.2rem;position:relative}
-.qs-list li::before{content:'\\25CF';position:absolute;left:.4rem;top:.35rem;color:var(--accent);font-size:.45rem}
+.qs-list li{font-size:.85rem;color:#444;padding:.35rem .6rem;background:#f8f9ff;border-radius:6px;margin-bottom:.3rem;border-left:3px solid var(--accent);padding-left:1.2rem;position:relative;line-height:1.6}
+.qs-list li::before{content:'\\25CF';position:absolute;left:.4rem;top:.4rem;color:var(--accent);font-size:.45rem}
 
 .stats-panel{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
 .stats-box{background:var(--card);border-radius:var(--radius);padding:1.5rem;box-shadow:0 2px 8px rgba(0,0,0,.06)}
 .stats-box h3{font-size:1rem;margin-bottom:1rem;color:var(--accent)}
 .bar-row{margin-bottom:.6rem}
-.bar-label{display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:.2rem}
+.bar-label{display:flex;justify-content:space-between;font-size:.85rem;margin-bottom:.2rem}
 .bar-bg{height:20px;background:#f0f4f8;border-radius:10px;overflow:hidden}
 .bar-fill{height:100%;border-radius:10px;transition:.5s}
-footer{text-align:center;padding:2rem;color:var(--sub);font-size:.8rem}
+footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
 .disclaimer{max-width:900px;margin:2rem auto 0;padding:1.5rem 2rem;background:#fff;border-radius:var(--radius);box-shadow:0 2px 8px rgba(0,0,0,.06);text-align:left}
 .disclaimer h3{font-size:1rem;font-weight:700;color:var(--text);margin-bottom:.8rem;padding-bottom:.5rem;border-bottom:2px solid #e5e7eb}
 .disclaimer h4{font-size:.85rem;font-weight:700;color:#444;margin:1rem 0 .3rem}
@@ -770,10 +770,10 @@ footer{text-align:center;padding:2rem;color:var(--sub);font-size:.8rem}
 /* 検索タブ */
 .search-result-count{font-size:.82rem;color:var(--sub);margin:.6rem 0}
 .search-hit{background:var(--card);padding:.9rem 1rem;border-radius:12px;margin-bottom:.6rem;box-shadow:0 1px 4px rgba(0,0,0,.05);border-left:4px solid var(--accent)}
-.search-hit-title{font-size:.88rem;font-weight:600;color:var(--text);text-decoration:none;display:block;margin-bottom:.3rem}
+.search-hit-title{font-size:.92rem;font-weight:600;color:var(--text);text-decoration:none;display:block;margin-bottom:.3rem}
 .search-hit-title:hover{color:var(--accent)}
-.search-hit-meta{display:flex;gap:.5rem;font-size:.72rem;color:var(--sub);margin-bottom:.4rem;flex-wrap:wrap}
-.search-hit-q{font-size:.78rem;color:#444;padding:.3rem .5rem .3rem 1rem;background:#f8f9ff;border-radius:6px;margin-bottom:.25rem;border-left:3px solid var(--accent);position:relative}
+.search-hit-meta{display:flex;gap:.5rem;font-size:.78rem;color:var(--sub);margin-bottom:.4rem;flex-wrap:wrap}
+.search-hit-q{font-size:.82rem;color:#444;padding:.3rem .5rem .3rem 1rem;background:#f8f9ff;border-radius:6px;margin-bottom:.25rem;border-left:3px solid var(--accent);position:relative;line-height:1.6}
 .search-hit-q::before{content:'\\25CF';position:absolute;left:.3rem;top:.35rem;color:var(--accent);font-size:.4rem}
 .search-hl{background:#fef3c7;font-weight:600;padding:0 .1rem;border-radius:2px}
 
@@ -795,20 +795,20 @@ footer{text-align:center;padding:2rem;color:var(--sub);font-size:.8rem}
 .trend-kw-item span:last-child{color:var(--sub);font-weight:600}
 
 /* 市民の声タブ */
-.voice-intro{background:linear-gradient(135deg,#667eea15,#764ba215);border-left:4px solid var(--accent);padding:1rem 1.2rem;border-radius:12px;margin-bottom:1rem}
+.voice-intro{background:linear-gradient(135deg,#2563eb10,#1d4ed810);border-left:4px solid var(--accent);padding:1rem 1.2rem;border-radius:12px;margin-bottom:1rem}
 .voice-intro h3{font-size:1rem;color:var(--accent);margin-bottom:.5rem}
 .voice-intro p{font-size:.85rem;color:#444;line-height:1.6}
 .voice-actions{display:flex;gap:.6rem;margin-bottom:1rem;flex-wrap:wrap;align-items:center}
-.voice-btn-post{padding:.7rem 1.5rem;border:none;border-radius:10px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;font-weight:700;cursor:pointer;font-size:.92rem;box-shadow:0 2px 8px rgba(102,126,234,.3)}
-.voice-btn-post:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(102,126,234,.4)}
+.voice-btn-post{padding:.7rem 1.5rem;border:none;border-radius:10px;background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;font-weight:700;cursor:pointer;font-size:.92rem;box-shadow:0 2px 8px rgba(37,99,235,.3)}
+.voice-btn-post:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(37,99,235,.4)}
 .voice-cat-filter{padding:.6rem 1rem;border:2px solid #e5e7eb;border-radius:10px;font-size:.88rem;background:#fff}
 .voice-list{display:flex;flex-direction:column;gap:.8rem}
 .voice-item{background:var(--card);border-radius:12px;padding:1rem 1.2rem;box-shadow:0 1px 4px rgba(0,0,0,.05);border-left:4px solid var(--accent)}
 .voice-item-head{display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem;flex-wrap:wrap}
-.voice-cat-pill{display:inline-block;padding:.15rem .6rem;border-radius:8px;font-size:.7rem;color:#fff;font-weight:600}
+.voice-cat-pill{display:inline-block;padding:.15rem .6rem;border-radius:8px;font-size:.75rem;color:#fff;font-weight:600}
 .voice-title{font-size:1rem;font-weight:700;color:var(--text);margin-bottom:.3rem}
 .voice-body{font-size:.85rem;color:#444;line-height:1.6;white-space:pre-wrap;word-break:break-all}
-.voice-meta{display:flex;gap:.5rem;font-size:.72rem;color:var(--sub);margin-top:.5rem;flex-wrap:wrap}
+.voice-meta{display:flex;gap:.5rem;font-size:.78rem;color:var(--sub);margin-top:.5rem;flex-wrap:wrap}
 .voice-empty{text-align:center;padding:2rem;color:var(--sub);background:#fff;border-radius:12px}
 .voice-loading{text-align:center;padding:1rem;color:var(--sub);font-size:.85rem}
 
@@ -832,31 +832,30 @@ footer{text-align:center;padding:2rem;color:var(--sub);font-size:.8rem}
 .modal-buttons{display:flex;gap:.6rem;margin-top:1rem}
 .modal-buttons button{flex:1;padding:.8rem;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-size:.92rem}
 .modal-cancel{background:#f3f4f6;color:#444}
-.modal-submit{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff}
+.modal-submit{background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff}
 .modal-submit:disabled{opacity:.5;cursor:not-allowed}
 .modal-msg{padding:.8rem;border-radius:8px;margin-top:.8rem;font-size:.85rem;text-align:center}
 .modal-msg.success{background:#dcfce7;color:#166534}
 .modal-msg.error{background:#fee2e2;color:#991b1b}
-.load-btn{display:block;margin:1rem auto;padding:.7rem 2rem;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:12px;cursor:pointer;font-size:.95rem;font-weight:600}
+.load-btn{display:block;margin:1rem auto;padding:.7rem 2rem;background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;border:none;border-radius:12px;cursor:pointer;font-size:.95rem;font-weight:600}
 .load-btn:hover{opacity:.9}
 /* タブレット */
 @media(max-width:1024px){
   .container{padding:.8rem}
   .detail-top{gap:1.2rem;padding:1.2rem}
-  .m-grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}
+  .m-grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
 }
 /* スマートフォン */
 @media(max-width:768px){
-  header{padding:1.5rem .8rem 1.2rem}
+  header{padding:1.1rem .8rem .9rem}
   header h1{font-size:1.2rem;letter-spacing:.04em}
   .header-sub{font-size:.72rem}
-  .stats-row{gap:.6rem;margin-top:.8rem}
-  .stat-card{padding:.4rem .7rem;border-radius:8px}
-  .stat-val{font-size:1.3rem}
-  .stat-lbl{font-size:.65rem}
-  nav{gap:.3rem;padding:.5rem .6rem}
-  nav button{padding:.4rem .8rem;font-size:.8rem}
-  .container{padding:.5rem}
+  .header-stats{font-size:.7rem;gap:.3rem;margin-top:.4rem}
+  .header-stats span{padding:.18rem .5rem}
+  nav{gap:.2rem;padding:.5rem .6rem;justify-content:flex-start}
+  nav button{padding:.4rem .7rem;font-size:.78rem;border-radius:6px}
+  nav button.active::after{left:15%;right:15%;height:2px}
+  .container{padding:.5rem .6rem}
   .search-row{gap:.5rem;margin:.6rem 0}
   .search-input{padding:.6rem .8rem;font-size:.88rem;min-width:120px}
   .filter-sel{padding:.6rem .7rem;font-size:.82rem}
@@ -866,12 +865,12 @@ footer{text-align:center;padding:2rem;color:var(--sub);font-size:.8rem}
   .m-avatar-photo img{width:100%;height:100%}
   .m-avatar-fb{font-size:1.4rem}
   .m-name{font-size:.92rem}
-  .m-faction{font-size:.72rem}
-  .m-committee{font-size:.65rem}
-  .m-stats-mini{font-size:.68rem;gap:.5rem}
+  .m-faction{font-size:.75rem}
+  .m-committee{font-size:.68rem}
+  .m-stats-mini{font-size:.72rem;gap:.5rem}
   .m-top-cats{gap:.2rem}
-  .cat-pill{font-size:.6rem;padding:.1rem .35rem}
-  .role-tag{font-size:.62rem;padding:.1rem .35rem}
+  .cat-pill{font-size:.62rem;padding:.1rem .35rem}
+  .role-tag{font-size:.65rem;padding:.1rem .35rem}
   .faction-header{padding:.5rem .7rem}
   .faction-name{font-size:.95rem}
   .stats-panel{grid-template-columns:1fr}
@@ -881,39 +880,61 @@ footer{text-align:center;padding:2rem;color:var(--sub);font-size:.8rem}
   .detail-left h2{font-size:1.3rem}
   .detail-avatar,.detail-avatar-photo{width:80px;height:80px}
   .detail-info>div{padding:.35rem 0}
-  .info-label{width:60px;font-size:.75rem}
-  .info-val{font-size:.8rem}
+  .info-label{width:60px;font-size:.78rem}
+  .info-val{font-size:.82rem}
   .detail-right{min-width:unset}
   .detail-right h3{font-size:.95rem}
   .detail-stats-box{gap:.8rem;padding:.6rem}
   .ds-val{font-size:1.3rem}
-  .cat-bar-label{width:70px;font-size:.7rem}
-  .cat-bar-pct{width:35px;font-size:.7rem}
+  .cat-bar-label{width:70px;font-size:.72rem}
+  .cat-bar-pct{width:35px;font-size:.72rem}
   .section-title{font-size:1rem;margin:1rem 0 .6rem}
   .v-list{gap:.6rem}
   .v-item{flex-direction:column}
   .v-thumb{width:100%;height:auto;aspect-ratio:16/9}
   .v-thumb img{width:100%;height:100%;object-fit:cover}
-  .v-info{padding:.5rem .6rem}
-  .v-title{font-size:.82rem}
+  .v-info{padding:.5rem .7rem}
+  .v-title{font-size:.85rem}
   .v-meta{margin-bottom:.3rem}
-  .v-date{font-size:.7rem}
-  .v-type{font-size:.62rem;padding:.08rem .4rem}
-  .q-list-always li{font-size:.75rem;padding:.3rem .5rem .3rem 1rem;margin-bottom:.3rem}
-  .q-list-always li::before{left:.3rem;top:.35rem;font-size:.4rem}
-  .q-bullet{font-size:.75rem;line-height:1.4}
-  .resp-box{font-size:.72rem;padding:.3rem .5rem}
-  .resp-label{font-size:.6rem;padding:.08rem .3rem}
-  .qs-list li{font-size:.72rem;padding:.3rem .5rem .3rem 1rem}
+  .v-date{font-size:.75rem}
+  .v-type{font-size:.68rem;padding:.1rem .4rem}
+  .q-list-always li{font-size:.8rem;padding:.35rem .5rem .35rem 1rem;margin-bottom:.3rem}
+  .q-list-always li::before{left:.3rem;top:.38rem;font-size:.4rem}
+  .q-bullet{font-size:.8rem;line-height:1.5}
+  .resp-box{font-size:.75rem;padding:.3rem .5rem}
+  .resp-label{font-size:.62rem;padding:.08rem .3rem}
+  .qs-list li{font-size:.78rem;padding:.3rem .5rem .3rem 1rem}
   .qs-list li::before{left:.3rem;font-size:.4rem}
   .back-btn{font-size:.82rem;padding:.4rem .8rem}
-  .load-btn{font-size:.85rem;padding:.6rem 1.5rem}
+  .load-btn{font-size:.88rem;padding:.6rem 1.5rem}
   .detail-committees{padding:.7rem}
-  .cm-title{font-size:.78rem}
-  .cm-item{font-size:.75rem}
-  .cm-badge{font-size:.62rem}
-  .member-desc p{font-size:.8rem}
-  footer{padding:1.2rem;font-size:.72rem}
+  .cm-title{font-size:.8rem}
+  .cm-item{font-size:.78rem}
+  .cm-badge{font-size:.65rem}
+  .member-desc p{font-size:.82rem}
+  .cmp-grid{grid-template-columns:1fr 1fr}
+  .cmp-card{padding:.8rem}
+  .cmp-name{font-size:.92rem}
+  .cmp-stat-val{font-size:1.1rem}
+  .kadai-grid{grid-template-columns:1fr}
+  .goals-grid{grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.6rem}
+  .goal-title{font-size:.85rem}
+  .goal-desc{font-size:.7rem}
+  .plan-hero{padding:1rem;border-radius:12px}
+  .plan-hero h2{font-size:1.1rem}
+  .plan-hero .plan-vision{font-size:.92rem}
+  .plan-hero .plan-sub{font-size:.78rem}
+  .heat-wrap{padding:.5rem}
+  .heat-table{font-size:.65rem}
+  .trend-chart{padding:.8rem}
+  .trend-chart h3{font-size:.92rem}
+  .disclaimer{padding:1rem;margin:1.5rem auto 0}
+  .disclaimer h3{font-size:.92rem}
+  .disclaimer h4{font-size:.82rem}
+  .disclaimer p,.disclaimer li{font-size:.78rem}
+  .modal-box{padding:1rem;border-radius:12px;max-height:calc(100vh - 2rem)}
+  .modal-overlay{padding:1rem .5rem}
+  footer{padding:1rem;font-size:.75rem}
 }
 /* 小さいスマホ */
 @media(max-width:400px){
@@ -921,32 +942,32 @@ footer{text-align:center;padding:2rem;color:var(--sub);font-size:.8rem}
   .m-card{padding:.6rem .3rem}
   .m-avatar,.m-avatar-photo{width:48px;height:48px}
   .m-name{font-size:.82rem}
-  .m-stats-mini{font-size:.62rem}
-  header h1{font-size:1rem}
-  .stat-val{font-size:1.1rem}
+  .m-stats-mini{font-size:.65rem}
+  header h1{font-size:1.05rem}
+  .header-stats span{font-size:.65rem;padding:.15rem .4rem}
+  nav button{padding:.35rem .55rem;font-size:.72rem}
+  .cmp-grid{grid-template-columns:1fr}
+  .goals-grid{grid-template-columns:1fr 1fr}
 }
 </style>
 </head>
 <body>
 <header>
   <h1>みんなの伊東市</h1>
-  <div class="header-sub">第21期（令和7年〜） ｜ 伊東市議会議員 大竹圭 が制作・運営しています</div>
-  <div class="stats-row">
-    <div class="stat-card"><div class="stat-val">${videos.length}</div><div class="stat-lbl">動画数</div></div>
-    <div class="stat-card"><div class="stat-val">${currentMembersList.length}</div><div class="stat-lbl">現職議員</div></div>
-    <div class="stat-card"><div class="stat-val">${videos.reduce((s,v)=>s+v.questions.length,0)}</div><div class="stat-lbl">質問数</div></div>
-    <div class="stat-card"><div class="stat-val">${typeCounts['一般質問']||0}</div><div class="stat-lbl">一般質問</div></div>
+  <div class="header-sub">伊東市議会の活動を市民にわかりやすく ｜ 制作: 大竹圭（伊東市議会議員）</div>
+  <div class="header-stats">
+    <span>議員 ${currentMembersList.length}名</span>
+    <span>動画 ${videos.length}本</span>
+    <span>質問 ${videos.reduce((s,v)=>s+v.questions.length,0)}件</span>
+    <span>第21期（令和7年〜）</span>
   </div>
 </header>
 <nav>
   <button class="active" onclick="switchTab('members',this)">議員一覧</button>
-  <button onclick="switchTab('all',this)">全動画</button>
-  <button onclick="switchTab('compare',this)">比較</button>
-  <button onclick="switchTab('search',this)">検索</button>
-  <button onclick="switchTab('trend',this)">トレンド</button>
+  <button onclick="switchTab('all',this)">動画・検索</button>
   <button onclick="switchTab('plan',this)">総合計画</button>
   <button onclick="switchTab('voice',this)">市民の声</button>
-  <button onclick="switchTab('stats',this)">統計</button>
+  <button onclick="switchTab('stats',this)">統計・分析</button>
 </nav>
 <div class="container">
   <div id="tab-members" class="tab-panel active">
@@ -980,7 +1001,7 @@ footer{text-align:center;padding:2rem;color:var(--sub);font-size:.8rem}
     <div class="v-list" id="all-v-list">
       ${videos.sort((a,b)=>(b.date||'').localeCompare(a.date||'')).map(v => {
         const tc = v.sessionType==='一般質問'?'#3498db':v.sessionType==='大綱質疑'?'#27ae60':v.sessionType==='補正予算審議'?'#e67e22':'#95a5a6';
-        const sp = v.speakers.map(s=>`<span class="cat-pill" style="background:#667eea">${s}</span>`).join('');
+        const sp = v.speakers.map(s=>`<span class="cat-pill" style="background:#2563eb">${s}</span>`).join('');
         const vSummaries = questionSummaries[v.videoId] || [];
         const qs = v.questions.length>0?`<div class="qs-box open"><ul class="qs-list" style="display:block">${v.questions.map((q,qi)=>{
           let s = vSummaries[qi] || '';
@@ -996,39 +1017,28 @@ footer{text-align:center;padding:2rem;color:var(--sub);font-size:.8rem}
       }).join('')}
     </div>
     <button class="load-btn" id="load-btn" onclick="loadMore()">もっと表示</button>
-  </div>
-  <div id="tab-compare" class="tab-panel">
-    <div class="cmp-picker">
-      <select id="cmp-select">
-        <option value="">議員を選択...</option>
-        ${compareData.map(m => `<option value="${esc(m.name)}">${esc(m.name)}${m.faction?` (${esc(m.faction)})`:''}</option>`).join('')}
-      </select>
-      <button onclick="addCompare()">追加</button>
-      <button onclick="clearCompare()">クリア</button>
+    <div style="margin-top:2rem;padding-top:1.5rem;border-top:2px solid #e5e7eb">
+      <h3 class="section-title">質問キーワード検索</h3>
+      <div class="search-row">
+        <input class="search-input" id="kw-input" placeholder="キーワードで全質問を検索（例: 観光、防災、給食、SDGs...）" oninput="runSearch()">
+        <select class="filter-sel" id="kw-type" onchange="runSearch()">
+          <option value="">全種別</option>
+          <option value="一般質問">一般質問</option>
+          <option value="大綱質疑">大綱質疑</option>
+          <option value="補正予算審議">補正予算審議</option>
+          <option value="委員会">委員会</option>
+        </select>
+      </div>
+      <div class="search-result-count" id="kw-count">キーワードを入力してください</div>
+      <div id="kw-results"></div>
     </div>
-    <div class="search-result-count">最大4名まで比較できます。質問数・動画数・分野別割合を並べて表示します。</div>
-    <div id="cmp-area" class="cmp-grid"><div class="cmp-empty">上のプルダウンから議員を選んで「追加」してください</div></div>
   </div>
-  <div id="tab-search" class="tab-panel">
-    <div class="search-row">
-      <input class="search-input" id="kw-input" placeholder="キーワードで全質問を検索（例: 観光、防災、給食、SDGs...）" oninput="runSearch()">
-      <select class="filter-sel" id="kw-type" onchange="runSearch()">
-        <option value="">全種別</option>
-        <option value="一般質問">一般質問</option>
-        <option value="大綱質疑">大綱質疑</option>
-        <option value="補正予算審議">補正予算審議</option>
-        <option value="委員会">委員会</option>
-      </select>
-    </div>
-    <div class="search-result-count" id="kw-count">キーワードを入力してください</div>
-    <div id="kw-results"></div>
-  </div>
-  <div id="tab-trend" class="tab-panel">
+  <div id="tab-trend" style="display:none">
     <div class="trend-chart">
       <h3>年別 動画数（種別内訳）</h3>
       ${(() => {
         const allTypes = ['一般質問','大綱質疑','補正予算審議','委員会'];
-        const typeCol = {'一般質問':'#667eea','大綱質疑':'#27ae60','補正予算審議':'#e67e22','委員会':'#95a5a6'};
+        const typeCol = {'一般質問':'#2563eb','大綱質疑':'#27ae60','補正予算審議':'#e67e22','委員会':'#95a5a6'};
         const maxV = Math.max(...sortedYears.map(y => yearStats[y].videos), 1);
         const rows = sortedYears.map(y => {
           const ys = yearStats[y];
@@ -1051,7 +1061,7 @@ footer{text-align:center;padding:2rem;color:var(--sub);font-size:.8rem}
         return sortedYears.map(y => {
           const q = yearStats[y].questions;
           const w = (q / maxQ * 100).toFixed(1);
-          return `<div class="trend-bar-row"><div class="trend-year">${y}</div><div class="trend-bar-bg"><div class="trend-seg" style="width:${w}%;background:#764ba2">${q>=5?q:''}</div></div><div class="trend-total">${q}問</div></div>`;
+          return `<div class="trend-bar-row"><div class="trend-year">${y}</div><div class="trend-bar-bg"><div class="trend-seg" style="width:${w}%;background:#1d4ed8">${q>=5?q:''}</div></div><div class="trend-total">${q}問</div></div>`;
         }).join('');
       })()}
     </div>
@@ -1282,12 +1292,32 @@ footer{text-align:center;padding:2rem;color:var(--sub);font-size:.8rem}
   </div>
 
   <div id="tab-stats" class="tab-panel">
+    <h3 class="section-title">議員比較</h3>
+    <div class="cmp-picker">
+      <select id="cmp-select">
+        <option value="">議員を選択...</option>
+        ${compareData.map(m => `<option value="${esc(m.name)}">${esc(m.name)}${m.faction?` (${esc(m.faction)})`:''}</option>`).join('')}
+      </select>
+      <button onclick="addCompare()">追加</button>
+      <button onclick="clearCompare()">クリア</button>
+    </div>
+    <div class="search-result-count">最大4名まで比較できます。質問数・動画数・分野別割合を並べて表示します。</div>
+    <div id="cmp-area" class="cmp-grid"><div class="cmp-empty">上のプルダウンから議員を選んで「追加」してください</div></div>
+
+    <div style="margin-top:2rem;padding-top:1.5rem;border-top:2px solid #e5e7eb">
+      <h3 class="section-title">年別トレンド</h3>
+      <div id="trend-embed"></div>
+    </div>
+
+    <div style="margin-top:2rem;padding-top:1.5rem;border-top:2px solid #e5e7eb">
+      <h3 class="section-title">基本統計</h3>
+    </div>
     <div class="stats-panel">
       <div class="stats-box">
         <h3>種別ごとの動画数</h3>
         ${Object.entries(typeCounts).sort((a,b)=>b[1]-a[1]).map(([t,c])=>{
           const p=(c/videos.length*100).toFixed(1);
-          const cl=t==='一般質問'?'#667eea':t==='大綱質疑'?'#27ae60':t==='補正予算審議'?'#e67e22':'#95a5a6';
+          const cl=t==='一般質問'?'#2563eb':t==='大綱質疑'?'#27ae60':t==='補正予算審議'?'#e67e22':'#95a5a6';
           return `<div class="bar-row"><div class="bar-label"><span>${t}</span><span>${c}本 (${p}%)</span></div><div class="bar-bg"><div class="bar-fill" style="width:${p}%;background:${cl}"></div></div></div>`;
         }).join('')}
       </div>
@@ -1331,7 +1361,7 @@ footer{text-align:center;padding:2rem;color:var(--sub);font-size:.8rem}
           const sorted = Object.entries(fieldCounts).sort((a,b) => b[1] - a[1]);
           const total = sorted.reduce((s, e) => s + e[1], 0);
           const fieldColors = {
-            '教育・子育て': '#667eea', '行財政・議会': '#764ba2', '観光・経済': '#e67e22',
+            '教育・子育て': '#2563eb', '行財政・議会': '#1d4ed8', '観光・経済': '#e67e22',
             '医療・福祉': '#e74c3c', '防災・安全': '#f39c12', '都市整備・交通': '#27ae60',
             '環境・衛生': '#2ecc71', '農林水産': '#16a085'
           };
@@ -1648,6 +1678,14 @@ function switchTab(id,btn){
   if(id==='all'){vCount=30;showVids();}
   if(id==='voice' && !voicesLoaded){loadVoices();}
   if(id==='plan'){ renderHeatmap(); }
+  if(id==='stats'){
+    // トレンドチャートをstatsタブ内に移動（初回のみ）
+    const embed=document.getElementById('trend-embed');
+    if(embed && !embed.hasChildNodes()){
+      const src=document.getElementById('tab-trend');
+      if(src){ embed.innerHTML=src.innerHTML; }
+    }
+  }
 }
 
 // ============ 市民の声タブ ============
