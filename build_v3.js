@@ -577,10 +577,10 @@ nav button.active{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff}
 .heat-table{border-collapse:collapse;font-size:.72rem;min-width:100%}
 .heat-table th,.heat-table td{border:1px solid #eef1f5;padding:0;text-align:center}
 .heat-table th.member-col,.heat-table td.member-col{position:sticky;left:0;background:#fff;z-index:2;text-align:left;padding:.3rem .5rem;white-space:nowrap;font-weight:600;min-width:100px;max-width:120px;overflow:hidden;text-overflow:ellipsis;border-right:2px solid #d5dbe6}
-.heat-table thead th{position:sticky;top:0;background:#f0f4f8;z-index:3;padding:.3rem .2rem;font-size:.66rem;writing-mode:vertical-rl;height:80px;white-space:nowrap;border-bottom:2px solid #d5dbe6;font-weight:600;color:var(--sub)}
+.heat-table thead th{position:sticky;top:0;background:#f0f4f8;z-index:3;padding:.2rem .1rem;font-size:.58rem;writing-mode:vertical-rl;height:140px;white-space:nowrap;border-bottom:2px solid #d5dbe6;font-weight:600;color:var(--sub);overflow:hidden;text-overflow:ellipsis;max-width:24px;line-height:1.1}
 .heat-table thead th.member-col{writing-mode:initial;transform:none;height:auto;z-index:4;background:#e8eef6;text-align:left}
 .heat-table thead th.goal-sep{background:#e8eef6;color:#4a90e2;font-weight:700;writing-mode:initial;transform:none;height:auto;padding:.3rem .5rem;font-size:.72rem}
-.heat-cell{width:22px;height:22px;cursor:pointer;transition:.1s;display:block}
+.heat-cell{width:24px;height:22px;cursor:pointer;transition:.1s;display:block;font-size:.6rem}
 .heat-cell:hover{outline:2px solid #4a90e2;outline-offset:-1px;z-index:5;position:relative}
 .heat-0{background:#fafbfd}
 .heat-1{background:#e3edf8}
