@@ -645,6 +645,13 @@ nav button.active::after{content:'';position:absolute;bottom:0;left:20%;right:20
   .concierge-fab{bottom:16px;right:16px;width:56px;height:56px;font-size:1.5rem}
   .concierge-fab-label{display:none}
 }
+/* 改善要望フォーム */
+.feedback-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:10000;display:flex;align-items:center;justify-content:center}
+.feedback-modal{background:#fff;border-radius:16px;width:420px;max-width:calc(100vw - 32px);max-height:calc(100vh - 60px);overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.feedback-header{display:flex;justify-content:space-between;align-items:center;padding:1rem 1.2rem;background:linear-gradient(135deg,#f39c12,#e67e22);color:#fff;border-radius:16px 16px 0 0;font-weight:700;font-size:.95rem}
+.feedback-close{background:rgba(255,255,255,.2);color:#fff;border:none;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:.9rem;display:flex;align-items:center;justify-content:center}
+.feedback-close:hover{background:rgba(255,255,255,.35)}
+.feedback-body{padding:1.2rem}
 .back-btn{padding:.5rem 1rem;border:none;border-radius:10px;background:#f0f4f8;font-size:.9rem;cursor:pointer;font-weight:600;margin-bottom:1rem}
 .back-btn:hover{background:#e5e7eb}
 .detail-panel{display:none}
@@ -1410,6 +1417,7 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
       <button class="concierge-sample" onclick="conciergeAsk('防災対策について教えて')">防災対策</button>
       <button class="concierge-sample" onclick="conciergeAsk('子育て支援はどうなっていますか？')">子育て支援</button>
       <button class="concierge-sample" onclick="conciergeAsk('このサイトは何ができますか？')">サイトの使い方</button>
+      <button class="concierge-sample" onclick="conciergeShowFeedback()" style="background:#fff5e6;border-color:#f39c12;color:#b8860b">💡 改善要望</button>
     </div>
   </div>
   <div class="concierge-footer">
@@ -1418,6 +1426,34 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
       <button class="concierge-send" id="concierge-send-btn" onclick="conciergeSend()">送信</button>
     </div>
     <div class="concierge-counter"><span id="concierge-counter">0</span> / 300　<span style="opacity:.6">Enterで送信</span></div>
+  </div>
+</div>
+
+<!-- 改善要望フォーム -->
+<div class="feedback-overlay" id="feedback-overlay" style="display:none">
+  <div class="feedback-modal">
+    <div class="feedback-header">
+      <span>💡 サイト改善要望</span>
+      <button class="feedback-close" onclick="closeFeedback()">✕</button>
+    </div>
+    <div class="feedback-body">
+      <p style="font-size:.82rem;color:var(--sub);margin-bottom:.8rem">
+        「みんなの伊東市」をもっと使いやすくするためのご意見・ご要望をお寄せください。<br>
+        いただいたご意見は運営者が確認し、改善に活かしていきます。
+      </p>
+      <label style="font-size:.78rem;font-weight:600;color:var(--text)">カテゴリ</label>
+      <select id="feedback-category" style="width:100%;padding:.5rem;border:1.5px solid #d5dbe6;border-radius:8px;font-size:.82rem;margin:.3rem 0 .8rem">
+        <option>機能の追加・改善</option>
+        <option>データの誤り・不足</option>
+        <option>デザイン・使いやすさ</option>
+        <option>その他</option>
+      </select>
+      <label style="font-size:.78rem;font-weight:600;color:var(--text)">ご要望・ご意見</label>
+      <textarea id="feedback-text" maxlength="500" rows="4" placeholder="ここにご要望をお書きください..." style="width:100%;padding:.55rem .7rem;border:1.5px solid #d5dbe6;border-radius:8px;font-size:.82rem;font-family:inherit;resize:vertical;margin:.3rem 0"></textarea>
+      <div style="text-align:right;font-size:.7rem;color:var(--sub)"><span id="feedback-counter">0</span> / 500</div>
+      <button id="feedback-submit-btn" onclick="submitFeedback()" style="width:100%;padding:.65rem;background:linear-gradient(135deg,#f39c12,#e67e22);color:#fff;border:none;border-radius:10px;font-size:.85rem;font-weight:700;cursor:pointer;margin-top:.5rem">送信する</button>
+      <div id="feedback-result" style="display:none;margin-top:.6rem;padding:.5rem .7rem;border-radius:8px;font-size:.8rem"></div>
+    </div>
   </div>
 </div>
 
@@ -1642,7 +1678,7 @@ async function conciergeSend(){
   btn.disabled=true; btn.textContent='…';
   const loading=document.createElement('div');
   loading.className='concierge-loading';
-  loading.innerHTML='<div class="concierge-spinner"></div>AIが計画書を参照中...';
+  loading.innerHTML='<div class="concierge-spinner"></div>サイト情報を検索中...';
   body.appendChild(loading);
   body.scrollTop=body.scrollHeight;
   try{
@@ -1671,7 +1707,51 @@ async function conciergeSend(){
 document.addEventListener('DOMContentLoaded',()=>{
   const ta=document.getElementById('concierge-input');
   if(ta) ta.addEventListener('input', conciergeUpdateCounter);
+  const fta=document.getElementById('feedback-text');
+  if(fta) fta.addEventListener('input', ()=>{
+    document.getElementById('feedback-counter').textContent=fta.value.length;
+  });
 });
+// 改善要望フォーム
+function conciergeShowFeedback(){
+  document.getElementById('feedback-overlay').style.display='flex';
+}
+function closeFeedback(){
+  document.getElementById('feedback-overlay').style.display='none';
+  document.getElementById('feedback-result').style.display='none';
+}
+async function submitFeedback(){
+  const text=document.getElementById('feedback-text').value.trim();
+  const cat=document.getElementById('feedback-category').value;
+  const btn=document.getElementById('feedback-submit-btn');
+  const result=document.getElementById('feedback-result');
+  if(text.length<5){ result.style.display='block'; result.style.background='#fef2f2'; result.style.color='#a33'; result.textContent='5文字以上でご入力ください。'; return; }
+  btn.disabled=true; btn.textContent='送信中...';
+  try{
+    const resp=await fetch(VOICE_API+'/feedback',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({feedback:text,category:cat})
+    });
+    const data=await resp.json();
+    result.style.display='block';
+    if(data.ok){
+      result.style.background='#f0fdf4'; result.style.color='#166534';
+      result.textContent='ご要望を受け付けました。ありがとうございます！';
+      document.getElementById('feedback-text').value='';
+      document.getElementById('feedback-counter').textContent='0';
+      setTimeout(closeFeedback, 2500);
+    } else {
+      result.style.background='#fef2f2'; result.style.color='#a33';
+      result.textContent=data.error||'送信に失敗しました';
+    }
+  }catch(e){
+    result.style.display='block'; result.style.background='#fef2f2'; result.style.color='#a33';
+    result.textContent='通信エラー: '+e.message;
+  }finally{
+    btn.disabled=false; btn.textContent='送信する';
+  }
+}
 let vCount=30;
 function switchTab(id,btn){
   document.querySelectorAll('.tab-panel').forEach(e=>e.classList.remove('active'));

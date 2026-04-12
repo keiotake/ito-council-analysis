@@ -32,7 +32,8 @@ const CHAT_SYSTEM = [
   '- 会派名から所属政党を推測してはいけない。例:「政和会」は政和会であり、公明党系でも自民党系でもない。会派名はそのまま伝えること',
   '- 議員のプロフィール（期数、委員会、会派など）は、サイト情報に書かれた通りに正確に答えること',
   '- 質問内容を聞かれた場合は「議員別 質問要約一覧」セクションから該当する議員の質問を探して回答すること',
-  '- キーワードで質問を検索する場合は、全議員の質問要約と会派別大綱質疑の質問要約の両方を検索すること',
+  '- 特定の議員の質問を探す場合は、その議員の個人質問だけでなく、その議員が所属する会派の大綱質疑・予算質疑も必ず確認すること。例: 犬飼このり議員について聞かれたら、犬飼議員の個人質問に加えて政和会の大綱質疑も検索する',
+  '- キーワードで質問を検索する場合は、全議員の質問要約と会派別大綱質疑の質問要約の両方を漏れなく検索すること',
   '',
   '## 回答ルール',
   '1. 回答は日本語で、やさしく簡潔に。中学生にもわかる言葉を心がけてください。人と会話するときと同じ、自然な話し言葉で答えてください。',
@@ -62,6 +63,14 @@ const CHAT_SYSTEM = [
   '9. 議会・行政の手続きや個人の相談（市役所の窓口情報など）についてはサイトに記載がなければ「伊東市公式サイト( https://www.city.ito.shizuoka.jp/ )をご覧ください」と案内してください。',
   '10. サイトと無関係の質問（レシピ、プログラミング、他自治体の話題、時事問題等）が来た場合は「『みんなの伊東市』に掲載された情報に関する質問にお答えしています」と丁重にお断りしてください。',
   '11. 運営者（大竹圭議員）の政策・実績について聞かれた場合も、他の議員と同じく「会派・委員会・統計数値」のみを答え、評価や宣伝はしないでください。',
+  '',
+  '## サイト改善要望の受付',
+  'ユーザーからサイトの改善要望・機能リクエスト・バグ報告を受け取った場合は:',
+  '1. まず「貴重なご意見ありがとうございます」とお礼を伝える',
+  '2. 内容を簡潔にまとめて確認する',
+  '3. 「運営者（大竹議員）に伝えます。今後の改善に活かしていきます。」と回答する',
+  '4. 回答のJSON内に feedback フィールドとして要望内容を含めること（システム処理用）',
+  'サイトに関する建設的な意見や要望は歓迎する姿勢で対応してください。',
   '',
   '## サイト情報（回答の唯一の根拠）',
   PLAN_CONTEXT,
@@ -189,6 +198,45 @@ export default {
           answer: answer,
           usage: { input: usage.input_tokens, output: usage.output_tokens },
         }, 200, env, origin);
+      } catch (e) {
+        return jsonResp({ ok: false, error: e.message }, 500, env, origin);
+      }
+    }
+
+    // ====== POST /feedback : サイト改善要望受付 ======
+    if (request.method === 'POST' && url.pathname === '/feedback') {
+      try {
+        const country = request.cf?.country || '';
+        if (country && country !== 'JP') {
+          return jsonResp({ ok: false, error: '日本国内からのみ利用可能です' }, 403, env, origin);
+        }
+        const body = await request.json();
+        const feedback = (body.feedback || '').toString().trim();
+        const category = (body.category || 'その他').toString().trim();
+        if (feedback.length < 5) {
+          return jsonResp({ ok: false, error: 'ご要望を5文字以上で入力してください' }, 400, env, origin);
+        }
+        if (feedback.length > 500) {
+          return jsonResp({ ok: false, error: 'ご要望は500文字以内でお願いします' }, 400, env, origin);
+        }
+        // GASに転送（市民の声と同じ仕組み）
+        const ip = request.headers.get('cf-connecting-ip') || 'unknown';
+        const ua = request.headers.get('user-agent') || 'unknown';
+        const payload = {
+          secret: env.SHARED_SECRET,
+          type: 'site_feedback',
+          category: category,
+          message: feedback,
+          ip,
+          userAgent: ua,
+          timestamp: new Date().toISOString()
+        };
+        const gasResp = await fetch(env.GAS_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        return jsonResp({ ok: true, message: 'ご要望を受け付けました。ありがとうございます！' }, 200, env, origin);
       } catch (e) {
         return jsonResp({ ok: false, error: e.message }, 500, env, origin);
       }
