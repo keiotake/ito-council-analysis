@@ -5,12 +5,17 @@
  *  - POST /submit  : 市民の声投稿をGASに転送
  *  - GET  /posts   : 承認済み投稿一覧をGASから中継（60秒キャッシュ）
  *  - POST /chat    : 第五次伊東市総合計画を根拠にした質問応答（Claude API）
+ *  - POST /pageview : ページビューカウント（KV使用）
+ *  - GET  /pageview : 現在のカウント取得
  *
  * 必要な環境変数 (Settings → Variables and Secrets):
  *  GAS_URL            : GASウェブアプリURL
  *  SHARED_SECRET      : GASと同じシークレット (Secret)
  *  ALLOWED_ORIGIN     : https://keiotake.github.io
  *  ANTHROPIC_API_KEY  : Claude APIキー (Secret)
+ *
+ * KVバインディング:
+ *  PAGEVIEW_KV        : ページビューカウンター用KVネームスペース
  */
 
 // 「みんなの伊東市」サイト全体のコンテキスト
@@ -246,9 +251,93 @@ export default {
       }
     }
 
+    // ====== POST /pageview : ページビューをカウント ======
+    if (request.method === 'POST' && url.pathname === '/pageview') {
+      try {
+        const today = new Date().toISOString().substring(0, 10); // YYYY-MM-DD
+        const kv = env.PAGEVIEW_KV;
+        if (!kv) {
+          return jsonResp({ ok: false, error: 'KV not configured' }, 500, env, origin);
+        }
+
+        // 総PV
+        const totalStr = await kv.get('pv_total') || '0';
+        const newTotal = parseInt(totalStr) + 1;
+        await kv.put('pv_total', String(newTotal));
+
+        // 今日のPV
+        const todayStr = await kv.get('pv_' + today) || '0';
+        const newToday = parseInt(todayStr) + 1;
+        await kv.put('pv_' + today, String(newToday), { expirationTtl: 90 * 86400 }); // 90日保持
+
+        // ユニーク訪問者（日別、IPベース簡易版）
+        const ip = request.headers.get('cf-connecting-ip') || 'unknown';
+        const uvKey = 'uv_' + today;
+        const uvSetStr = await kv.get(uvKey) || '[]';
+        let uvSet;
+        try { uvSet = JSON.parse(uvSetStr); } catch(e) { uvSet = []; }
+        const ipHash = await hashIP(ip);
+        let isNew = false;
+        if (!uvSet.includes(ipHash)) {
+          uvSet.push(ipHash);
+          await kv.put(uvKey, JSON.stringify(uvSet), { expirationTtl: 90 * 86400 });
+          isNew = true;
+        }
+
+        // 総ユニーク訪問者
+        const totalUvStr = await kv.get('uv_total') || '0';
+        const newTotalUv = isNew ? parseInt(totalUvStr) + 1 : parseInt(totalUvStr);
+        if (isNew) await kv.put('uv_total', String(newTotalUv));
+
+        return jsonResp({
+          ok: true,
+          total: newTotal,
+          today: newToday,
+          totalVisitors: newTotalUv,
+          todayVisitors: uvSet.length,
+        }, 200, env, origin);
+      } catch (e) {
+        return jsonResp({ ok: false, error: e.message }, 500, env, origin);
+      }
+    }
+
+    // ====== GET /pageview : カウント取得のみ ======
+    if (request.method === 'GET' && url.pathname === '/pageview') {
+      try {
+        const kv = env.PAGEVIEW_KV;
+        if (!kv) {
+          return jsonResp({ ok: false, error: 'KV not configured' }, 500, env, origin);
+        }
+        const today = new Date().toISOString().substring(0, 10);
+        const total = parseInt(await kv.get('pv_total') || '0');
+        const todayPv = parseInt(await kv.get('pv_' + today) || '0');
+        const totalUv = parseInt(await kv.get('uv_total') || '0');
+        const uvSetStr = await kv.get('uv_' + today) || '[]';
+        let todayUv = 0;
+        try { todayUv = JSON.parse(uvSetStr).length; } catch(e) {}
+        return jsonResp({
+          ok: true,
+          total,
+          today: todayPv,
+          totalVisitors: totalUv,
+          todayVisitors: todayUv,
+        }, 200, env, origin);
+      } catch (e) {
+        return jsonResp({ ok: false, error: e.message }, 500, env, origin);
+      }
+    }
+
     return jsonResp({ ok: false, error: 'not found' }, 404, env, origin);
   },
 };
+
+// IPアドレスをハッシュ化（プライバシー保護）
+async function hashIP(ip) {
+  const data = new TextEncoder().encode(ip + '_ito_salt_2026');
+  const hash = await crypto.subtle.digest('SHA-256', data);
+  const arr = new Uint8Array(hash);
+  return Array.from(arr.slice(0, 8)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
 
 function corsHeaders(env, origin) {
   const allowed = env.ALLOWED_ORIGIN || '*';

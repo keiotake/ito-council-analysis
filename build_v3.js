@@ -588,7 +588,9 @@ header h1{font-size:1.5rem;font-weight:700;letter-spacing:.06em}
 .header-sub{opacity:.92;font-size:.88rem;margin-top:.2rem;font-weight:400}
 .header-stats{display:flex;justify-content:center;gap:.4rem;margin-top:.5rem;flex-wrap:wrap;font-size:.78rem;opacity:.9}
 .header-stats span{background:rgba(255,255,255,.18);padding:.25rem .7rem;border-radius:20px}
-.header-credit{opacity:.75;font-size:.72rem;margin-top:.5rem}
+.header-visitors{display:flex;justify-content:center;gap:.3rem;margin-top:.35rem;font-size:.72rem;opacity:.85}
+.header-visitors span{font-weight:700}
+.header-credit{opacity:.75;font-size:.72rem;margin-top:.3rem}
 nav{display:flex;justify-content:flex-start;gap:.3rem;padding:.6rem 1rem;background:#fff;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,.06);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 nav::-webkit-scrollbar{display:none}
 nav button{padding:.5rem 1rem;border:none;border-radius:8px;font-size:.85rem;font-weight:600;cursor:pointer;transition:.2s;background:transparent;color:var(--sub);white-space:nowrap;flex-shrink:0;position:relative}
@@ -1253,6 +1255,9 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
     <span>動画 ${videos.length}本</span>
     <span>質問 ${videos.reduce((s,v)=>s+v.questions.length,0)}件</span>
   </div>
+  <div class="header-visitors" id="visitor-counter" style="display:none">
+    <span id="vc-total">—</span> 人が訪問 ｜ 今日 <span id="vc-today">—</span> 人
+  </div>
   <div class="header-credit">制作・運営: <wbr>伊東市議会議員 大竹圭</div>
 </header>
 <nav role="tablist" aria-label="メインナビゲーション">
@@ -1905,6 +1910,25 @@ function initGlossary(){
   });
 }
 document.addEventListener('DOMContentLoaded', initGlossary);
+
+// === 訪問者カウンター ===
+(function(){
+  var api = typeof VOICE_API !== 'undefined' ? VOICE_API : '';
+  if(!api) return;
+  fetch(api+'/pageview',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'})
+    .then(function(r){return r.json()})
+    .then(function(d){
+      if(d.ok){
+        var el=document.getElementById('visitor-counter');
+        if(el){
+          document.getElementById('vc-total').textContent=d.totalVisitors.toLocaleString();
+          document.getElementById('vc-today').textContent=d.todayVisitors.toLocaleString();
+          el.style.display='flex';
+        }
+      }
+    })
+    .catch(function(){});
+})();
 
 // === 質問一覧タイムライン ===
 function toggleQtlResp(name, idx){
