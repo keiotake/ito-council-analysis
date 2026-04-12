@@ -645,13 +645,6 @@ nav button.active::after{content:'';position:absolute;bottom:0;left:20%;right:20
   .concierge-fab{bottom:16px;right:16px;width:56px;height:56px;font-size:1.5rem}
   .concierge-fab-label{display:none}
 }
-/* 改善要望フォーム */
-.feedback-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:10000;display:flex;align-items:center;justify-content:center}
-.feedback-modal{background:#fff;border-radius:16px;width:420px;max-width:calc(100vw - 32px);max-height:calc(100vh - 60px);overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)}
-.feedback-header{display:flex;justify-content:space-between;align-items:center;padding:1rem 1.2rem;background:linear-gradient(135deg,#f39c12,#e67e22);color:#fff;border-radius:16px 16px 0 0;font-weight:700;font-size:.95rem}
-.feedback-close{background:rgba(255,255,255,.2);color:#fff;border:none;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:.9rem;display:flex;align-items:center;justify-content:center}
-.feedback-close:hover{background:rgba(255,255,255,.35)}
-.feedback-body{padding:1.2rem}
 .back-btn{padding:.5rem 1rem;border:none;border-radius:10px;background:#f0f4f8;font-size:.9rem;cursor:pointer;font-weight:600;margin-bottom:1rem}
 .back-btn:hover{background:#e5e7eb}
 .detail-panel{display:none}
@@ -819,6 +812,13 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
 .voice-meta{display:flex;gap:.5rem;font-size:.78rem;color:var(--sub);margin-top:.5rem;flex-wrap:wrap}
 .voice-empty{text-align:center;padding:2rem;color:var(--sub);background:#fff;border-radius:12px}
 .voice-loading{text-align:center;padding:1rem;color:var(--sub);font-size:.85rem}
+/* サイト改善要望セクション */
+.site-feedback-section{margin-top:2rem;background:linear-gradient(135deg,#fef9ef,#fff7e6);border:2px solid #f5d990;border-radius:14px;padding:1.2rem 1.4rem}
+.site-feedback-section h3{font-size:1rem;color:#b8860b;margin-bottom:.5rem}
+.site-feedback-section>p{font-size:.82rem;color:#666;line-height:1.6;margin-bottom:1rem}
+.site-feedback-form select,.site-feedback-form textarea{width:100%;padding:.6rem .8rem;border:2px solid #e5e7eb;border-radius:8px;font-size:.88rem;font-family:inherit;outline:none;box-sizing:border-box}
+.site-feedback-form select:focus,.site-feedback-form textarea:focus{border-color:#f39c12}
+.site-feedback-form textarea{resize:vertical;min-height:100px}
 
 /* モーダル */
 .modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);z-index:1000;align-items:flex-start;justify-content:center;padding:2rem 1rem;overflow-y:auto}
@@ -1222,6 +1222,30 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
     <div id="voice-list" class="voice-list">
       <div class="voice-loading">投稿を読み込み中...</div>
     </div>
+
+    <!-- サイト改善要望セクション -->
+    <div class="site-feedback-section">
+      <h3>💡 サイト改善要望</h3>
+      <p>「みんなの伊東市」をもっと使いやすくするためのご意見・ご要望をお寄せください。いただいたご意見は運営者が確認し、改善に活かしていきます。</p>
+      <div class="site-feedback-form">
+        <div class="modal-form-row">
+          <label>カテゴリ</label>
+          <select id="site-fb-category">
+            <option>機能の追加・改善</option>
+            <option>データの誤り・不足</option>
+            <option>デザイン・使いやすさ</option>
+            <option>その他</option>
+          </select>
+        </div>
+        <div class="modal-form-row">
+          <label>ご要望・ご意見 * (500文字以内)</label>
+          <textarea id="site-fb-text" maxlength="500" rows="4" placeholder="例：○○議員の質問データが古い、スマホで見づらい、こんな機能がほしい など" oninput="document.getElementById('site-fb-count').textContent=this.value.length+'/500'"></textarea>
+          <div class="char-count" id="site-fb-count">0/500</div>
+        </div>
+        <button class="voice-btn-post" onclick="submitSiteFeedback()" id="site-fb-btn" style="width:100%;margin-top:.5rem">送信する</button>
+        <div id="site-fb-result" style="display:none;margin-top:.6rem;padding:.6rem .8rem;border-radius:8px;font-size:.82rem"></div>
+      </div>
+    </div>
   </div>
 
   <!-- 投稿モーダル -->
@@ -1417,7 +1441,6 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
       <button class="concierge-sample" onclick="conciergeAsk('防災対策について教えて')">防災対策</button>
       <button class="concierge-sample" onclick="conciergeAsk('子育て支援はどうなっていますか？')">子育て支援</button>
       <button class="concierge-sample" onclick="conciergeAsk('このサイトは何ができますか？')">サイトの使い方</button>
-      <button class="concierge-sample" onclick="conciergeShowFeedback()" style="background:#fff5e6;border-color:#f39c12;color:#b8860b">💡 改善要望</button>
     </div>
   </div>
   <div class="concierge-footer">
@@ -1429,33 +1452,6 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
   </div>
 </div>
 
-<!-- 改善要望フォーム -->
-<div class="feedback-overlay" id="feedback-overlay" style="display:none">
-  <div class="feedback-modal">
-    <div class="feedback-header">
-      <span>💡 サイト改善要望</span>
-      <button class="feedback-close" onclick="closeFeedback()">✕</button>
-    </div>
-    <div class="feedback-body">
-      <p style="font-size:.82rem;color:var(--sub);margin-bottom:.8rem">
-        「みんなの伊東市」をもっと使いやすくするためのご意見・ご要望をお寄せください。<br>
-        いただいたご意見は運営者が確認し、改善に活かしていきます。
-      </p>
-      <label style="font-size:.78rem;font-weight:600;color:var(--text)">カテゴリ</label>
-      <select id="feedback-category" style="width:100%;padding:.5rem;border:1.5px solid #d5dbe6;border-radius:8px;font-size:.82rem;margin:.3rem 0 .8rem">
-        <option>機能の追加・改善</option>
-        <option>データの誤り・不足</option>
-        <option>デザイン・使いやすさ</option>
-        <option>その他</option>
-      </select>
-      <label style="font-size:.78rem;font-weight:600;color:var(--text)">ご要望・ご意見</label>
-      <textarea id="feedback-text" maxlength="500" rows="4" placeholder="ここにご要望をお書きください..." style="width:100%;padding:.55rem .7rem;border:1.5px solid #d5dbe6;border-radius:8px;font-size:.82rem;font-family:inherit;resize:vertical;margin:.3rem 0"></textarea>
-      <div style="text-align:right;font-size:.7rem;color:var(--sub)"><span id="feedback-counter">0</span> / 500</div>
-      <button id="feedback-submit-btn" onclick="submitFeedback()" style="width:100%;padding:.65rem;background:linear-gradient(135deg,#f39c12,#e67e22);color:#fff;border:none;border-radius:10px;font-size:.85rem;font-weight:700;cursor:pointer;margin-top:.5rem">送信する</button>
-      <div id="feedback-result" style="display:none;margin-top:.6rem;padding:.5rem .7rem;border-radius:8px;font-size:.8rem"></div>
-    </div>
-  </div>
-</div>
 
 <div class="disclaimer">
   <h3>免責事項</h3>
@@ -1707,24 +1703,13 @@ async function conciergeSend(){
 document.addEventListener('DOMContentLoaded',()=>{
   const ta=document.getElementById('concierge-input');
   if(ta) ta.addEventListener('input', conciergeUpdateCounter);
-  const fta=document.getElementById('feedback-text');
-  if(fta) fta.addEventListener('input', ()=>{
-    document.getElementById('feedback-counter').textContent=fta.value.length;
-  });
 });
-// 改善要望フォーム
-function conciergeShowFeedback(){
-  document.getElementById('feedback-overlay').style.display='flex';
-}
-function closeFeedback(){
-  document.getElementById('feedback-overlay').style.display='none';
-  document.getElementById('feedback-result').style.display='none';
-}
-async function submitFeedback(){
-  const text=document.getElementById('feedback-text').value.trim();
-  const cat=document.getElementById('feedback-category').value;
-  const btn=document.getElementById('feedback-submit-btn');
-  const result=document.getElementById('feedback-result');
+// サイト改善要望（市民の声タブ内）
+async function submitSiteFeedback(){
+  const text=document.getElementById('site-fb-text').value.trim();
+  const cat=document.getElementById('site-fb-category').value;
+  const btn=document.getElementById('site-fb-btn');
+  const result=document.getElementById('site-fb-result');
   if(text.length<5){ result.style.display='block'; result.style.background='#fef2f2'; result.style.color='#a33'; result.textContent='5文字以上でご入力ください。'; return; }
   btn.disabled=true; btn.textContent='送信中...';
   try{
@@ -1738,9 +1723,8 @@ async function submitFeedback(){
     if(data.ok){
       result.style.background='#f0fdf4'; result.style.color='#166534';
       result.textContent='ご要望を受け付けました。ありがとうございます！';
-      document.getElementById('feedback-text').value='';
-      document.getElementById('feedback-counter').textContent='0';
-      setTimeout(closeFeedback, 2500);
+      document.getElementById('site-fb-text').value='';
+      document.getElementById('site-fb-count').textContent='0/500';
     } else {
       result.style.background='#fef2f2'; result.style.color='#a33';
       result.textContent=data.error||'送信に失敗しました';
