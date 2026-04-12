@@ -464,9 +464,10 @@ const html = `<!DOCTYPE html>
 body{font-family:-apple-system,'Hiragino Sans','Meiryo',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;-webkit-text-size-adjust:100%}
 header{background:linear-gradient(135deg,#1e40af 0%,#2563eb 100%);color:#fff;padding:1.4rem 1rem 1.1rem;text-align:center}
 header h1{font-size:1.5rem;font-weight:700;letter-spacing:.06em}
-.header-sub{opacity:.88;font-size:.82rem;margin-top:.25rem}
-.header-stats{display:flex;justify-content:center;gap:.4rem;margin-top:.6rem;flex-wrap:wrap;font-size:.78rem;opacity:.9}
+.header-sub{opacity:.92;font-size:.88rem;margin-top:.2rem;font-weight:400}
+.header-stats{display:flex;justify-content:center;gap:.4rem;margin-top:.5rem;flex-wrap:wrap;font-size:.78rem;opacity:.9}
 .header-stats span{background:rgba(255,255,255,.18);padding:.25rem .7rem;border-radius:20px}
+.header-credit{opacity:.75;font-size:.72rem;margin-top:.5rem}
 nav{display:flex;justify-content:flex-start;gap:.3rem;padding:.6rem 1rem;background:#fff;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,.06);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 nav::-webkit-scrollbar{display:none}
 nav button{padding:.5rem 1rem;border:none;border-radius:8px;font-size:.85rem;font-weight:600;cursor:pointer;transition:.2s;background:transparent;color:var(--sub);white-space:nowrap;flex-shrink:0;position:relative}
@@ -847,11 +848,12 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
 }
 /* スマートフォン */
 @media(max-width:768px){
-  header{padding:1.1rem .8rem .9rem}
+  header{padding:1rem .8rem .8rem}
   header h1{font-size:1.2rem;letter-spacing:.04em}
-  .header-sub{font-size:.72rem}
-  .header-stats{font-size:.7rem;gap:.3rem;margin-top:.4rem}
+  .header-sub{font-size:.75rem}
+  .header-stats{font-size:.72rem;gap:.3rem;margin-top:.35rem}
   .header-stats span{padding:.18rem .5rem}
+  .header-credit{font-size:.65rem;margin-top:.35rem}
   nav{gap:.2rem;padding:.5rem .6rem;justify-content:flex-start}
   nav button{padding:.4rem .7rem;font-size:.78rem;border-radius:6px}
   nav button.active::after{left:15%;right:15%;height:2px}
@@ -945,6 +947,7 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
   .m-stats-mini{font-size:.65rem}
   header h1{font-size:1.05rem}
   .header-stats span{font-size:.65rem;padding:.15rem .4rem}
+  .header-credit{font-size:.6rem}
   nav button{padding:.35rem .55rem;font-size:.72rem}
   .cmp-grid{grid-template-columns:1fr}
   .goals-grid{grid-template-columns:1fr 1fr}
@@ -954,13 +957,13 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
 <body>
 <header>
   <h1>みんなの伊東市</h1>
-  <div class="header-sub">伊東市議会の活動を市民にわかりやすく ｜ 制作: 大竹圭（伊東市議会議員）</div>
+  <div class="header-sub">伊東市議会の活動を、市民にわかりやすく</div>
   <div class="header-stats">
     <span>議員 ${currentMembersList.length}名</span>
     <span>動画 ${videos.length}本</span>
     <span>質問 ${videos.reduce((s,v)=>s+v.questions.length,0)}件</span>
-    <span>第21期（令和7年〜）</span>
   </div>
+  <div class="header-credit">制作・運営: <wbr>伊東市議会議員 大竹圭</div>
 </header>
 <nav>
   <button class="active" onclick="switchTab('members',this)">議員一覧</button>
