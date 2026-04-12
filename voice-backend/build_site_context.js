@@ -167,6 +167,23 @@ currentNames.forEach(name => {
 
     ctx += `${v.date || '不明'} ${v.sessionType || ''}: ${qList}\n`;
   });
+
+  // この議員の所属会派の大綱質疑も追加
+  const faction = profiles[name].faction || '無会派';
+  const factionVidsForMember = analysis.videos.filter(v =>
+    v.sessionType && (v.sessionType.includes('大綱') || v.sessionType.includes('補正')) &&
+    v.title && v.title.includes(faction)
+  );
+  if (factionVidsForMember.length > 0) {
+    ctx += `【${faction}の大綱質疑・予算質疑（会派代表質問）】\n`;
+    factionVidsForMember.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+    factionVidsForMember.slice(0, 3).forEach(v => { // 直近3件まで
+      const summaries = (questionSummaries[v.videoId] || []).filter(s => s && s !== '質問内容');
+      if (summaries.length === 0) return;
+      const qList = summaries.map(q => q.length > 80 ? q.substring(0, 77) + '...' : q).join(' / ');
+      ctx += `${v.date || '不明'} ${v.title?.replace(/伊東市議会[　\s]*/g, '').substring(0, 40) || ''}: ${qList}\n`;
+    });
+  }
 });
 
 // ========== 会派別大綱質疑 ==========
