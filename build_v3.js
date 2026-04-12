@@ -455,6 +455,75 @@ function memberDetailHTML(m) {
         </div>
       </div>`;
     })()}
+    ${(() => {
+      // === 質問一覧タイムライン ===
+      const allQuestions = [];
+      const sortedVids = [...m.videos].sort((a,b) => (b.date||'').localeCompare(a.date||''));
+      for (const v of sortedVids) {
+        if (!v.questions || v.questions.length === 0) continue;
+        const tc = v.sessionType === '一般質問' ? '#3498db' : v.sessionType === '大綱質疑' ? '#27ae60' : v.sessionType === '補正予算審議' ? '#e67e22' : '#95a5a6';
+        const sums = questionSummaries[v.videoId] || [];
+        const resps = responseMap[v.videoId] || [];
+        v.questions.forEach((q, qi) => {
+          let summary = sums[qi] || '';
+          if (!summary || summary === '質問内容') {
+            const cleaned = q.replace(/[\n\r]/g, '').replace(/^[^ぁ-んァ-ヶ\u4e00-\u9fff]*/,'')
+              .replace(/.{2,6}(君|くん)の一般質問を許します/g,'')
+              .replace(/委?\d+番?\d*/g,'').trim();
+            summary = cleaned.length > 80 ? cleaned.substring(0, 77) + '…' : cleaned;
+          }
+          if (summary.length > 80) summary = summary.substring(0, 77) + '…';
+          const resp = resps[qi];
+          const respText = resp && resp.response ? resp.response : '';
+          allQuestions.push({
+            date: v.date || '',
+            type: v.sessionType,
+            typeColor: tc,
+            summary: summary,
+            response: respText,
+            url: v.url,
+            videoId: v.videoId,
+          });
+        });
+      }
+      if (allQuestions.length === 0) return '';
+
+      const qRows = allQuestions.map((q, i) => {
+        const respShort = q.response ? (q.response.length > 150 ? q.response.substring(0, 147) + '…' : q.response) : '';
+        const respHTML = q.response
+          ? `<div class="qtl-resp">
+              <div class="qtl-resp-label">当局回答</div>
+              <div class="qtl-resp-short" id="qtl-rs-${esc(m.name)}-${i}">${esc(respShort)}</div>
+              ${q.response.length > 150 ? `<div class="qtl-resp-full" id="qtl-rf-${esc(m.name)}-${i}" style="display:none">${esc(q.response)}</div><button class="qtl-resp-toggle" onclick="toggleQtlResp('${esc(m.name)}',${i})">全文を表示</button>` : ''}
+            </div>`
+          : '<div class="qtl-no-resp">回答データなし</div>';
+
+        return `<div class="qtl-card">
+          <div class="qtl-header">
+            <span class="qtl-date">${esc(q.date)}</span>
+            <span class="qtl-type" style="background:${q.typeColor}">${esc(q.type)}</span>
+            <a href="${q.url}" target="_blank" class="qtl-video-link" title="動画を見る">▶ 動画</a>
+          </div>
+          <div class="qtl-question">${esc(q.summary)}</div>
+          ${respHTML}
+        </div>`;
+      }).join('');
+
+      return `<div class="qtl-section">
+        <h3 class="section-title">📋 質問一覧 (${allQuestions.length}件)</h3>
+        <div class="qtl-controls">
+          <input class="qtl-search" placeholder="質問をキーワードで絞り込み..." oninput="filterQtl(this,'${esc(m.name)}')">
+          <select class="qtl-filter" onchange="filterQtlType(this,'${esc(m.name)}')">
+            <option value="">全種別</option>
+            <option value="一般質問">一般質問</option>
+            <option value="大綱質疑">大綱質疑</option>
+            <option value="補正予算審議">補正予算審議</option>
+          </select>
+        </div>
+        <div class="qtl-list" id="qtl-${esc(m.name)}">${qRows}</div>
+        <div class="qtl-count" id="qtl-count-${esc(m.name)}">全${allQuestions.length}件を表示中</div>
+      </div>`;
+    })()}
     <h3 class="section-title">発言動画 (${m.videos.length}本)</h3>
     <div class="v-list">${videoItems}</div>
   </div>`;
@@ -912,6 +981,30 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
 .activity-highlights{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem}
 .activity-tag{padding:.25rem .6rem;border-radius:8px;font-size:.72rem;font-weight:600;background:#dbeafe;color:#1d4ed8}
 
+/* 質問一覧タイムライン */
+.qtl-section{margin:1.5rem 0}
+.qtl-controls{display:flex;gap:.5rem;margin-bottom:1rem;flex-wrap:wrap}
+.qtl-search{flex:1;min-width:180px;padding:.6rem .8rem;border:2px solid #e5e7eb;border-radius:10px;font-size:.85rem;outline:none}
+.qtl-search:focus{border-color:var(--accent)}
+.qtl-filter{padding:.6rem .8rem;border:2px solid #e5e7eb;border-radius:10px;font-size:.85rem;background:#fff;outline:none}
+.qtl-list{display:flex;flex-direction:column;gap:.6rem}
+.qtl-card{background:var(--card);border-radius:12px;padding:1rem 1.2rem;box-shadow:0 1px 4px rgba(0,0,0,.06);border-left:4px solid var(--accent);transition:.2s}
+.qtl-card:hover{box-shadow:0 3px 12px rgba(0,0,0,.1)}
+.qtl-card.hidden{display:none}
+.qtl-header{display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem;flex-wrap:wrap}
+.qtl-date{font-size:.78rem;font-weight:700;color:var(--sub);background:#f0f4f8;padding:.2rem .5rem;border-radius:6px}
+.qtl-type{font-size:.68rem;color:#fff;padding:.15rem .5rem;border-radius:6px;font-weight:600}
+.qtl-video-link{font-size:.72rem;color:#16a34a;font-weight:600;text-decoration:none;margin-left:auto;padding:.15rem .5rem;border:1px solid #86efac;border-radius:6px;background:#f0fdf4}
+.qtl-video-link:hover{background:#16a34a;color:#fff}
+.qtl-question{font-size:.9rem;font-weight:600;color:var(--text);line-height:1.6;margin-bottom:.5rem}
+.qtl-resp{background:#f8fafc;border-radius:8px;padding:.6rem .8rem;border-left:3px solid #2563eb}
+.qtl-resp-label{font-size:.68rem;font-weight:700;color:var(--accent);margin-bottom:.25rem;display:inline-block;background:#eff6ff;padding:.1rem .4rem;border-radius:4px}
+.qtl-resp-short,.qtl-resp-full{font-size:.82rem;color:#444;line-height:1.7;white-space:pre-wrap;word-break:break-all}
+.qtl-resp-toggle{font-size:.72rem;color:var(--accent);border:none;background:none;cursor:pointer;font-weight:600;padding:.2rem 0;margin-top:.2rem}
+.qtl-resp-toggle:hover{text-decoration:underline}
+.qtl-no-resp{font-size:.75rem;color:#aaa;font-style:italic;margin-top:.2rem}
+.qtl-count{font-size:.75rem;color:var(--sub);text-align:center;margin-top:.6rem;padding:.3rem}
+
 /* 議会カレンダー */
 .council-calendar{background:linear-gradient(135deg,#f0f9ff,#e0f2fe);border:2px solid #7dd3fc;border-radius:14px;padding:1rem 1.2rem;margin-bottom:1.5rem}
 .cal-header{font-size:1rem;font-weight:700;color:#0369a1;margin-bottom:.5rem}
@@ -1049,6 +1142,12 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
   .back-btn{font-size:.82rem;padding:.4rem .8rem}
   .load-btn{font-size:.88rem;padding:.6rem 1.5rem}
   .detail-committees{padding:.7rem}
+  .qtl-card{padding:.7rem .8rem}
+  .qtl-question{font-size:.82rem}
+  .qtl-resp-short,.qtl-resp-full{font-size:.78rem}
+  .qtl-controls{gap:.4rem}
+  .qtl-search{font-size:.8rem;padding:.5rem .6rem}
+  .qtl-filter{font-size:.8rem;padding:.5rem .6rem}
   .cm-title{font-size:.8rem}
   .cm-item{font-size:.78rem}
   .cm-badge{font-size:.65rem}
@@ -1806,6 +1905,43 @@ function initGlossary(){
   });
 }
 document.addEventListener('DOMContentLoaded', initGlossary);
+
+// === 質問一覧タイムライン ===
+function toggleQtlResp(name, idx){
+  var short=document.getElementById('qtl-rs-'+name+'-'+idx);
+  var full=document.getElementById('qtl-rf-'+name+'-'+idx);
+  var btn=full.nextElementSibling;
+  if(full.style.display==='none'){
+    full.style.display='block'; short.style.display='none';
+    btn.textContent='閉じる';
+  } else {
+    full.style.display='none'; short.style.display='block';
+    btn.textContent='全文を表示';
+  }
+}
+function filterQtl(input, name){
+  var kw=input.value.toLowerCase();
+  var cards=document.querySelectorAll('#qtl-'+name+' .qtl-card');
+  var shown=0;
+  cards.forEach(function(c){
+    var match=!kw||c.textContent.toLowerCase().indexOf(kw)>=0;
+    c.classList.toggle('hidden',!match);
+    if(match) shown++;
+  });
+  document.getElementById('qtl-count-'+name).textContent=shown+'件を表示中';
+}
+function filterQtlType(sel, name){
+  var type=sel.value;
+  var cards=document.querySelectorAll('#qtl-'+name+' .qtl-card');
+  var shown=0;
+  cards.forEach(function(c){
+    var cardType=c.querySelector('.qtl-type').textContent;
+    var match=!type||cardType===type;
+    c.classList.toggle('hidden',!match);
+    if(match) shown++;
+  });
+  document.getElementById('qtl-count-'+name).textContent=shown+'件を表示中';
+}
 
 // === アクセシビリティ ===
 function toggleFontSize(){
