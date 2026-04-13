@@ -1841,6 +1841,8 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
   <div style="margin-top:.3rem">制作・運営: 伊東市議会議員 大竹圭 ｜ 最終更新: ${new Date().toLocaleDateString('ja-JP')}</div>
 </footer>
 <script>
+const VOICE_API='https://ito-voice.bmwrllsor-ko.workers.dev'; // Cloudflare Worker
+
 // === はじめてガイド ===
 (function(){
   if(!localStorage.getItem('ito_welcomed')){
@@ -2277,7 +2279,6 @@ function switchTab(id,btn){
 }
 
 // ============ 市民の声タブ ============
-const VOICE_API='https://ito-voice.bmwrllsor-ko.workers.dev'; // Cloudflare Worker
 const VOICE_CAT_COLORS={
   '道路・交通':'#3498db','福祉・医療':'#e91e63','教育・子育て':'#9b59b6',
   '観光・経済':'#f39c12','防災・安全':'#e74c3c','環境・衛生':'#27ae60',
