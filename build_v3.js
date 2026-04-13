@@ -1888,24 +1888,25 @@ function initGlossary(){
 }
 document.addEventListener('DOMContentLoaded', initGlossary);
 
-// === 訪問者カウンター ===
-(function(){
-  var api = typeof VOICE_API !== 'undefined' ? VOICE_API : '';
-  if(!api) return;
-  fetch(api+'/pageview',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'})
-    .then(function(r){return r.json()})
-    .then(function(d){
-      if(d.ok){
-        var el=document.getElementById('visitor-counter');
-        if(el){
-          document.getElementById('vc-total').textContent=d.totalVisitors.toLocaleString();
-          document.getElementById('vc-today').textContent=d.todayVisitors.toLocaleString();
-          el.style.display='flex';
+// === 訪問者カウンター（VOICE_API定義後に実行） ===
+document.addEventListener('DOMContentLoaded',function(){
+  setTimeout(function(){
+    if(typeof VOICE_API==='undefined'||!VOICE_API) return;
+    fetch(VOICE_API+'/pageview',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'})
+      .then(function(r){return r.json()})
+      .then(function(d){
+        if(d.ok){
+          var el=document.getElementById('visitor-counter');
+          if(el){
+            document.getElementById('vc-total').textContent=d.totalVisitors.toLocaleString();
+            document.getElementById('vc-today').textContent=d.todayVisitors.toLocaleString();
+            el.style.display='flex';
+          }
         }
-      }
-    })
-    .catch(function(){});
-})();
+      })
+      .catch(function(){});
+  },100);
+});
 
 // === 質問一覧タイムライン ===
 function toggleQtlResp(name, idx){
