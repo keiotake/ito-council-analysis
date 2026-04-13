@@ -597,6 +597,8 @@ nav button{padding:.5rem 1rem;border:none;border-radius:8px;font-size:.85rem;fon
 nav button:hover{background:#f0f4f8;color:var(--text)}
 nav button.active{color:var(--accent);background:#eff6ff}
 nav button.active::after{content:'';position:absolute;bottom:0;left:20%;right:20%;height:3px;background:var(--accent);border-radius:3px}
+.tab-notice{font-size:.72rem;color:#6b7280;background:#f8fafc;border-left:3px solid #d1d5db;padding:.4rem .7rem;margin-bottom:.8rem;border-radius:0 6px 6px 0;line-height:1.5}
+.tab-notice a{color:var(--accent)}
 .container{max-width:1200px;margin:0 auto;padding:1rem 1.2rem}
 .search-row{display:flex;gap:.8rem;margin:1rem 0;flex-wrap:wrap}
 .search-input{flex:1;min-width:200px;padding:.8rem 1.2rem;border:2px solid #e5e7eb;border-radius:12px;font-size:1rem;outline:none;transition:.2s}
@@ -856,8 +858,14 @@ nav button.active::after{content:'';position:absolute;bottom:0;left:20%;right:20
 .bar-fill{height:100%;border-radius:10px;transition:.5s}
 footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
 .disclaimer{max-width:900px;margin:2rem auto 0;padding:1.5rem 2rem;background:#fff;border-radius:var(--radius);box-shadow:0 2px 8px rgba(0,0,0,.06);text-align:left}
-.disclaimer h3{font-size:1rem;font-weight:700;color:var(--text);margin-bottom:.8rem;padding-bottom:.5rem;border-bottom:2px solid #e5e7eb}
+.disc-summary{text-align:center}
+.disc-summary p{font-size:.82rem;color:#555;line-height:1.7;margin-bottom:.5rem}
+.disc-toggle{border:none;background:none;color:var(--accent);font-size:.8rem;font-weight:600;cursor:pointer;padding:.3rem .8rem}
+.disc-toggle:hover{text-decoration:underline}
+.disc-detail{display:none;text-align:left;margin-top:1rem;padding-top:1rem;border-top:1px solid #e5e7eb}
+.disc-detail.open{display:block}
 .disclaimer h4{font-size:.85rem;font-weight:700;color:#444;margin:1rem 0 .3rem}
+.disclaimer h4:first-child{margin-top:0}
 .disclaimer p,.disclaimer li{font-size:.8rem;color:#555;line-height:1.7}
 .disclaimer ul{padding-left:1.2rem;margin:.3rem 0 .8rem}
 .disclaimer li{margin-bottom:.2rem}
@@ -1171,9 +1179,8 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
   .trend-chart{padding:.8rem}
   .trend-chart h3{font-size:.92rem}
   .disclaimer{padding:1rem;margin:1.5rem auto 0}
-  .disclaimer h3{font-size:.92rem}
   .disclaimer h4{font-size:.82rem}
-  .disclaimer p,.disclaimer li{font-size:.78rem}
+  .disclaimer p,.disclaimer li,.disc-summary p{font-size:.78rem}
   .modal-box{padding:1rem;border-radius:12px;max-height:calc(100vh - 2rem)}
   .modal-overlay{padding:1rem .5rem}
   footer{padding:1rem;font-size:.75rem}
@@ -1269,6 +1276,7 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
 </nav>
 <div class="container" id="main-content" role="main">
   <div id="tab-members" class="tab-panel active">
+    <div class="tab-notice">ℹ️ 議員情報は伊東市公式サイトの公開資料に基づきます。質問数等は動画字幕の解析値であり公式記録とは異なる場合があります。</div>
     <!-- パーソナライズバー -->
     <div class="personalize-bar" id="personalize-bar">
       <h4>⭐ 関心のあるテーマを選んでください（複数可）</h4>
@@ -1295,6 +1303,7 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
     <div id="detail-area">${allMembers.map(m => memberDetailHTML(m)).join('')}</div>
   </div>
   <div id="tab-all" class="tab-panel">
+    <div class="tab-notice">ℹ️ 質問要約はYouTube自動字幕の機械抽出です。正確な内容は各動画または<a href="https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/itoshigikai/index.html" target="_blank">会議録</a>でご確認ください。</div>
     <!-- テーマで探す -->
     <div class="theme-picker">
       <div class="theme-picker-label">🔍 テーマで探す</div>
@@ -1637,6 +1646,7 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
   </div>
 
   <div id="tab-stats" class="tab-panel">
+    <div class="tab-notice">ℹ️ 統計データはYouTube動画の字幕解析に基づく推計値です。分野分類はキーワード自動分類のため、実際の質問趣旨と異なる場合があります。</div>
     <!-- 議会カレンダー -->
     <div class="council-calendar" id="council-calendar">
       <div class="cal-header">🗓️ 議会スケジュール</div>
@@ -1776,73 +1786,40 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
 
 
 <div class="disclaimer">
-  <h3>免責事項</h3>
-
-  <h4>1. 本サイトの目的と性質</h4>
-  <p>本サイトは、伊東市議会の活動に関する公開情報を市民がわかりやすく閲覧できるよう、公益目的で作成された非公式の情報サイトです。伊東市、伊東市議会、またはいかなる政党・政治団体とも関係はなく、特定の政治的立場を支持・推薦・批判するものではありません。</p>
-
-  <h4>2. 情報の正確性について</h4>
-  <ul>
-    <li>本サイトに掲載されている質問要約は、YouTubeの自動生成字幕（音声認識）をもとに機械的に抽出・要約したものであり、<strong>正確性を保証するものではありません</strong>。音声認識の誤変換、文脈の欠落、要約時の情報損失等が含まれる可能性があります。</li>
-    <li>質問の分野分類（教育・子育て、観光・経済等）は、キーワードに基づく自動分類であり、質問の趣旨を正確に反映していない場合があります。</li>
-    <li>議員の質問数・動画出演数等の数値データは、YouTube動画の字幕解析に基づく推計値であり、公式記録とは異なる場合があります。</li>
-    <li>正確な議会記録については、<a href="https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/itoshigikai/index.html" target="_blank">伊東市議会公式ページ</a>および会議録をご参照ください。</li>
-  </ul>
-
-  <h4>3. データの出典と利用</h4>
-  <ul>
-    <li><strong>動画・字幕:</strong> <a href="https://www.youtube.com/channel/UC9FGDfo93b_dpu_7-AnN4wQ" target="_blank">伊東市議会インターネット中継放送（YouTube公式チャンネル）</a>の公開動画および自動生成字幕を利用しています。</li>
-    <li><strong>議員情報:</strong> 伊東市公式ウェブサイトで公開されている議員名簿、委員会名簿、会派名簿等の公開資料に基づいています。</li>
-    <li><strong>写真:</strong> 選挙ドットコム等の公開されている政治家プロフィールページの情報を参照しています。各写真の著作権は撮影者または掲載元に帰属します。</li>
-  </ul>
-
-  <h4>4. 公平性・中立性について</h4>
-  <ul>
-    <li>本サイトは客観的なデータの可視化を目的としており、特定の議員の活動を評価・批判・推薦する意図はありません。</li>
-    <li>質問数や動画出演数の多寡は、議員活動の質や成果を直接示すものではありません。議会活動には、委員会審議、住民相談、政策調査など、本サイトでは計測できない多くの側面があります。</li>
-    <li>データの取得・処理は全議員に対して同一の方法で行っており、意図的な偏りはありません。</li>
-  </ul>
-
-  <h4>5. 肖像権・プライバシーについて</h4>
-  <ul>
-    <li>掲載している議員の写真は、政治家としての公的活動に関連して公開されているものを利用しています。政治家は公人として、公務に関する情報公開が社会的に求められる立場にあります。</li>
-    <li>プライベートな情報（住所、電話番号、家族構成等）は一切掲載していません。</li>
-    <li>掲載情報に関してご本人から削除・修正の申し出があった場合は、速やかに対応いたします。</li>
-  </ul>
-
-  <h4>6. 著作権について</h4>
-  <ul>
-    <li>議会の質疑内容は公的な記録であり、著作権法第13条により著作権の対象外となる場合がありますが、動画・字幕データの利用についてはYouTubeの利用規約に従います。</li>
-    <li>本サイトでは字幕テキストをそのまま掲載するのではなく、質問テーマの短い要約として再構成しています。</li>
-    <li>本サイト上の分析結果・グラフ等の二次利用にあたっては、出典を明記してください。</li>
-  </ul>
-
-  <h4>7. 外部リンクについて</h4>
-  <p>本サイトから外部サイト（YouTube、伊東市HP等）へのリンクを設けていますが、リンク先の内容について本サイトは責任を負いません。</p>
-
-  <h4>8. 免責</h4>
-  <p>本サイトの利用によって生じたいかなる損害についても、サイト運営者は一切の責任を負いません。掲載情報に基づく判断・行動は、利用者ご自身の責任において行ってください。</p>
-
-  <h4>9. 「市民の声」投稿機能について</h4>
-  <ul>
-    <li><strong>承認制：</strong>投稿は運営者が確認後、承認されたもののみが公開されます。投稿即時公開ではありません。</li>
-    <li><strong>禁止事項：</strong>特定の個人(議員・市職員・市民)への誹謗中傷、個人情報の記載、差別的表現、虚偽情報、営業・宣伝、わいせつ表現、選挙運動等は禁止します。該当する投稿は予告なく削除します。</li>
-    <li><strong>記録される情報：</strong>投稿者のIPアドレス、ブラウザ情報、投稿日時、投稿内容のハッシュ値を保存します。これらは公開されませんが、悪質な投稿への対応のため永続的に保存されます。</li>
-    <li><strong>悪質投稿への対応：</strong>脅迫・名誉毀損・威力業務妨害等に該当すると判断した投稿については、保存している接続情報をもとに、<strong>伊東警察署および静岡県警察本部サイバー犯罪対策課への被害届提出、ならびにプロバイダ責任制限法に基づく発信者情報開示請求</strong>を行う場合があります。</li>
-    <li><strong>運営者の責任：</strong>プロバイダ責任制限法第3条に基づき、運営者は権利侵害のある投稿を認識した後、速やかに削除等の対応を行います。</li>
-    <li><strong>削除依頼：</strong>掲載中の投稿について削除をご希望の場合は ka@oh-life.co.jp までご連絡ください。</li>
-    <li><strong>免責：</strong>投稿内容の真実性・正確性について運営者は一切の責任を負いません。投稿は投稿者個人の意見であり、運営者の見解ではありません。</li>
-  </ul>
-
-  <h4>10. お問い合わせ・情報の修正・削除について</h4>
-  <p>掲載内容に誤りを発見された場合、掲載情報の修正・削除のご希望、またはご意見・ご感想等がございましたら、下記までご連絡ください。確認の上、速やかに対応いたします。</p>
-  <ul>
-    <li><strong>メール:</strong> <a href="mailto:ka@oh-life.co.jp" style="color:var(--accent)">ka@oh-life.co.jp</a></li>
-    <li><strong>お問い合わせフォーム:</strong> <span style="color:var(--sub)">準備中</span></li>
-    <li><strong>運営:</strong> 大竹圭（伊東市議会議員）</li>
-  </ul>
-
-  <div class="disc-note">本免責事項は予告なく変更される場合があります。最終更新: ${new Date().toLocaleDateString('ja-JP')}</div>
+  <div class="disc-summary">
+    <p>本サイトは伊東市議会の公開情報を市民にわかりやすく届ける<strong>非公式の情報サイト</strong>です。質問要約はYouTube自動字幕の機械抽出であり、正確性を保証しません。正確な情報は<a href="https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/itoshigikai/index.html" target="_blank">伊東市議会公式ページ</a>をご確認ください。</p>
+    <button class="disc-toggle" onclick="this.parentElement.nextElementSibling.classList.toggle('open');this.textContent=this.textContent==='詳しく見る ▼'?'閉じる ▲':'詳しく見る ▼'">詳しく見る ▼</button>
+  </div>
+  <div class="disc-detail">
+    <h4>1. 情報の正確性</h4>
+    <ul>
+      <li>質問要約はYouTube自動字幕（音声認識）の機械抽出であり、誤変換・文脈欠落・情報損失を含む可能性があります。</li>
+      <li>分野分類はキーワードによる自動分類で、質問の趣旨を正確に反映しない場合があります。</li>
+      <li>質問数・動画数等はYouTube字幕解析に基づく推計値で、公式記録とは異なる場合があります。</li>
+    </ul>
+    <h4>2. データの出典</h4>
+    <ul>
+      <li><strong>動画・字幕:</strong> <a href="https://www.youtube.com/channel/UC9FGDfo93b_dpu_7-AnN4wQ" target="_blank">伊東市議会YouTube公式チャンネル</a></li>
+      <li><strong>議員情報:</strong> 伊東市公式サイトの公開資料（議員名簿・委員会名簿・会派名簿等）</li>
+      <li><strong>写真:</strong> 選挙ドットコム等の公開プロフィール。著作権は撮影者・掲載元に帰属</li>
+    </ul>
+    <h4>3. 公平性・中立性</h4>
+    <p>特定の議員の評価・批判・推薦の意図はありません。質問数等の多寡は議員活動の質を示すものではなく、全議員に同一方法でデータ処理しています。</p>
+    <h4>4. 肖像権・著作権</h4>
+    <p>議員写真は公人としての公的活動に関連して公開されたものを利用。削除・修正の申し出には速やかに対応します。議会質疑の字幕テキストは要約として再構成しています。</p>
+    <h4>5. 免責</h4>
+    <p>本サイトの利用により生じた損害について運営者は一切の責任を負いません。外部リンク先の内容についても責任を負いません。</p>
+    <h4>6. 「市民の声」投稿機能</h4>
+    <ul>
+      <li>投稿は<strong>承認制</strong>（運営者確認後に公開）</li>
+      <li>誹謗中傷・個人情報・差別・虚偽・宣伝・選挙運動等は禁止。該当投稿は予告なく削除</li>
+      <li>IPアドレス・ブラウザ情報・投稿日時を保存。悪質投稿は<strong>警察への被害届・発信者情報開示請求</strong>を行う場合あり</li>
+      <li>投稿内容は投稿者個人の意見であり、運営者の見解ではありません</li>
+    </ul>
+    <h4>7. お問い合わせ</h4>
+    <p>誤り・修正・削除のご依頼: <a href="mailto:ka@oh-life.co.jp" style="color:var(--accent)">ka@oh-life.co.jp</a>（運営: 大竹圭 伊東市議会議員）</p>
+    <div class="disc-note">最終更新: ${new Date().toLocaleDateString('ja-JP')}</div>
+  </div>
 </div>
 <!-- ダイジェストメール登録 -->
 <div class="newsletter-section" id="newsletter">
