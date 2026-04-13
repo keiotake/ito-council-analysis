@@ -296,15 +296,8 @@ function radarChart(topicData, size = 280) {
     labels += `<text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle" font-size="11" fill="#555" font-weight="500">${cats[i]}</text>`;
   }
 
-  // スケールラベル（最外周=maxPct%）
-  const scaleLabels = [1,2,3,4].map(level => {
-    const val = Math.round(maxPct * level / 4);
-    const ly = cy - r * level / 4 - 2;
-    return `<text x="${cx+2}" y="${ly}" font-size="8" fill="#bbb">${val}%</text>`;
-  }).join('');
-
   return `<svg viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" style="max-width:100%">
-    ${gridLines}${axes}${scaleLabels}
+    ${gridLines}${axes}
     <polygon points="${dataPts.join(' ')}" fill="rgba(37,99,235,0.25)" stroke="#2563eb" stroke-width="2"/>
     ${labels}
   </svg>`;
