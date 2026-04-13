@@ -100,10 +100,22 @@ function extractSpeakerAndTopics(text, videoId) {
 
   // 「伺います」の前の文を質問として抽出
   const questions = [];
-  const questionPattern = /([^。]{20,150})(を伺います|について伺います|をお伺いします|の見解を伺い|について質問)/g;
-  let qMatch;
-  while ((qMatch = questionPattern.exec(text)) !== null) {
-    questions.push(qMatch[1].trim() + qMatch[2]);
+  const questionPatterns = [
+    /([^。]{20,150})(を伺います|について伺います|をお伺いします|の見解を伺い|について質問)/g,
+    // 大綱質疑・予算質疑向けパターン
+    /([^。]{20,150})(についてお聞き|について聞き|について確認|について伺い|について見解|についてお尋ね|をお聞き)/g,
+    /([^。]{15,150})(はどうか|はいかが|はどのように|はどうなっている|はどうなる)/g,
+    /([^。]{15,150})(を求め|を要望|を要請|と考えるが)/g,
+  ];
+  for (const questionPattern of questionPatterns) {
+    let qMatch;
+    while ((qMatch = questionPattern.exec(text)) !== null) {
+      const q = qMatch[1].trim() + qMatch[2];
+      // 重複チェック（同じ文が複数パターンにマッチする場合）
+      if (!questions.some(existing => existing.includes(q.substring(0, 30)) || q.includes(existing.substring(0, 30)))) {
+        questions.push(q);
+      }
+    }
   }
 
   // 回答パターン（市長、部長等の答弁）
@@ -114,13 +126,16 @@ function extractSpeakerAndTopics(text, videoId) {
   ];
 
   // テキストの種類判定（一般質問、大綱質疑、委員会等）
+  // タイトル＋字幕テキストの両方から判定する
+  const combined = title + ' ' + text;
   let sessionType = '不明';
-  if (text.includes('一般質問')) sessionType = '一般質問';
-  else if (text.includes('大綱質疑')) sessionType = '大綱質疑';
-  else if (text.includes('補正予算')) sessionType = '補正予算審議';
-  else if (text.includes('委員会')) sessionType = '委員会';
-  else if (text.includes('討論')) sessionType = '討論';
-  else if (text.includes('議案')) sessionType = '議案審議';
+  if (combined.includes('一般質問')) sessionType = '一般質問';
+  else if (combined.includes('大綱質疑') || combined.includes('予算大綱') || combined.includes('決算大綱')) sessionType = '大綱質疑';
+  else if (combined.includes('所信表明に対する質問') || combined.includes('所信表明')) sessionType = '大綱質疑';
+  else if (combined.includes('補正予算')) sessionType = '補正予算審議';
+  else if (combined.includes('委員会') || combined.includes('臨時会')) sessionType = '委員会';
+  else if (combined.includes('討論')) sessionType = '討論';
+  else if (combined.includes('議案')) sessionType = '議案審議';
 
   // 日付の推定（タイトルから）
   let date = '';
