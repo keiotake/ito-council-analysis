@@ -1034,20 +1034,6 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
 .p-tag.selected{background:#7c3aed;color:#fff;border-color:#7c3aed}
 .p-tag-save{padding:.35rem .8rem;border:none;border-radius:20px;font-size:.78rem;background:linear-gradient(135deg,#7c3aed,#6d28d9);color:#fff;font-weight:700;cursor:pointer;margin-left:.3rem}
 
-/* ニュースレター */
-.newsletter-section{background:linear-gradient(135deg,#1e40af,#2563eb);padding:2rem 1rem;margin-top:1rem}
-.newsletter-inner{max-width:600px;margin:0 auto;text-align:center;color:#fff}
-.newsletter-inner h3{font-size:1.1rem;margin-bottom:.4rem}
-.newsletter-inner>p{font-size:.85rem;opacity:.9;margin-bottom:1rem;line-height:1.6}
-.newsletter-form{display:flex;gap:.5rem;justify-content:center;max-width:400px;margin:0 auto}
-.nl-input{flex:1;padding:.6rem .8rem;border:2px solid rgba(255,255,255,.3);border-radius:10px;font-size:.88rem;background:rgba(255,255,255,.15);color:#fff;outline:none}
-.nl-input::placeholder{color:rgba(255,255,255,.6)}
-.nl-input:focus{border-color:#fff;background:rgba(255,255,255,.25)}
-.nl-btn{padding:.6rem 1.2rem;border:none;border-radius:10px;background:#fff;color:#1e40af;font-weight:700;font-size:.88rem;cursor:pointer}
-.nl-btn:hover{background:#f0f9ff;transform:translateY(-1px)}
-.nl-note{font-size:.7rem;opacity:.7;margin-top:.6rem}
-@media(max-width:480px){.newsletter-form{flex-direction:column}.nl-input,.nl-btn{width:100%}}
-
 /* モーダル */
 .modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);z-index:1000;align-items:flex-start;justify-content:center;padding:2rem 1rem;overflow-y:auto}
 .modal-overlay.open{display:flex}
@@ -1814,21 +1800,6 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
     <div class="disc-note">最終更新: ${new Date().toLocaleDateString('ja-JP')}</div>
   </div>
 </div>
-<!-- ダイジェストメール登録 -->
-<div class="newsletter-section" id="newsletter">
-  <div class="newsletter-inner">
-    <div class="newsletter-text">
-      <h3>📬 みんなの伊東市ダイジェスト</h3>
-      <p>月1回、議会の動きをメールでお届けします。新着動画・話題のテーマ・質問数ランキングなど。</p>
-    </div>
-    <div class="newsletter-form">
-      <input type="email" id="nl-email" class="nl-input" placeholder="メールアドレスを入力">
-      <button class="nl-btn" onclick="subscribeNewsletter()">登録する</button>
-    </div>
-    <div id="nl-result" style="display:none;font-size:.78rem;margin-top:.4rem"></div>
-    <p class="nl-note">※ いつでも配信停止可能です。メールアドレスはダイジェスト配信以外には使用しません。</p>
-  </div>
-</div>
 <footer>
   <div>データ出典: <a href="https://www.youtube.com/channel/UC9FGDfo93b_dpu_7-AnN4wQ" target="_blank" style="color:var(--accent)">伊東市議会インターネット中継放送</a> | <a href="https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/itoshigikai/index.html" target="_blank" style="color:var(--accent)">伊東市議会HP</a></div>
   <div style="margin-top:.3rem">制作・運営: 伊東市議会議員 大竹圭 ｜ 最終更新: ${new Date().toLocaleDateString('ja-JP')}</div>
@@ -2005,31 +1976,6 @@ function applyPersonalize(){
   });
 }
 document.addEventListener('DOMContentLoaded',applyPersonalize);
-
-// === ニュースレター登録 ===
-async function subscribeNewsletter(){
-  const email=document.getElementById('nl-email').value.trim();
-  const result=document.getElementById('nl-result');
-  if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
-    result.style.display='block';result.style.color='#fca5a5';result.textContent='有効なメールアドレスを入力してください。';return;
-  }
-  try{
-    const resp=await fetch(VOICE_API+'/newsletter',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({email:email,action:'subscribe'})
-    });
-    const data=await resp.json();
-    result.style.display='block';
-    if(data.ok){
-      result.style.color='#86efac';result.textContent='登録ありがとうございます！次回のダイジェストをお届けします。';
-      document.getElementById('nl-email').value='';
-    } else {
-      result.style.color='#fca5a5';result.textContent=data.error||'登録に失敗しました。';
-    }
-  }catch(e){
-    result.style.display='block';result.style.color='#fca5a5';result.textContent='通信エラー: '+e.message;
-  }
-}
 
 // === テーマで探す ===
 function themeSearch(keywords){
