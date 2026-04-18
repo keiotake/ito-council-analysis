@@ -1106,6 +1106,110 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
 .analysis-footer-note p{font-size:.82rem;color:#78350f;line-height:1.7;margin:0}
 .analysis-footer-note strong{color:#92400e}
 
+/* 分析タブ - 調査方法の折りたたみ */
+.analysis-methodology{margin-top:.8rem;padding:.6rem .8rem;background:#eff6ff;border-radius:6px;font-size:.8rem}
+.analysis-methodology summary{cursor:pointer;color:#1e40af;font-weight:600}
+.analysis-methodology p{margin-top:.5rem;font-size:.8rem;line-height:1.7;color:#334155}
+
+/* エグゼクティブサマリー */
+.analysis-es{background:linear-gradient(135deg,#fef3c7,#fde68a);border-radius:16px;padding:1.8rem;margin-bottom:2rem;border:2px solid #f59e0b}
+.analysis-es-head{text-align:center;margin-bottom:1.2rem}
+.analysis-es-head h2{font-size:1.4rem;color:#78350f;margin-bottom:.3rem}
+.analysis-es-lead{font-size:.9rem;color:#92400e;font-weight:600}
+.analysis-es-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:.8rem}
+.analysis-es-card{display:flex;gap:.8rem;background:#fff;padding:.9rem 1rem;border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,.06);border-left:4px solid #f59e0b}
+.es-num{flex-shrink:0;width:32px;height:32px;background:#f59e0b;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.9rem}
+.es-content{flex:1}
+.es-cat{display:inline-block;background:#fef3c7;color:#78350f;font-size:.65rem;font-weight:700;padding:.1rem .4rem;border-radius:6px;margin-bottom:.25rem}
+.es-text{font-size:.82rem;line-height:1.6;color:#1f2937}
+.es-text strong{color:#92400e}
+@media(max-width:640px){.analysis-es{padding:1.2rem}.analysis-es-head h2{font-size:1.2rem}}
+
+/* 目次 */
+.analysis-toc{background:#f8fafc;border:1px solid #cbd5e1;border-radius:14px;padding:1.5rem;margin-bottom:2rem}
+.analysis-toc h3{font-size:1.05rem;color:#1e40af;margin-bottom:1rem;font-weight:700}
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.6rem}
+.toc-item{display:flex;align-items:center;gap:.6rem;padding:.7rem .9rem;background:#fff;border:1px solid #e2e8f0;border-radius:8px;text-decoration:none;color:inherit;transition:.2s;cursor:pointer}
+.toc-item:hover{background:#eff6ff;border-color:#3b82f6;transform:translateX(3px)}
+.toc-icon{font-size:1.1rem}
+.toc-num{font-size:.7rem;color:#64748b;font-weight:600}
+.toc-title{font-size:.85rem;color:#1e293b;font-weight:600;flex:1}
+.toc-item.swot-item:hover{background:#fef3c7;border-color:#f59e0b}
+.toc-item.strat-item:hover{background:#dcfce7;border-color:#22c55e}
+@media(max-width:640px){.toc-grid{grid-template-columns:1fr}}
+
+/* 章 */
+.analysis-chapter{background:#fff;border-radius:16px;padding:2rem;margin-bottom:1.8rem;box-shadow:0 2px 12px rgba(0,0,0,.05);border:1px solid #e2e8f0;scroll-margin-top:80px}
+.chapter-header{border-bottom:2px solid #e2e8f0;padding-bottom:1rem;margin-bottom:1.5rem}
+.chapter-num-badge{display:inline-block;background:linear-gradient(135deg,#1e40af,#3b82f6);color:#fff;font-size:.75rem;font-weight:700;padding:.3rem .8rem;border-radius:20px;margin-bottom:.5rem}
+.chapter-title{font-size:1.6rem;font-weight:800;color:#0f172a;display:flex;align-items:center;gap:.6rem}
+.chapter-icon{font-size:1.8rem}
+.chapter-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.8rem;margin-bottom:1.8rem}
+.chapter-stat{background:linear-gradient(135deg,#dbeafe,#bfdbfe);padding:1.2rem 1rem;border-radius:12px;text-align:center;border:1px solid #93c5fd}
+.stat-value{font-size:1.5rem;font-weight:900;color:#1e3a8a;line-height:1.2;margin-bottom:.3rem}
+.stat-label{font-size:.75rem;color:#1e40af;font-weight:600}
+.chapter-section{margin-bottom:1.8rem}
+.chapter-section:last-child{margin-bottom:0}
+.chapter-sec-title{font-size:1.05rem;color:#1e40af;font-weight:700;margin-bottom:.7rem;padding-left:.7rem;border-left:4px solid #3b82f6}
+.chapter-sec-body{font-size:.88rem;line-height:1.9;color:#334155}
+.chapter-sec-body p{margin-bottom:.8rem}
+.chapter-sec-body ul,.chapter-sec-body ol{padding-left:1.5rem;margin:.5rem 0 1rem}
+.chapter-sec-body li{margin-bottom:.3rem;line-height:1.8}
+.chapter-sec-body strong{color:#1e3a8a;background:#dbeafe;padding:.05rem .3rem;border-radius:3px;font-weight:700}
+.chapter-sec-body h4{font-size:.95rem;color:#1e40af;margin:1rem 0 .5rem;font-weight:700}
+.chapter-sec-body table{border-collapse:collapse;width:100%;margin:.8rem 0;font-size:.82rem;background:#fff}
+.chapter-sec-body th,.chapter-sec-body td{border:1px solid #cbd5e1;padding:.55rem .7rem;text-align:left;vertical-align:top}
+.chapter-sec-body th{background:#1e40af;color:#fff;font-weight:700;font-size:.8rem}
+.chapter-sec-body tbody tr:nth-child(even){background:#f8fafc}
+.chapter-sec-body tbody tr:hover{background:#eff6ff}
+.chapter-sources{margin-top:1.5rem;padding-top:1rem;border-top:1px dashed #cbd5e1;font-size:.75rem;color:#64748b;line-height:1.6}
+.chapter-sources strong{color:#475569}
+@media(max-width:640px){.analysis-chapter{padding:1.3rem;border-radius:12px}.chapter-title{font-size:1.3rem}.chapter-icon{font-size:1.5rem}.stat-value{font-size:1.3rem}.chapter-sec-body table{font-size:.72rem}.chapter-sec-body th,.chapter-sec-body td{padding:.4rem .5rem}}
+
+/* SWOT */
+.swot-chapter{background:linear-gradient(135deg,#fffbeb,#fef3c7)}
+.swot-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;margin-bottom:1.5rem}
+.swot-quadrant{padding:1.3rem;border-radius:12px;background:#fff;border:2px solid}
+.swot-quadrant h4{font-size:1.05rem;margin-bottom:.8rem;font-weight:700}
+.swot-quadrant ul{padding-left:1.3rem;margin:0}
+.swot-quadrant li{font-size:.85rem;line-height:1.7;margin-bottom:.3rem}
+.swot-s{border-color:#22c55e}.swot-s h4{color:#166534}
+.swot-w{border-color:#ef4444}.swot-w h4{color:#991b1b}
+.swot-o{border-color:#3b82f6}.swot-o h4{color:#1e40af}
+.swot-t{border-color:#f97316}.swot-t h4{color:#9a3412}
+.swot-diagnosis{background:#fff;border-radius:12px;padding:1.5rem;border-left:5px solid #1e40af}
+.swot-diagnosis h4{font-size:1.05rem;color:#1e40af;margin-bottom:.7rem}
+.swot-diagnosis p{font-size:.9rem;line-height:1.9;color:#1f2937}
+
+/* 戦略カード */
+.strat-chapter{background:linear-gradient(135deg,#f0fdf4,#dcfce7)}
+.strat-intro{font-size:.92rem;line-height:1.8;color:#14532d;margin-bottom:1.5rem;padding:1rem;background:#fff;border-radius:10px;border-left:4px solid #22c55e}
+.strat-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1.2rem}
+.strat-card{background:#fff;border-radius:14px;padding:1.5rem;box-shadow:0 2px 8px rgba(0,0,0,.06);border:1px solid #bbf7d0;transition:.2s}
+.strat-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.1)}
+.strat-card-head{display:flex;gap:.8rem;align-items:flex-start;margin-bottom:.8rem}
+.strat-num{flex-shrink:0;width:36px;height:36px;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1rem}
+.strat-icon{flex-shrink:0;font-size:1.6rem}
+.strat-title{font-size:1.1rem;font-weight:800;color:#14532d;margin-bottom:.2rem}
+.strat-tagline{font-size:.82rem;color:#166534;font-style:italic;font-weight:600}
+.strat-challenge{font-size:.82rem;color:#7c2d12;background:#fef2f2;border-left:3px solid #f87171;padding:.6rem .8rem;border-radius:0 6px 6px 0;margin-bottom:.8rem;line-height:1.6}
+.strat-challenge strong{color:#991b1b}
+.strat-actions{padding-left:1.3rem;margin:0}
+.strat-actions li{font-size:.85rem;line-height:1.7;margin-bottom:.4rem;color:#14532d}
+
+/* 出典 */
+.analysis-refs{margin-top:2rem;background:#f1f5f9;border-radius:12px;padding:1rem 1.2rem}
+.analysis-refs summary{cursor:pointer;font-size:.9rem;color:#1e40af;padding:.3rem 0}
+.analysis-refs summary:hover{color:#1e3a8a}
+.refs-list{margin-top:1rem;display:grid;gap:.8rem;max-height:500px;overflow-y:auto;padding-right:.5rem}
+.ref-item{display:flex;gap:.7rem;background:#fff;padding:.7rem .9rem;border-radius:8px;font-size:.82rem;border:1px solid #e2e8f0}
+.ref-num{flex-shrink:0;font-weight:700;color:#1e40af;min-width:2.5rem}
+.ref-detail{flex:1;min-width:0}
+.ref-title{font-weight:600;color:#1e293b;margin-bottom:.2rem;line-height:1.5}
+.ref-desc{font-size:.76rem;color:#64748b;margin-bottom:.3rem;line-height:1.5}
+.ref-url{font-size:.72rem;color:#3b82f6;text-decoration:underline;word-break:break-all}
+.ref-url:hover{color:#1e40af}
+
 /* 議員本人コメント欄 */
 .member-voice{margin:1.5rem 0;padding:1.2rem 1.4rem;border-radius:14px;border:2px solid #cbd5e1}
 .member-voice.filled{background:linear-gradient(135deg,#ecfdf5,#d1fae5);border-color:#10b981}
@@ -1668,15 +1772,17 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
     ${itoAnalysis ? (() => {
       const meta = itoAnalysis.meta || {};
       const intro = itoAnalysis.introduction || {};
-      const sections = (itoAnalysis.sections || []).filter(s => s.title && s.title.trim().length > 0);
-      const comingSoon = itoAnalysis.coming_soon || [];
-      const hasContent = sections.length > 0;
+      const es = itoAnalysis.executive_summary;
+      const chapters = itoAnalysis.chapters || [];
+      const swot = itoAnalysis.swot;
+      const strat = itoAnalysis.strategies;
+      const refs = itoAnalysis.references || [];
 
       return `
         <div class="analysis-hero">
           <div class="analysis-hero-inner">
-            <div class="analysis-hero-badge">🔎 徹底分析</div>
-            <h1 class="analysis-hero-title">${esc(meta.title || '伊東市徹底分析')}</h1>
+            <div class="analysis-hero-badge">🔎 徹底分析レポート</div>
+            <h1 class="analysis-hero-title">${esc(meta.title || '伊東市総合分析レポート')}</h1>
             <p class="analysis-hero-sub">${esc(meta.subtitle || '')}</p>
             ${meta.author ? `<div class="analysis-hero-author">by ${esc(meta.author)}</div>` : ''}
             ${meta.last_updated ? `<div class="analysis-hero-updated">最終更新: ${esc(meta.last_updated)}</div>` : ''}
@@ -1687,41 +1793,159 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
           <div class="analysis-intro">
             ${intro.heading ? `<h3>${esc(intro.heading)}</h3>` : ''}
             <p>${esc(intro.body).replace(/\n/g,'<br>')}</p>
+            ${meta.methodology ? `<details class="analysis-methodology"><summary>📊 調査方法とデータソースについて</summary><p>${esc(meta.methodology)}</p></details>` : ''}
           </div>
         ` : ''}
 
-        ${!hasContent ? `
-          <div class="analysis-placeholder">
-            <div class="analysis-placeholder-icon">📝</div>
-            <h2>分析資料は現在準備中です</h2>
-            <p>伊東市の現状を多角的に分析した資料を、近日ここに掲載予定です。</p>
-            <p class="analysis-placeholder-sub">大竹圭議員が独自に調査・分析した伊東市の現状と政策提言について、データと共にお伝えします。</p>
-            ${comingSoon.length > 0 ? `
-              <div class="analysis-coming-soon">
-                <h4>📋 掲載予定のテーマ</h4>
-                <div class="analysis-cs-grid">
-                  ${comingSoon.map(t => `<div class="analysis-cs-item">${esc(t)}</div>`).join('')}
+        ${es ? `
+          <div class="analysis-es">
+            <div class="analysis-es-head">
+              <h2>📌 ${esc(es.title || 'エグゼクティブサマリー')}</h2>
+              <p class="analysis-es-lead">${esc(es.lead || '')}</p>
+            </div>
+            <div class="analysis-es-grid">
+              ${(es.facts || []).map(f => `
+                <div class="analysis-es-card">
+                  <div class="es-num">${f.num}</div>
+                  <div class="es-content">
+                    ${f.category ? `<div class="es-cat">${esc(f.category)}</div>` : ''}
+                    <div class="es-text">${esc(f.text)}</div>
+                  </div>
                 </div>
-              </div>
-            ` : ''}
-            <div class="analysis-placeholder-note">
-              <p>💡 資料の公開時期については、トップページで随時お知らせいたします。</p>
+              `).join('')}
             </div>
           </div>
-        ` : `
-          <div class="analysis-sections">
-            ${sections.map((sec, i) => `
-              <article class="analysis-section" id="analysis-${esc(sec.id || 'sec-'+i)}">
-                ${sec.category ? `<div class="analysis-cat">${esc(sec.category)}</div>` : ''}
-                <h2 class="analysis-sec-title">${esc(sec.title)}</h2>
-                ${sec.published ? `<div class="analysis-sec-date">${esc(sec.published)}</div>` : ''}
-                ${sec.summary ? `<div class="analysis-sec-summary">${esc(sec.summary)}</div>` : ''}
-                ${sec.body ? `<div class="analysis-sec-body">${sec.body.replace(/\n/g,'<br>')}</div>` : ''}
-                ${sec.source ? `<div class="analysis-sec-source">出典: ${esc(sec.source)}</div>` : ''}
-              </article>
-            `).join('')}
+        ` : ''}
+
+        ${chapters.length > 0 ? `
+          <div class="analysis-toc">
+            <h3>📑 目次</h3>
+            <div class="toc-grid">
+              ${chapters.map(ch => `
+                <a href="#analysis-${esc(ch.id)}" class="toc-item" onclick="scrollToAnalysisChapter(event,'${esc(ch.id)}')">
+                  <span class="toc-icon">${ch.icon || '📖'}</span>
+                  <span class="toc-num">第${ch.number}章</span>
+                  <span class="toc-title">${esc(ch.title)}</span>
+                </a>
+              `).join('')}
+              ${swot ? `<a href="#analysis-swot" class="toc-item swot-item" onclick="scrollToAnalysisChapter(event,'swot')"><span class="toc-icon">⚡</span><span class="toc-num">第15章</span><span class="toc-title">SWOT分析</span></a>` : ''}
+              ${strat ? `<a href="#analysis-strategies" class="toc-item strat-item" onclick="scrollToAnalysisChapter(event,'strategies')"><span class="toc-icon">🎯</span><span class="toc-num">第16章</span><span class="toc-title">打開策の提言</span></a>` : ''}
+            </div>
           </div>
-        `}
+        ` : ''}
+
+        ${chapters.map(ch => `
+          <article class="analysis-chapter" id="analysis-${esc(ch.id)}">
+            <div class="chapter-header">
+              <div class="chapter-num-badge">第${ch.number}章</div>
+              <h2 class="chapter-title"><span class="chapter-icon">${ch.icon || ''}</span>${esc(ch.title)}</h2>
+            </div>
+            ${(ch.key_stats && ch.key_stats.length > 0) ? `
+              <div class="chapter-stats">
+                ${ch.key_stats.map(s => `
+                  <div class="chapter-stat">
+                    <div class="stat-value">${esc(s.value)}</div>
+                    <div class="stat-label">${esc(s.label)}</div>
+                  </div>
+                `).join('')}
+              </div>
+            ` : ''}
+            <div class="chapter-body">
+              ${(ch.sections || []).map(s => `
+                <div class="chapter-section">
+                  <h3 class="chapter-sec-title">${esc(s.title)}</h3>
+                  <div class="chapter-sec-body">${s.body}</div>
+                </div>
+              `).join('')}
+            </div>
+            ${(ch.sources && ch.sources.length > 0) ? `
+              <div class="chapter-sources">
+                <strong>出典:</strong> ${ch.sources.map(src => esc(src)).join(' / ')}
+              </div>
+            ` : ''}
+          </article>
+        `).join('')}
+
+        ${swot ? `
+          <article class="analysis-chapter swot-chapter" id="analysis-swot">
+            <div class="chapter-header">
+              <div class="chapter-num-badge">第15章</div>
+              <h2 class="chapter-title"><span class="chapter-icon">⚡</span>${esc(swot.title || 'SWOT分析')}</h2>
+            </div>
+            <div class="swot-grid">
+              <div class="swot-quadrant swot-s">
+                <h4>💪 Strengths（強み）</h4>
+                <ul>${(swot.strengths || []).map(x => `<li>${esc(x)}</li>`).join('')}</ul>
+              </div>
+              <div class="swot-quadrant swot-w">
+                <h4>⚠️ Weaknesses（弱み）</h4>
+                <ul>${(swot.weaknesses || []).map(x => `<li>${esc(x)}</li>`).join('')}</ul>
+              </div>
+              <div class="swot-quadrant swot-o">
+                <h4>🌱 Opportunities（機会）</h4>
+                <ul>${(swot.opportunities || []).map(x => `<li>${esc(x)}</li>`).join('')}</ul>
+              </div>
+              <div class="swot-quadrant swot-t">
+                <h4>🚨 Threats（脅威）</h4>
+                <ul>${(swot.threats || []).map(x => `<li>${esc(x)}</li>`).join('')}</ul>
+              </div>
+            </div>
+            ${swot.diagnosis ? `
+              <div class="swot-diagnosis">
+                <h4>🩺 総合診断</h4>
+                <p>${esc(swot.diagnosis)}</p>
+              </div>
+            ` : ''}
+          </article>
+        ` : ''}
+
+        ${strat ? `
+          <article class="analysis-chapter strat-chapter" id="analysis-strategies">
+            <div class="chapter-header">
+              <div class="chapter-num-badge">第16章</div>
+              <h2 class="chapter-title"><span class="chapter-icon">🎯</span>${esc(strat.title || '打開策の提言')}</h2>
+            </div>
+            ${strat.intro ? `<p class="strat-intro">${esc(strat.intro)}</p>` : ''}
+            <div class="strat-list">
+              ${(strat.items || []).map(s => `
+                <div class="strat-card">
+                  <div class="strat-card-head">
+                    <div class="strat-num">${s.num}</div>
+                    <div class="strat-icon">${s.icon || ''}</div>
+                    <div>
+                      <h3 class="strat-title">${esc(s.title)}</h3>
+                      <div class="strat-tagline">${esc(s.tagline || '')}</div>
+                    </div>
+                  </div>
+                  ${s.challenge ? `<div class="strat-challenge"><strong>課題:</strong> ${esc(s.challenge)}</div>` : ''}
+                  ${(s.actions && s.actions.length > 0) ? `
+                    <ul class="strat-actions">
+                      ${s.actions.map(a => `<li>${esc(a)}</li>`).join('')}
+                    </ul>
+                  ` : ''}
+                </div>
+              `).join('')}
+            </div>
+          </article>
+        ` : ''}
+
+        ${refs.length > 0 ? `
+          <details class="analysis-refs">
+            <summary><strong>📚 出典一覧（完全版・URL付）全${refs.length}件</strong></summary>
+            <div class="refs-list">
+              ${refs.map(r => `
+                <div class="ref-item">
+                  <span class="ref-num">[${r.num}]</span>
+                  <div class="ref-detail">
+                    <div class="ref-title">${esc(r.title)}</div>
+                    ${r.desc ? `<div class="ref-desc">${esc(r.desc)}</div>` : ''}
+                    ${r.url ? `<a href="${esc(r.url)}" target="_blank" class="ref-url">${esc(r.url)}</a>` : ''}
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </details>
+        ` : ''}
 
         <div class="analysis-footer-note">
           <p><strong>⚠️ ご注意:</strong> このページの内容は大竹圭議員個人の分析・見解であり、伊東市議会の公式見解ではありません。データの解釈や政策提言については、参考資料としてご活用ください。</p>
@@ -2050,6 +2274,15 @@ function openLimitsModal(){
 function closeLimitsModal(){
   document.getElementById('limits-overlay').classList.remove('open');
   document.body.style.overflow='';
+}
+
+// === 伊東市分析 章ジャンプ ===
+function scrollToAnalysisChapter(ev, id){
+  ev.preventDefault();
+  const target = document.getElementById('analysis-' + id);
+  if (target) {
+    target.scrollIntoView({behavior: 'smooth', block: 'start'});
+  }
 }
 
 // === 用語解説ツールチップ ===
