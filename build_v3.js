@@ -27,6 +27,9 @@ try { memberPolicyMap = JSON.parse(fs.readFileSync('data/member_policy_map.json'
 // 議員本人コメント（活動方針・背景）
 let memberComments = {};
 try { memberComments = JSON.parse(fs.readFileSync('member_comments.json', 'utf-8')); } catch(e) { console.warn('member_comments.json not found'); }
+// 伊東市徹底分析（大竹圭による独自分析）
+let itoAnalysis = null;
+try { itoAnalysis = JSON.parse(fs.readFileSync('ito_analysis.json', 'utf-8')); } catch(e) { console.warn('ito_analysis.json not found'); }
 
 const { videos, memberSummary } = analysis;
 
@@ -1048,6 +1051,61 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
 .topic-note{font-size:.75rem;color:#6b7280;line-height:1.6;margin-bottom:.8rem;padding:.5rem .7rem;background:#f9fafb;border-left:3px solid #9ca3af;border-radius:4px}
 .cat-tag{padding:.15rem .55rem;border-radius:10px;color:#fff;font-size:.7rem;font-weight:600}
 
+/* 伊東市徹底分析タブ */
+.analysis-hero{background:linear-gradient(135deg,#0f172a,#1e40af);color:#fff;border-radius:18px;padding:2.5rem 2rem;margin-bottom:1.5rem;text-align:center;position:relative;overflow:hidden}
+.analysis-hero::before{content:'';position:absolute;top:-30%;right:-10%;width:300px;height:300px;background:radial-gradient(circle,rgba(59,130,246,.3),transparent);border-radius:50%}
+.analysis-hero::after{content:'';position:absolute;bottom:-40%;left:-10%;width:260px;height:260px;background:radial-gradient(circle,rgba(147,197,253,.2),transparent);border-radius:50%}
+.analysis-hero-inner{position:relative;z-index:1}
+.analysis-hero-badge{display:inline-block;background:rgba(251,191,36,.2);color:#fde68a;font-size:.78rem;font-weight:700;padding:.3rem .8rem;border-radius:20px;margin-bottom:.8rem;border:1px solid rgba(251,191,36,.4)}
+.analysis-hero-title{font-size:1.8rem;font-weight:800;margin-bottom:.6rem;letter-spacing:.02em}
+.analysis-hero-sub{font-size:1rem;opacity:.9;line-height:1.7;margin-bottom:.6rem}
+.analysis-hero-author{font-size:.88rem;opacity:.85;margin-top:.4rem}
+.analysis-hero-updated{font-size:.75rem;opacity:.7;margin-top:.4rem}
+@media(max-width:640px){.analysis-hero{padding:1.8rem 1.2rem}.analysis-hero-title{font-size:1.4rem}.analysis-hero-sub{font-size:.88rem}}
+
+.analysis-intro{background:#f8fafc;border-left:4px solid #1e40af;padding:1.2rem 1.5rem;border-radius:0 10px 10px 0;margin-bottom:1.5rem}
+.analysis-intro h3{font-size:1rem;color:#1e40af;margin-bottom:.5rem;font-weight:700}
+.analysis-intro p{font-size:.88rem;line-height:1.8;color:#334155}
+
+.analysis-placeholder{background:linear-gradient(135deg,#f1f5f9,#e2e8f0);border:2px dashed #94a3b8;border-radius:16px;padding:3rem 2rem;text-align:center;margin-bottom:1.5rem}
+.analysis-placeholder-icon{font-size:3rem;margin-bottom:.8rem}
+.analysis-placeholder h2{font-size:1.3rem;color:#334155;margin-bottom:.6rem;font-weight:700}
+.analysis-placeholder p{font-size:.9rem;color:#475569;line-height:1.8;margin-bottom:.5rem}
+.analysis-placeholder-sub{font-size:.85rem!important;color:#64748b!important}
+.analysis-coming-soon{margin-top:2rem;padding:1.5rem;background:#fff;border-radius:12px;text-align:left}
+.analysis-coming-soon h4{font-size:.95rem;color:#1e40af;margin-bottom:.8rem;font-weight:700}
+.analysis-cs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.6rem}
+.analysis-cs-item{background:linear-gradient(135deg,#dbeafe,#bfdbfe);color:#1e3a8a;padding:.7rem 1rem;border-radius:8px;font-size:.83rem;font-weight:600;text-align:center}
+.analysis-placeholder-note{margin-top:1.5rem;padding:.8rem;background:rgba(251,191,36,.15);border-radius:8px;color:#78350f;font-size:.82rem}
+.analysis-placeholder-note p{margin:0;color:#78350f!important}
+@media(max-width:640px){.analysis-placeholder{padding:2rem 1rem}.analysis-cs-grid{grid-template-columns:1fr}}
+
+.analysis-sections{display:flex;flex-direction:column;gap:1.5rem}
+.analysis-section{background:#fff;border-radius:14px;padding:1.8rem 2rem;box-shadow:0 2px 12px rgba(0,0,0,.05);border:1px solid #e2e8f0;transition:.2s}
+.analysis-section:hover{box-shadow:0 4px 20px rgba(0,0,0,.08);border-color:#cbd5e1}
+.analysis-cat{display:inline-block;background:#1e40af;color:#fff;font-size:.7rem;font-weight:700;padding:.2rem .6rem;border-radius:10px;letter-spacing:.03em;margin-bottom:.6rem}
+.analysis-sec-title{font-size:1.3rem;font-weight:800;color:#0f172a;margin-bottom:.4rem;line-height:1.4}
+.analysis-sec-date{font-size:.75rem;color:#64748b;margin-bottom:.8rem}
+.analysis-sec-summary{font-size:.92rem;line-height:1.8;color:#1e293b;background:#f8fafc;border-left:3px solid #3b82f6;padding:.8rem 1rem;border-radius:0 8px 8px 0;margin-bottom:1rem;font-weight:500}
+.analysis-sec-body{font-size:.88rem;line-height:1.9;color:#334155;margin-bottom:1rem}
+.analysis-sec-body p{margin-bottom:.8rem}
+.analysis-sec-body h3,.analysis-sec-body h4{color:#1e40af;margin:1.2rem 0 .5rem;font-weight:700}
+.analysis-sec-body h3{font-size:1.05rem}
+.analysis-sec-body h4{font-size:.95rem}
+.analysis-sec-body ul,.analysis-sec-body ol{padding-left:1.5rem;margin:.5rem 0}
+.analysis-sec-body li{margin-bottom:.3rem}
+.analysis-sec-body strong{color:#1e3a8a;background:#dbeafe;padding:.05rem .25rem;border-radius:3px}
+.analysis-sec-body table{border-collapse:collapse;width:100%;margin:.8rem 0;font-size:.85rem}
+.analysis-sec-body th,.analysis-sec-body td{border:1px solid #cbd5e1;padding:.5rem .7rem;text-align:left}
+.analysis-sec-body th{background:#f1f5f9;font-weight:700;color:#1e40af}
+.analysis-sec-body img{max-width:100%;height:auto;border-radius:8px;margin:.8rem 0;border:1px solid #e2e8f0}
+.analysis-sec-source{font-size:.75rem;color:#64748b;padding-top:.8rem;border-top:1px dashed #cbd5e1;margin-top:1rem}
+@media(max-width:640px){.analysis-section{padding:1.3rem;border-radius:12px}.analysis-sec-title{font-size:1.1rem}}
+
+.analysis-footer-note{margin-top:2rem;padding:1rem 1.2rem;background:#fef3c7;border:1px solid #fcd34d;border-radius:10px}
+.analysis-footer-note p{font-size:.82rem;color:#78350f;line-height:1.7;margin:0}
+.analysis-footer-note strong{color:#92400e}
+
 /* 議員本人コメント欄 */
 .member-voice{margin:1.5rem 0;padding:1.2rem 1.4rem;border-radius:14px;border:2px solid #cbd5e1}
 .member-voice.filled{background:linear-gradient(135deg,#ecfdf5,#d1fae5);border-color:#10b981}
@@ -1347,6 +1405,7 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
   <button class="active" role="tab" aria-selected="true" onclick="switchTab('members',this)">議員一覧</button>
   <button role="tab" aria-selected="false" onclick="switchTab('all',this)">動画・検索</button>
   <button role="tab" aria-selected="false" onclick="switchTab('plan',this)">総合計画</button>
+  <button role="tab" aria-selected="false" onclick="switchTab('analysis',this)">🔎 伊東市分析</button>
   <button role="tab" aria-selected="false" onclick="switchTab('voice',this)">市民の声</button>
   <button role="tab" aria-selected="false" onclick="switchTab('stats',this)">議会全体の動き</button>
 </nav>
@@ -1604,6 +1663,77 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
       <div class="heat-modal-sub" id="heat-modal-sub"></div>
       <div id="heat-modal-body"></div>
     </div>
+  </div>
+  <div id="tab-analysis" class="tab-panel">
+    ${itoAnalysis ? (() => {
+      const meta = itoAnalysis.meta || {};
+      const intro = itoAnalysis.introduction || {};
+      const sections = (itoAnalysis.sections || []).filter(s => s.title && s.title.trim().length > 0);
+      const comingSoon = itoAnalysis.coming_soon || [];
+      const hasContent = sections.length > 0;
+
+      return `
+        <div class="analysis-hero">
+          <div class="analysis-hero-inner">
+            <div class="analysis-hero-badge">🔎 徹底分析</div>
+            <h1 class="analysis-hero-title">${esc(meta.title || '伊東市徹底分析')}</h1>
+            <p class="analysis-hero-sub">${esc(meta.subtitle || '')}</p>
+            ${meta.author ? `<div class="analysis-hero-author">by ${esc(meta.author)}</div>` : ''}
+            ${meta.last_updated ? `<div class="analysis-hero-updated">最終更新: ${esc(meta.last_updated)}</div>` : ''}
+          </div>
+        </div>
+
+        ${intro.body ? `
+          <div class="analysis-intro">
+            ${intro.heading ? `<h3>${esc(intro.heading)}</h3>` : ''}
+            <p>${esc(intro.body).replace(/\n/g,'<br>')}</p>
+          </div>
+        ` : ''}
+
+        ${!hasContent ? `
+          <div class="analysis-placeholder">
+            <div class="analysis-placeholder-icon">📝</div>
+            <h2>分析資料は現在準備中です</h2>
+            <p>伊東市の現状を多角的に分析した資料を、近日ここに掲載予定です。</p>
+            <p class="analysis-placeholder-sub">大竹圭議員が独自に調査・分析した伊東市の現状と政策提言について、データと共にお伝えします。</p>
+            ${comingSoon.length > 0 ? `
+              <div class="analysis-coming-soon">
+                <h4>📋 掲載予定のテーマ</h4>
+                <div class="analysis-cs-grid">
+                  ${comingSoon.map(t => `<div class="analysis-cs-item">${esc(t)}</div>`).join('')}
+                </div>
+              </div>
+            ` : ''}
+            <div class="analysis-placeholder-note">
+              <p>💡 資料の公開時期については、トップページで随時お知らせいたします。</p>
+            </div>
+          </div>
+        ` : `
+          <div class="analysis-sections">
+            ${sections.map((sec, i) => `
+              <article class="analysis-section" id="analysis-${esc(sec.id || 'sec-'+i)}">
+                ${sec.category ? `<div class="analysis-cat">${esc(sec.category)}</div>` : ''}
+                <h2 class="analysis-sec-title">${esc(sec.title)}</h2>
+                ${sec.published ? `<div class="analysis-sec-date">${esc(sec.published)}</div>` : ''}
+                ${sec.summary ? `<div class="analysis-sec-summary">${esc(sec.summary)}</div>` : ''}
+                ${sec.body ? `<div class="analysis-sec-body">${sec.body.replace(/\n/g,'<br>')}</div>` : ''}
+                ${sec.source ? `<div class="analysis-sec-source">出典: ${esc(sec.source)}</div>` : ''}
+              </article>
+            `).join('')}
+          </div>
+        `}
+
+        <div class="analysis-footer-note">
+          <p><strong>⚠️ ご注意:</strong> このページの内容は大竹圭議員個人の分析・見解であり、伊東市議会の公式見解ではありません。データの解釈や政策提言については、参考資料としてご活用ください。</p>
+        </div>
+      `;
+    })() : `
+      <div class="analysis-placeholder">
+        <div class="analysis-placeholder-icon">📝</div>
+        <h2>分析資料は現在準備中です</h2>
+        <p>近日公開予定です。</p>
+      </div>
+    `}
   </div>
   <div id="tab-voice" class="tab-panel">
     <div class="voice-intro">
