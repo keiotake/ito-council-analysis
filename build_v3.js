@@ -24,6 +24,9 @@ let sougouPlan = null;
 try { sougouPlan = JSON.parse(fs.readFileSync('data/sougoukeikaku_v5.json', 'utf-8')); } catch(e) { console.warn('sougoukeikaku_v5.json not found'); }
 let memberPolicyMap = null;
 try { memberPolicyMap = JSON.parse(fs.readFileSync('data/member_policy_map.json', 'utf-8')); } catch(e) { console.warn('member_policy_map.json not found'); }
+// 議員本人コメント（活動方針・背景）
+let memberComments = {};
+try { memberComments = JSON.parse(fs.readFileSync('member_comments.json', 'utf-8')); } catch(e) { console.warn('member_comments.json not found'); }
 
 const { videos, memberSummary } = analysis;
 
@@ -385,6 +388,33 @@ function memberDetailHTML(m) {
         })()}</div>
       </div>
     </div>
+    ${(() => {
+      // === 議員本人コメント欄 ===
+      const cm = memberComments[m.name];
+      const hasComment = cm && cm.comment && cm.comment.trim().length > 0;
+      if (hasComment) {
+        return `<div class="member-voice filled">
+          <div class="mv-header">
+            <span class="mv-icon">💬</span>
+            <span class="mv-title">${esc(m.name)}議員からのひとこと</span>
+            ${cm.updated ? `<span class="mv-date">${esc(cm.updated)}</span>` : ''}
+          </div>
+          <div class="mv-body">${esc(cm.comment).replace(/\n/g,'<br>')}</div>
+          <div class="mv-note">※ 活動の背景・方針は本人の言葉で記載されています。数字だけでは伝わらない想いをお読みください。</div>
+        </div>`;
+      } else {
+        return `<div class="member-voice empty">
+          <div class="mv-header">
+            <span class="mv-icon">💬</span>
+            <span class="mv-title">${esc(m.name)}議員からのひとこと</span>
+          </div>
+          <div class="mv-body-empty">
+            <p>本人からのコメントはまだ記入されていません。</p>
+            <p class="mv-sub">活動の背景や想いは、議員ご本人に直接お尋ねください。このサイトに表示されている数字や傾向だけで議員を判断することのないよう、お願いいたします。</p>
+          </div>
+        </div>`;
+      }
+    })()}
     ${(() => {
       // === 質問一覧タイムライン ===
       const allQuestions = [];
@@ -978,11 +1008,49 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
 .manifesto-body p:last-child{margin-bottom:0}
 .manifesto-body strong{color:#92400e;background:rgba(255,255,255,.6);padding:.05rem .3rem;border-radius:4px}
 .manifesto-note{font-size:.78rem!important;color:#78350f!important;margin-top:.5rem!important;padding-top:.5rem;border-top:1px dashed #b45309}
-@media(max-width:640px){.site-manifesto{padding:1rem}.manifesto-body p{font-size:.8rem;line-height:1.65}}
+.manifesto-limit-btn{margin-top:.8rem;padding:.55rem 1rem;background:#fff;color:#92400e;border:2px solid #b45309;border-radius:8px;font-size:.82rem;font-weight:700;cursor:pointer;transition:.2s}
+.manifesto-limit-btn:hover{background:#92400e;color:#fff}
+@media(max-width:640px){.site-manifesto{padding:1rem}.manifesto-body p{font-size:.8rem;line-height:1.65}.manifesto-limit-btn{width:100%}}
+
+/* このデータの限界モーダル */
+.limits-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:2500;align-items:flex-start;justify-content:center;padding:2rem 1rem;overflow-y:auto;animation:fadeIn .25s}
+.limits-overlay.open{display:flex}
+.limits-box{background:#fff;border-radius:18px;max-width:720px;width:100%;padding:2rem 2rem 1.5rem;box-shadow:0 25px 80px rgba(0,0,0,.35);max-height:calc(100vh - 4rem);overflow-y:auto;animation:slideUp .35s ease-out}
+.limits-box h2{font-size:1.4rem;color:#92400e;margin-bottom:.3rem;display:flex;align-items:center;gap:.5rem}
+.limits-lead{font-size:.85rem;color:#64748b;margin-bottom:1.5rem;line-height:1.7;padding-bottom:1rem;border-bottom:2px solid #fde68a}
+.limits-section{margin-bottom:1.5rem;padding:1rem 1.2rem;background:#fffbeb;border-left:4px solid #f59e0b;border-radius:8px}
+.limits-section h3{font-size:1rem;color:#92400e;margin-bottom:.5rem;display:flex;align-items:center;gap:.4rem}
+.limits-section p{font-size:.85rem;color:#451a03;line-height:1.75;margin-bottom:.5rem}
+.limits-section p:last-child{margin-bottom:0}
+.limits-section strong{background:rgba(245,158,11,.18);padding:.05rem .3rem;border-radius:3px}
+.limits-section ul{padding-left:1.3rem;margin:.4rem 0}
+.limits-section li{font-size:.82rem;color:#451a03;line-height:1.7;margin-bottom:.3rem}
+.limits-closing{margin-top:1.5rem;padding:1.2rem;background:linear-gradient(135deg,#fef3c7,#fde68a);border-radius:10px;text-align:center}
+.limits-closing p{font-size:.9rem;color:#78350f;font-weight:600;line-height:1.7;margin-bottom:.5rem}
+.limits-closing p:last-child{margin-bottom:0;font-size:.78rem;font-weight:400;color:#92400e}
+.limits-close-btn{display:block;margin:1.5rem auto 0;padding:.7rem 2.5rem;background:#92400e;color:#fff;border:none;border-radius:10px;font-size:.95rem;font-weight:700;cursor:pointer;transition:.2s}
+.limits-close-btn:hover{background:#78350f;transform:translateY(-1px)}
+@media(max-width:640px){.limits-box{padding:1.3rem}.limits-box h2{font-size:1.2rem}.limits-section{padding:.8rem 1rem}}
 
 /* 注力分野の注意書き */
 .topic-note{font-size:.75rem;color:#6b7280;line-height:1.6;margin-bottom:.8rem;padding:.5rem .7rem;background:#f9fafb;border-left:3px solid #9ca3af;border-radius:4px}
 .cat-tag{padding:.15rem .55rem;border-radius:10px;color:#fff;font-size:.7rem;font-weight:600}
+
+/* 議員本人コメント欄 */
+.member-voice{margin:1.5rem 0;padding:1.2rem 1.4rem;border-radius:14px;border:2px solid #cbd5e1}
+.member-voice.filled{background:linear-gradient(135deg,#ecfdf5,#d1fae5);border-color:#10b981}
+.member-voice.empty{background:#f8fafc;border-color:#cbd5e1;border-style:dashed}
+.mv-header{display:flex;align-items:center;gap:.5rem;margin-bottom:.7rem;flex-wrap:wrap}
+.mv-icon{font-size:1.2rem}
+.mv-title{font-size:.95rem;font-weight:700;color:#0f172a}
+.member-voice.filled .mv-title{color:#065f46}
+.mv-date{font-size:.7rem;color:#64748b;margin-left:auto;background:rgba(255,255,255,.7);padding:.15rem .5rem;border-radius:10px}
+.mv-body{font-size:.88rem;line-height:1.8;color:#1f2937;white-space:pre-wrap;padding:.5rem 0}
+.mv-note{font-size:.72rem;color:#047857;margin-top:.7rem;padding-top:.5rem;border-top:1px dashed #6ee7b7;line-height:1.5}
+.mv-body-empty{padding:.5rem 0}
+.mv-body-empty p{font-size:.85rem;color:#475569;margin-bottom:.4rem;line-height:1.7}
+.mv-body-empty p.mv-sub{font-size:.75rem;color:#64748b;line-height:1.65;padding:.5rem .7rem;background:#fff;border-radius:6px;border-left:3px solid #cbd5e1}
+@media(max-width:640px){.member-voice{padding:1rem}.mv-body{font-size:.82rem}}
 
 /* モーダル */
 .modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);z-index:1000;align-items:flex-start;justify-content:center;padding:2rem 1rem;overflow-y:auto}
@@ -1148,6 +1216,74 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
 </head>
 <body>
 <a href="#main-content" class="skip-link">本文へスキップ</a>
+<!-- このデータの限界モーダル -->
+<div class="limits-overlay" id="limits-overlay" onclick="if(event.target===this)closeLimitsModal()">
+  <div class="limits-box" role="dialog" aria-labelledby="limits-title">
+    <h2 id="limits-title">📖 このデータの限界について</h2>
+    <div class="limits-lead">
+      「みんなの伊東市」は、AI技術を活用して議会情報を市民に届ける試みです。しかし、<strong>技術には限界があり、数字やデータには必ず"見えていない部分"があります。</strong>このサイトをご覧いただく前に、以下の限界を必ずご理解ください。
+    </div>
+
+    <div class="limits-section">
+      <h3>⚠️ 1. 「数字」は議員の仕事を測れない</h3>
+      <p>質問数や動画数は、議員活動の<strong>一側面にすぎません</strong>。以下のような重要な要素はデータには表れません：</p>
+      <ul>
+        <li>一つ一つの質問の深さ・本質・論理性</li>
+        <li>当局との事前調整や委員会での議論</li>
+        <li>市民相談・地域活動・研修・視察</li>
+        <li>議員連盟や他自治体との連携</li>
+        <li>条例提案や政策立案の貢献度</li>
+      </ul>
+      <p><strong>「質問が多い議員＝優れた議員」ではありません。</strong>一つの深く練られた質問が、表面的な百の質問よりも価値がある場合もあります。</p>
+    </div>
+
+    <div class="limits-section">
+      <h3>🎯 2. 「関心領域」には戦略・背景がある</h3>
+      <p>議員によって質問の分野に偏りがあるように見える場合があります。しかし、それには必ず<strong>その議員なりの理由・戦略・問題意識</strong>があります。</p>
+      <p>例えば、観光分野の質問が多い議員は、<strong>「観光で稼がなければ他の事業に回す財源が生まれない」</strong>という財政戦略に基づいて質問している場合もあります。特定分野への集中を「他分野を軽視している」と解釈するのは誤りです。</p>
+      <p>背景を知るには、サイトの数字ではなく、<strong>議員ご本人に直接お尋ねください。</strong></p>
+    </div>
+
+    <div class="limits-section">
+      <h3>🤖 3. AI字幕解析の精度には限界がある</h3>
+      <p>このサイトの質問内容は、YouTube自動字幕（音声認識）を機械的に解析して抽出しています。以下の誤差が含まれます：</p>
+      <ul>
+        <li>音声認識の誤変換（人名・専門用語・方言）</li>
+        <li>古い動画ほど字幕品質が低く、抽出精度も低い</li>
+        <li>質問の文脈・意図・ニュアンスは捉えきれない</li>
+        <li>分野分類はキーワードベースのため、質問の真の趣旨と異なる場合がある</li>
+      </ul>
+      <p>正確な内容は必ず<strong>元動画または公式会議録</strong>でご確認ください。</p>
+    </div>
+
+    <div class="limits-section">
+      <h3>🏛️ 4. 議員の役割は「質問」だけではない</h3>
+      <p>議員の仕事は、本会議での質問だけではありません。実際には、以下のような活動が多くを占めます：</p>
+      <ul>
+        <li>委員会での審議・議論</li>
+        <li>会派での政策協議</li>
+        <li>市民からの相談対応</li>
+        <li>地域行事への参加</li>
+        <li>政策研究・視察</li>
+      </ul>
+      <p>これらは<strong>本サイトのデータには一切反映されていません。</strong>質問動画の数だけで議員の勤勉さや価値を判断することは、議員活動の全体像を大きく見誤ることになります。</p>
+    </div>
+
+    <div class="limits-section">
+      <h3>⚖️ 5. 公平な運営を心がけていますが…</h3>
+      <p>本サイトは<strong>全議員に対して同一の方法でデータ処理</strong>をしており、特定議員を優遇・批判する意図はありません。</p>
+      <p>しかし運営者自身も伊東市議会議員（大竹圭）です。可能な限り中立な設計を心がけていますが、無意識のバイアスが含まれる可能性は否定できません。お気づきの点があれば、ぜひフィードバックをお寄せください。</p>
+    </div>
+
+    <div class="limits-closing">
+      <p>🌱 このサイトは「議員を測る道具」ではありません。</p>
+      <p>市民の皆さまが議会を知り、議員と対話するきっかけをつくる——それが目的です。数字の奥にある「議員の想い」まで、ぜひ想像しながらご覧ください。</p>
+    </div>
+
+    <button class="limits-close-btn" onclick="closeLimitsModal()">理解しました</button>
+  </div>
+</div>
+
 <!-- はじめてガイド -->
 <div class="welcome-overlay" id="welcome-overlay" style="display:none">
   <div class="welcome-box">
@@ -1211,6 +1347,7 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
         <p>議員の仕事は「質問の数」では測れません。一つの深い質問が、百の質問より重い場合もあります。また、議員によって得意分野・戦略・問題意識は異なり、それは多様性として尊重されるべきものです。</p>
         <p>このサイトはあくまで <strong>「誰が、いつ、何を質問し、当局がどう答えたか」という記録を市民が知るための道具</strong> です。議員の優劣を判断する材料としては使わないでください。</p>
         <p class="manifesto-note">※ 議員一覧は<strong>五十音順（会派別）</strong>で表示しています。並び順に意味はありません。</p>
+        <button class="manifesto-limit-btn" onclick="openLimitsModal()">📖 このデータの限界について詳しく読む</button>
       </div>
     </div>
     <div class="tab-notice">ℹ️ 議員情報は伊東市公式サイトの公開資料に基づきます。質問内容は動画字幕の自動抽出であり、正確な内容は各動画・会議録でご確認ください。</div>
@@ -1732,6 +1869,9 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
 </div>
 <footer>
   <div>データ出典: <a href="https://www.youtube.com/channel/UC9FGDfo93b_dpu_7-AnN4wQ" target="_blank" style="color:var(--accent)">伊東市議会インターネット中継放送</a> | <a href="https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/itoshigikai/index.html" target="_blank" style="color:var(--accent)">伊東市議会HP</a></div>
+  <div style="margin-top:.3rem">
+    <a href="javascript:void(0)" onclick="openLimitsModal()" style="color:var(--accent);text-decoration:underline">📖 このデータの限界について</a>
+  </div>
   <div style="margin-top:.3rem">制作・運営: 伊東市議会議員 大竹圭 ｜ 最終更新: ${new Date().toLocaleDateString('ja-JP')}</div>
 </footer>
 <script>
@@ -1758,6 +1898,16 @@ function welcomeGo(target){
   } else if(target==='voice'){
     switchTab('voice',document.querySelector('nav button:nth-child(4)'));
   }
+}
+
+// === このデータの限界モーダル ===
+function openLimitsModal(){
+  document.getElementById('limits-overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeLimitsModal(){
+  document.getElementById('limits-overlay').classList.remove('open');
+  document.body.style.overflow='';
 }
 
 // === 用語解説ツールチップ ===
