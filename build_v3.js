@@ -147,9 +147,16 @@ function groupByFaction(members) {
     if (!groups[f]) groups[f] = [];
     groups[f].push(m);
   }
-  // 各会派内を五十音順（reading）で並び替え
+  // 各会派内を並び替え：代表が先頭、その他は五十音順（reading）
   for (const f of Object.keys(groups)) {
+    const rep = councilData?.factions?.find(fc => fc.name.includes(f))?.representative;
     groups[f].sort((a, b) => {
+      // 代表を先頭に
+      if (rep) {
+        if (a.name === rep && b.name !== rep) return -1;
+        if (b.name === rep && a.name !== rep) return 1;
+      }
+      // それ以外は五十音順
       const ra = (a.profile.reading || a.name) + '';
       const rb = (b.profile.reading || b.name) + '';
       return ra.localeCompare(rb, 'ja');
@@ -273,6 +280,7 @@ function memberCardHTML(m) {
   const initial = m.name.charAt(0);
   const topCats = m.topics.topCategories?.slice(0, 3) || [];
   const roles = rolesHTML(m.name);
+  const isRep = councilData?.factions?.some(fc2 => fc2.name.includes(p.faction || '') && fc2.representative === m.name);
 
   // 常任委員会名のみ短縮表示
   const cd = memberCommitteeMap[m.name];
@@ -292,7 +300,8 @@ function memberCardHTML(m) {
     ? `<div class="m-avatar-photo" style="border-color:${fc}"><img src="${esc(m.photoUrl)}" alt="${esc(m.name)}" onerror="this.parentElement.innerHTML='<div class=m-avatar-fb style=background:${fc}>${initial}</div>'"></div>`
     : `<div class="m-avatar" style="background:${fc}">${initial}</div>`;
 
-  return `<div class="m-card" data-name="${esc(m.name)}" data-faction="${esc(p.faction || '')}" onclick="showDetail('${esc(m.name)}')">
+  return `<div class="m-card${isRep ? ' is-rep' : ''}" data-name="${esc(m.name)}" data-faction="${esc(p.faction || '')}" onclick="showDetail('${esc(m.name)}')">
+    ${isRep ? '<div class="rep-badge">会派代表</div>' : ''}
     ${avatarContent}
     <div class="m-name">${esc(m.name)}</div>
     <div class="m-faction" style="color:${fc}">${esc(p.faction || '')}</div>
@@ -572,8 +581,11 @@ nav button.active::after{content:'';position:absolute;bottom:0;left:20%;right:20
 .faction-rep{font-size:.75rem;color:var(--sub);margin-left:auto}
 
 .m-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem;margin-bottom:1rem}
-.m-card{background:var(--card);border-radius:var(--radius);padding:1.2rem;text-align:center;cursor:pointer;transition:.2s;box-shadow:0 2px 8px rgba(0,0,0,.06);border:2px solid transparent;overflow:hidden}
+.m-card{background:var(--card);border-radius:var(--radius);padding:1.2rem;text-align:center;cursor:pointer;transition:.2s;box-shadow:0 2px 8px rgba(0,0,0,.06);border:2px solid transparent;overflow:hidden;position:relative}
 .m-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.1);border-color:#e0e7ff}
+.m-card.is-rep{border-color:#fbbf24;box-shadow:0 2px 12px rgba(251,191,36,.25)}
+.m-card.is-rep:hover{border-color:#f59e0b;box-shadow:0 6px 20px rgba(245,158,11,.3)}
+.rep-badge{position:absolute;top:.6rem;left:.6rem;background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;font-size:.68rem;font-weight:700;padding:.2rem .5rem;border-radius:8px;letter-spacing:.02em;box-shadow:0 2px 4px rgba(0,0,0,.15);z-index:2}
 .m-avatar{width:72px;height:72px;border-radius:50%;margin:0 auto .6rem;display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:800;color:#fff}
 .m-avatar-photo{width:72px;height:72px;border-radius:50%;margin:0 auto .6rem;overflow:hidden;border:3px solid}
 .m-avatar-photo img{width:100%;height:100%;object-fit:cover}
