@@ -144,6 +144,14 @@ function groupByFaction(members) {
     if (!groups[f]) groups[f] = [];
     groups[f].push(m);
   }
+  // 各会派内を五十音順（reading）で並び替え
+  for (const f of Object.keys(groups)) {
+    groups[f].sort((a, b) => {
+      const ra = (a.profile.reading || a.name) + '';
+      const rb = (b.profile.reading || b.name) + '';
+      return ra.localeCompare(rb, 'ja');
+    });
+  }
   return groups;
 }
 
@@ -255,54 +263,6 @@ function rolesHTML(name) {
   return roles.map(r => `<span class="role-tag">${esc(r)}</span>`).join(' ');
 }
 
-// レーダーチャートSVG
-function radarChart(topicData, size = 280) {
-  const cats = Object.keys(catColors);
-  const n = cats.length;
-  const cx = size / 2, cy = size / 2, r = size * 0.32;
-  const rawPcts = cats.map(c => topicData.percentage?.[c] || 0);
-  const maxPct = Math.max(...rawPcts, 1); // 最大値を基準にスケーリング
-  const pcts = rawPcts.map(p => p / 100);
-
-  let gridLines = '';
-  for (let level = 1; level <= 4; level++) {
-    const lr = r * level / 4;
-    let pts = [];
-    for (let i = 0; i < n; i++) {
-      const angle = (Math.PI * 2 * i / n) - Math.PI / 2;
-      pts.push(`${cx + lr * Math.cos(angle)},${cy + lr * Math.sin(angle)}`);
-    }
-    gridLines += `<polygon points="${pts.join(' ')}" fill="none" stroke="#ddd" stroke-width="0.8"/>`;
-  }
-
-  let axes = '';
-  for (let i = 0; i < n; i++) {
-    const angle = (Math.PI * 2 * i / n) - Math.PI / 2;
-    axes += `<line x1="${cx}" y1="${cy}" x2="${cx + r * Math.cos(angle)}" y2="${cy + r * Math.sin(angle)}" stroke="#ddd" stroke-width="0.5"/>`;
-  }
-
-  let dataPts = [];
-  for (let i = 0; i < n; i++) {
-    const angle = (Math.PI * 2 * i / n) - Math.PI / 2;
-    const val = Math.min(rawPcts[i] / maxPct, 1); // 最大カテゴリを100%として相対表示
-    dataPts.push(`${cx + r * val * Math.cos(angle)},${cy + r * val * Math.sin(angle)}`);
-  }
-
-  let labels = '';
-  for (let i = 0; i < n; i++) {
-    const angle = (Math.PI * 2 * i / n) - Math.PI / 2;
-    const lx = cx + (r + 25) * Math.cos(angle);
-    const ly = cy + (r + 25) * Math.sin(angle);
-    labels += `<text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle" font-size="11" fill="#555" font-weight="500">${cats[i]}</text>`;
-  }
-
-  return `<svg viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" style="max-width:100%">
-    ${gridLines}${axes}
-    <polygon points="${dataPts.join(' ')}" fill="rgba(37,99,235,0.25)" stroke="#2563eb" stroke-width="2"/>
-    ${labels}
-  </svg>`;
-}
-
 // 議員カードHTML（統一フォーマット）
 function memberCardHTML(m) {
   const p = m.profile;
@@ -336,9 +296,9 @@ function memberCardHTML(m) {
     ${roles}
     <div class="m-committee">${esc(shortCommittee)}</div>
     <div class="m-stats-mini">
-      <span>${m.videoCount}本</span><span>${m.questionCount}問</span><span>${p.terms || '?'}期</span>
+      <span>${p.terms || '?'}期目</span>
     </div>
-    <div class="m-top-cats">${topCats.map(t => `<span class="cat-pill" style="background:${catColors[t.category] || '#999'}">${t.category.split('・')[0]} ${t.percentage}%</span>`).join('')}</div>
+    <div class="m-top-cats">${topCats.map(t => `<span class="cat-pill" style="background:${catColors[t.category] || '#999'}">${t.category.split('・')[0]}</span>`).join('')}</div>
   </div>`;
 }
 
@@ -346,7 +306,6 @@ function memberCardHTML(m) {
 function memberDetailHTML(m) {
   const p = m.profile;
   const fc = factionColors[p.faction] || '#607D8B';
-  const chart = radarChart(m.topics);
   const initial = m.name.charAt(0);
   const roles = rolesHTML(m.name);
   const committees = committeeHTML(m.name);
@@ -418,36 +377,14 @@ function memberDetailHTML(m) {
         ${m.description ? `<div class="member-desc"><p>${esc(m.description)}</p></div>` : ''}
       </div>
       <div class="detail-right">
-        <h3>注力分野</h3>
-        ${chart}
+        <h3>よく取り上げるテーマ</h3>
+        <p class="topic-note">※ これまでの質問内容から機械的に抽出した関心領域です。議員の活動を"評価"するものではありません。背景や戦略は各議員本人にお尋ねください。</p>
         <div class="cat-bars">${(() => {
-          const cats = m.topics.topCategories || [];
-          const maxPct = cats.length > 0 ? Math.max(...cats.map(t => t.percentage)) : 1;
-          return cats.map(t => `<div class="cat-bar-row"><span class="cat-bar-label">${t.category}</span><div class="cat-bar-bg"><div class="cat-bar-fill" style="width:${(t.percentage / maxPct * 100).toFixed(1)}%;background:${catColors[t.category] || '#999'}"></div></div><span class="cat-bar-pct">${t.percentage}%</span></div>`).join('');
+          const cats = (m.topics.topCategories || []).slice(0, 5);
+          return cats.map(t => `<div class="cat-bar-row"><span class="cat-bar-label">${t.category}</span><span class="cat-tag" style="background:${catColors[t.category] || '#999'}">言及あり</span></div>`).join('');
         })()}</div>
-        <div class="detail-stats-box">
-          <div class="ds-item"><span class="ds-val">${m.videoCount}</span><span class="ds-lbl">動画</span></div>
-          <div class="ds-item"><span class="ds-val">${m.questionCount}</span><span class="ds-lbl">質問</span></div>
-          <div class="ds-item"><span class="ds-val">${p.terms || '?'}</span><span class="ds-lbl">期</span></div>
-        </div>
       </div>
     </div>
-    ${(() => {
-      // 活動サマリーカード生成
-      const topCats = (m.topics.topCategories || []).slice(0, 3);
-      const recentYear = m.videos.length > 0 ? m.videos[0].date?.substring(0, 4) : null;
-      const recentVids = m.videos.filter(v => v.date?.startsWith(recentYear || ''));
-      const recentQCount = recentVids.reduce((s,v) => s + (v.questions||[]).length, 0);
-      const themeList = topCats.map(t => t.category).join('・') || '多分野';
-      if (!m.isCurrent || m.videoCount === 0) return '';
-      return `<div class="activity-summary">
-        <h4>📊 直近の活動まとめ</h4>
-        <p>${esc(m.name)}議員は${esc(p.faction||'無所属')}所属、${p.terms||'?'}期目。議会動画は計<strong>${m.videoCount}本</strong>、質問数は<strong>${m.questionCount}件</strong>。${recentYear ? `${recentYear}年は${recentVids.length}本の動画で${recentQCount}件の質問を行いました。` : ''}主な注力分野は<strong>${esc(themeList)}</strong>です。</p>
-        <div class="activity-highlights">
-          ${topCats.map(t => `<span class="activity-tag" style="background:${catColors[t.category]||'#dbeafe'}22;color:${catColors[t.category]||'#1d4ed8'};border:1px solid ${catColors[t.category]||'#1d4ed8'}44">${esc(t.category)} ${t.percentage}%</span>`).join('')}
-        </div>
-      </div>`;
-    })()}
     ${(() => {
       // === 質問一覧タイムライン ===
       const allQuestions = [];
@@ -1034,6 +971,19 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
 .p-tag.selected{background:#7c3aed;color:#fff;border-color:#7c3aed}
 .p-tag-save{padding:.35rem .8rem;border:none;border-radius:20px;font-size:.78rem;background:linear-gradient(135deg,#7c3aed,#6d28d9);color:#fff;font-weight:700;cursor:pointer;margin-left:.3rem}
 
+/* サイト宣言文 */
+.site-manifesto{background:linear-gradient(135deg,#fef3c7,#fde68a);border:2px solid #f59e0b;border-radius:14px;padding:1.2rem 1.4rem;margin-bottom:1rem;box-shadow:0 2px 8px rgba(245,158,11,.1)}
+.manifesto-title{font-size:1rem;font-weight:700;color:#92400e;margin-bottom:.6rem}
+.manifesto-body p{font-size:.85rem;line-height:1.7;color:#451a03;margin-bottom:.5rem}
+.manifesto-body p:last-child{margin-bottom:0}
+.manifesto-body strong{color:#92400e;background:rgba(255,255,255,.6);padding:.05rem .3rem;border-radius:4px}
+.manifesto-note{font-size:.78rem!important;color:#78350f!important;margin-top:.5rem!important;padding-top:.5rem;border-top:1px dashed #b45309}
+@media(max-width:640px){.site-manifesto{padding:1rem}.manifesto-body p{font-size:.8rem;line-height:1.65}}
+
+/* 注力分野の注意書き */
+.topic-note{font-size:.75rem;color:#6b7280;line-height:1.6;margin-bottom:.8rem;padding:.5rem .7rem;background:#f9fafb;border-left:3px solid #9ca3af;border-radius:4px}
+.cat-tag{padding:.15rem .55rem;border-radius:10px;color:#fff;font-size:.7rem;font-weight:600}
+
 /* モーダル */
 .modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);z-index:1000;align-items:flex-start;justify-content:center;padding:2rem 1rem;overflow-y:auto}
 .modal-overlay.open{display:flex}
@@ -1235,11 +1185,10 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
     <button class="a11y-btn" onclick="toggleFontSize()" aria-label="文字サイズ切り替え">文字 大⇔標準</button>
   </div>
   <h1>みんなの伊東市</h1>
-  <div class="header-sub">伊東市議会の活動を、市民にわかりやすく</div>
+  <div class="header-sub">伊東市議会を、もっと身近に。</div>
   <div class="header-stats">
     <span>議員 ${currentMembersList.length}名</span>
     <span>動画 ${videos.length}本</span>
-    <span>質問 ${videos.reduce((s,v)=>s+v.questions.length,0)}件</span>
   </div>
   <div class="header-visitors" id="visitor-counter" style="display:none">
     <span id="vc-total">—</span> 人が訪問 ｜ 今日 <span id="vc-today">—</span> 人
@@ -1251,11 +1200,20 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
   <button role="tab" aria-selected="false" onclick="switchTab('all',this)">動画・検索</button>
   <button role="tab" aria-selected="false" onclick="switchTab('plan',this)">総合計画</button>
   <button role="tab" aria-selected="false" onclick="switchTab('voice',this)">市民の声</button>
-  <button role="tab" aria-selected="false" onclick="switchTab('stats',this)">統計・分析</button>
+  <button role="tab" aria-selected="false" onclick="switchTab('stats',this)">議会全体の動き</button>
 </nav>
 <div class="container" id="main-content" role="main">
   <div id="tab-members" class="tab-panel active">
-    <div class="tab-notice">ℹ️ 議員情報は伊東市公式サイトの公開資料に基づきます。質問数等は動画字幕の解析値であり公式記録とは異なる場合があります。</div>
+    <div class="site-manifesto">
+      <div class="manifesto-title">🔔 このサイトをご覧いただく前に</div>
+      <div class="manifesto-body">
+        <p><strong>このサイトは議員を評価・ランク付けするものではありません。</strong></p>
+        <p>議員の仕事は「質問の数」では測れません。一つの深い質問が、百の質問より重い場合もあります。また、議員によって得意分野・戦略・問題意識は異なり、それは多様性として尊重されるべきものです。</p>
+        <p>このサイトはあくまで <strong>「誰が、いつ、何を質問し、当局がどう答えたか」という記録を市民が知るための道具</strong> です。議員の優劣を判断する材料としては使わないでください。</p>
+        <p class="manifesto-note">※ 議員一覧は<strong>五十音順（会派別）</strong>で表示しています。並び順に意味はありません。</p>
+      </div>
+    </div>
+    <div class="tab-notice">ℹ️ 議員情報は伊東市公式サイトの公開資料に基づきます。質問内容は動画字幕の自動抽出であり、正確な内容は各動画・会議録でご確認ください。</div>
     <!-- パーソナライズバー -->
     <div class="personalize-bar" id="personalize-bar">
       <h4>⭐ 関心のあるテーマを選んでください（複数可）</h4>
@@ -1625,7 +1583,7 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
   </div>
 
   <div id="tab-stats" class="tab-panel">
-    <div class="tab-notice">ℹ️ 統計データはYouTube動画の字幕解析に基づく推計値です。分野分類はキーワード自動分類のため、実際の質問趣旨と異なる場合があります。</div>
+    <div class="tab-notice">ℹ️ このページは<strong>議会全体の動き</strong>を俯瞰するものです。議員個人の数値化・ランキング表示は行いません。質問の数は議員の働きの一側面にすぎず、一つの深い質問が百の質問より重い場合もあります。</div>
     <!-- 議会カレンダー -->
     <div class="council-calendar" id="council-calendar">
       <div class="cal-header">🗓️ 議会スケジュール</div>
@@ -1637,25 +1595,14 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
         <div class="cal-item" data-month="12"><span class="cal-month">12月</span><span class="cal-label">${glossary('定例会')}</span></div>
       </div>
     </div>
-    <h3 class="section-title">議員比較</h3>
-    <div class="cmp-picker">
-      <select id="cmp-select">
-        <option value="">議員を選択...</option>
-        ${compareData.map(m => `<option value="${esc(m.name)}">${esc(m.name)}${m.faction?` (${esc(m.faction)})`:''}</option>`).join('')}
-      </select>
-      <button onclick="addCompare()">追加</button>
-      <button onclick="clearCompare()">クリア</button>
-    </div>
-    <div class="search-result-count">最大4名まで比較できます。質問数・動画数・分野別割合を並べて表示します。</div>
-    <div id="cmp-area" class="cmp-grid"><div class="cmp-empty">上のプルダウンから議員を選んで「追加」してください</div></div>
 
     <div style="margin-top:2rem;padding-top:1.5rem;border-top:2px solid #e5e7eb">
-      <h3 class="section-title">年別トレンド</h3>
+      <h3 class="section-title">年別の動画本数推移</h3>
       <div id="trend-embed"></div>
     </div>
 
     <div style="margin-top:2rem;padding-top:1.5rem;border-top:2px solid #e5e7eb">
-      <h3 class="section-title">基本統計</h3>
+      <h3 class="section-title">議会全体の構成</h3>
     </div>
     <div class="stats-panel">
       <div class="stats-box">
@@ -1667,15 +1614,6 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
         }).join('')}
       </div>
       <div class="stats-box">
-        <h3>質問数ランキング</h3>
-        ${allMembers.filter(m=>m.isCurrent).sort((a,b)=>b.questionCount-a.questionCount).slice(0,15).map((m,i)=>{
-          const max=allMembers.filter(x=>x.isCurrent).reduce((a,b)=>Math.max(a,b.questionCount),1);
-          const p=(m.questionCount/max*100).toFixed(1);
-          const fc=factionColors[m.profile.faction]||'#607D8B';
-          return `<div class="bar-row"><div class="bar-label"><span>${i+1}. ${m.name}</span><span>${m.questionCount}問</span></div><div class="bar-bg"><div class="bar-fill" style="width:${p}%;background:${fc}"></div></div></div>`;
-        }).join('')}
-      </div>
-      <div class="stats-box">
         <h3>会派別議員数</h3>
         ${factionOrder.filter(f => currentGroups[f]).map(f => {
           const c = currentGroups[f].length;
@@ -1683,17 +1621,9 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
           return `<div class="bar-row"><div class="bar-label"><span style="color:${cl};font-weight:600">${f}</span><span>${c}名</span></div><div class="bar-bg"><div class="bar-fill" style="width:${c/currentMembersList.length*100}%;background:${cl}"></div></div></div>`;
         }).join('')}
       </div>
-      <div class="stats-box">
-        <h3>動画数ランキング</h3>
-        ${allMembers.filter(m=>m.isCurrent).sort((a,b)=>b.videoCount-a.videoCount).slice(0,15).map((m,i)=>{
-          const max=allMembers.filter(x=>x.isCurrent).reduce((a,b)=>Math.max(a,b.videoCount),1);
-          const p=(m.videoCount/max*100).toFixed(1);
-          const fc=factionColors[m.profile.faction]||'#607D8B';
-          return `<div class="bar-row"><div class="bar-label"><span>${i+1}. ${m.name}</span><span>${m.videoCount}本</span></div><div class="bar-bg"><div class="bar-fill" style="width:${p}%;background:${fc}"></div></div></div>`;
-        }).join('')}
-      </div>
       <div class="stats-box" style="grid-column:1/-1">
-        <h3>伊東市議会 分野別質問割合</h3>
+        <h3>議会全体で取り上げられているテーマ（分野別）</h3>
+        <p style="font-size:.8rem;color:var(--sub);margin-bottom:.8rem">※ 個々の議員の数字ではなく、議会全体でどのような分野が議論されているかを示します。</p>
         ${(() => {
           const fieldCounts = {};
           for (const m of allMembers) {
@@ -1715,7 +1645,7 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
             const maxPct = total > 0 ? (sorted[0][1] / total * 100) : 1;
             const barW = (parseFloat(pct) / maxPct * 100).toFixed(1);
             const cl = fieldColors[field] || '#95a5a6';
-            return `<div class="bar-row"><div class="bar-label"><span style="font-weight:600">${i+1}. ${field}</span><span>${count}件 (${pct}%)</span></div><div class="bar-bg"><div class="bar-fill" style="width:${barW}%;background:${cl}"></div></div></div>`;
+            return `<div class="bar-row"><div class="bar-label"><span style="font-weight:600">${field}</span><span>${pct}%</span></div><div class="bar-bg"><div class="bar-fill" style="width:${barW}%;background:${cl}"></div></div></div>`;
           }).join('');
         })()}
       </div>
@@ -1744,10 +1674,10 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
       ・質問要約は自動字幕の機械抽出、議員評価は行いません。<br>
       ・正確な情報は<a href="https://www.city.ito.shizuoka.jp/" target="_blank">伊東市公式</a>・<a href="https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/itoshigikai/index.html" target="_blank">市議会公式</a>でご確認ください。
     </div>
-    <div class="concierge-msg bot">こんにちは！「みんなの伊東市」AIコンシェルジュです 🏙️<br>議員情報・質問ランキング・会派・総合計画など、サイトに掲載された情報について日本語で質問してください。</div>
+    <div class="concierge-msg bot">こんにちは！「みんなの伊東市」AIコンシェルジュです 🏙️<br>議員の質問内容・会派・総合計画など、サイトに掲載された情報について日本語で質問してください。<br><small>※ 議員の優劣判定やランキング的な回答はいたしません。</small></div>
     <div class="concierge-samples" id="concierge-samples">
-      <button class="concierge-sample" onclick="conciergeAsk('質問数が多い議員は誰ですか？')">質問数ランキング</button>
       <button class="concierge-sample" onclick="conciergeAsk('伊東市議会の会派構成を教えて')">会派構成</button>
+      <button class="concierge-sample" onclick="conciergeAsk('観光政策について議会ではどんな質問が出ていますか？')">観光の議論</button>
       <button class="concierge-sample" onclick="conciergeAsk('伊東市のこれからの人口はどうなりますか？')">将来人口</button>
       <button class="concierge-sample" onclick="conciergeAsk('防災対策について教えて')">防災対策</button>
       <button class="concierge-sample" onclick="conciergeAsk('子育て支援はどうなっていますか？')">子育て支援</button>
@@ -1774,7 +1704,7 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
     <ul>
       <li>質問要約はYouTube自動字幕（音声認識）の機械抽出であり、誤変換・文脈欠落・情報損失を含む可能性があります。</li>
       <li>分野分類はキーワードによる自動分類で、質問の趣旨を正確に反映しない場合があります。</li>
-      <li>質問数・動画数等はYouTube字幕解析に基づく推計値で、公式記録とは異なる場合があります。</li>
+      <li>動画数・質問数等の数値はYouTube字幕解析に基づく推計値で、公式記録とは異なります。また、これらの数字は<strong>議員の活動の質や優劣を示すものではありません。</strong></li>
     </ul>
     <h4>2. データの出典</h4>
     <ul>
@@ -1783,7 +1713,7 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
       <li><strong>写真:</strong> 選挙ドットコム等の公開プロフィール。著作権は撮影者・掲載元に帰属</li>
     </ul>
     <h4>3. 公平性・中立性</h4>
-    <p>特定の議員の評価・批判・推薦の意図はありません。質問数等の多寡は議員活動の質を示すものではなく、全議員に同一方法でデータ処理しています。</p>
+    <p>特定の議員の評価・批判・推薦の意図はありません。<strong>質問の数や頻度は議員活動の「質」を示すものではなく、多いほど優秀・少ないほど劣っているといった評価は一切意図していません。</strong>議員によって得意分野・戦略・問題意識は異なり、それは多様性として尊重されるべきものです。全議員に同一方法でデータ処理しています。</p>
     <h4>4. 肖像権・著作権</h4>
     <p>議員写真は公人としての公的活動に関連して公開されたものを利用。削除・修正の申し出には速やかに対応します。議会質疑の字幕テキストは要約として再構成しています。</p>
     <h4>5. 免責</h4>
@@ -2304,50 +2234,6 @@ async function submitVoice(e){
     msg.innerHTML='<div class="modal-msg error">通信エラー: '+escHtml(err.message)+'</div>';
     btn.disabled=false;
   }
-}
-
-// ============ 比較タブ ============
-let compareList=[];
-function addCompare(){
-  const sel=document.getElementById('cmp-select');
-  const name=sel.value;
-  if(!name||compareList.includes(name))return;
-  if(compareList.length>=4){alert('最大4名まで比較できます');return;}
-  compareList.push(name);
-  sel.value='';
-  renderCompare();
-}
-function removeCompare(name){
-  compareList=compareList.filter(n=>n!==name);
-  renderCompare();
-}
-function clearCompare(){compareList=[];renderCompare();}
-function renderCompare(){
-  const area=document.getElementById('cmp-area');
-  if(compareList.length===0){
-    area.innerHTML='<div class="cmp-empty">上のプルダウンから議員を選んで「追加」してください</div>';
-    area.className='cmp-grid';
-    return;
-  }
-  area.className='cmp-grid';
-  const html=compareList.map(name=>{
-    const m=COMPARE_DATA.find(x=>x.name===name);
-    if(!m)return '';
-    const initial=m.name.charAt(0);
-    const av=m.photo
-      ?'<div class="cmp-avatar" style="border-color:'+m.factionColor+'"><img src="'+m.photo+'" onerror="this.parentElement.innerHTML=\\'<div class=cmp-avatar-fb style=background:'+m.factionColor+'>'+initial+'</div>\\'"></div>'
-      :'<div class="cmp-avatar" style="border-color:'+m.factionColor+'"><div class="cmp-avatar-fb" style="background:'+m.factionColor+'">'+initial+'</div></div>';
-    const cats=Object.entries(m.percentage||{}).sort((a,b)=>b[1]-a[1]).map(([c,p])=>{
-      const col=CAT_COLORS[c]||'#999';
-      return '<div class="cmp-cat-row"><div class="cmp-cat-label">'+c+'</div><div class="cmp-cat-bg"><div class="cmp-cat-fill" style="width:'+p+'%;background:'+col+'"></div></div><div class="cmp-cat-pct">'+p+'%</div></div>';
-    }).join('');
-    return '<div class="cmp-card"><button class="cmp-close" onclick="removeCompare(\\''+name+'\\')">×</button>'
-      +'<div class="cmp-head">'+av+'<div><div class="cmp-name">'+m.name+'</div><div class="cmp-faction" style="color:'+m.factionColor+'">'+m.faction+'</div></div></div>'
-      +'<div class="cmp-stats"><div class="cmp-stat"><span class="cmp-stat-val">'+m.questionCount+'</span><span class="cmp-stat-lbl">質問数</span></div>'
-      +'<div class="cmp-stat"><span class="cmp-stat-val">'+m.videoCount+'</span><span class="cmp-stat-lbl">動画数</span></div></div>'
-      +'<div class="cmp-cats-title">分野別割合</div>'+cats+'</div>';
-  }).join('');
-  area.innerHTML=html;
 }
 
 // ============ 検索タブ ============
