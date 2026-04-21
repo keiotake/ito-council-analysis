@@ -321,7 +321,7 @@ function memberCardHTML(m) {
     ${roles}
     <div class="m-committee">${esc(shortCommittee)}</div>
     <div class="m-stats-mini">
-      <span>${p.terms || '?'}期目</span>
+      ${p.terms ? `<span>${p.terms}期目</span>` : (m.isCurrent ? '' : '<span class="m-former-tag">元議員</span>')}
     </div>
     <div class="m-top-cats">${topCats.map(t => `<span class="cat-pill" style="background:${catColors[t.category] || '#999'}">${t.category.split('・')[0]}</span>`).join('')}</div>
   </div>`;
@@ -394,7 +394,7 @@ function memberDetailHTML(m) {
         <div class="detail-roles">${roles}</div>
         <div class="detail-info">
           <div><span class="info-label">${glossary('会派')}</span><span class="info-val" style="color:${fc}">${esc(p.faction || '不明')}</span></div>
-          <div><span class="info-label">期数</span><span class="info-val">${p.terms || '?'}期</span></div>
+          ${p.terms ? `<div><span class="info-label">期数</span><span class="info-val">${p.terms}期</span></div>` : ''}
           <div><span class="info-label">生年</span><span class="info-val">${esc(p.birthYear || '不明')}</span></div>
         </div>
         <div class="detail-committees">
@@ -666,7 +666,8 @@ nav button.active::after{content:'';position:absolute;bottom:0;left:20%;right:20
 .m-faction{font-size:.82rem;font-weight:600;margin-bottom:.3rem}
 .m-committee{font-size:.76rem;color:var(--sub);margin-bottom:.3rem}
 .role-tag{display:inline-block;padding:.15rem .5rem;border-radius:10px;font-size:.72rem;background:#fef3c7;color:#92400e;font-weight:600;margin-bottom:.3rem;margin-right:.2rem}
-.m-stats-mini{display:flex;justify-content:center;gap:.8rem;font-size:.82rem;color:var(--sub);margin:.4rem 0}
+.m-stats-mini{display:flex;justify-content:center;gap:.8rem;font-size:.82rem;color:var(--sub);margin:.4rem 0;min-height:1em}
+.m-former-tag{color:#9ca3af;font-size:.75rem;font-style:italic}
 .m-top-cats{display:flex;flex-wrap:wrap;justify-content:center;gap:.3rem;margin-top:.4rem}
 .cat-pill{display:inline-block;padding:.15rem .5rem;border-radius:8px;font-size:.7rem;color:#fff;font-weight:500}
 
