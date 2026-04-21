@@ -15,6 +15,11 @@ try {
     photos[name] = data.photo_url || data.election_photo_url || '';
   }
 } catch(e) {}
+
+// 議員写真のズーム・位置調整（顔のサイズを統一するため）
+const photoAdjustments = {
+  '大竹圭': { scale: 1.35, offsetY: '-5%' },
+};
 let responsesData = null;
 try { responsesData = JSON.parse(fs.readFileSync('analysis_with_responses.json', 'utf-8')); } catch(e) {}
 let questionSummaries = {};
@@ -299,8 +304,10 @@ function memberCardHTML(m) {
     shortCommittee = p.committee.replace('常任', '');
   }
 
+  const adj = photoAdjustments[m.name];
+  const imgStyle = adj ? `style="transform:scale(${adj.scale||1}) translateY(${adj.offsetY||'0'});transform-origin:center center"` : '';
   const avatarContent = m.photoUrl
-    ? `<div class="m-avatar-photo" style="border-color:${fc}"><img src="${esc(m.photoUrl)}" alt="${esc(m.name)}" onerror="this.parentElement.innerHTML='<div class=m-avatar-fb style=background:${fc}>${initial}</div>'"></div>`
+    ? `<div class="m-avatar-photo" style="border-color:${fc}"><img src="${esc(m.photoUrl)}" alt="${esc(m.name)}" ${imgStyle} onerror="this.parentElement.innerHTML='<div class=m-avatar-fb style=background:${fc}>${initial}</div>'"></div>`
     : `<div class="m-avatar" style="background:${fc}">${initial}</div>`;
 
   return `<div class="m-card${isRep ? ' is-rep' : ''}" data-name="${esc(m.name)}" data-faction="${esc(p.faction || '')}" onclick="showDetail('${esc(m.name)}')">
@@ -325,8 +332,10 @@ function memberDetailHTML(m) {
   const roles = rolesHTML(m.name);
   const committees = committeeHTML(m.name);
 
+  const adj2 = photoAdjustments[m.name];
+  const imgStyle2 = adj2 ? `style="transform:scale(${adj2.scale||1}) translateY(${adj2.offsetY||'0'});transform-origin:center center"` : '';
   const avatarContent = m.photoUrl
-    ? `<div class="detail-avatar-photo" style="border-color:${fc}"><img src="${esc(m.photoUrl)}" alt="${esc(m.name)}" onerror="this.parentElement.innerHTML='<div class=detail-avatar style=background:${fc}>${initial}</div>'"></div>`
+    ? `<div class="detail-avatar-photo" style="border-color:${fc}"><img src="${esc(m.photoUrl)}" alt="${esc(m.name)}" ${imgStyle2} onerror="this.parentElement.innerHTML='<div class=detail-avatar style=background:${fc}>${initial}</div>'"></div>`
     : `<div class="detail-avatar" style="background:${fc}">${initial}</div>`;
 
   // 動画リスト（質問を箇条書きで常に表示）
