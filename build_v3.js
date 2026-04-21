@@ -35,6 +35,9 @@ try { memberComments = JSON.parse(fs.readFileSync('member_comments.json', 'utf-8
 // 伊東市徹底分析（大竹圭による独自分析）
 let itoAnalysis = null;
 try { itoAnalysis = JSON.parse(fs.readFileSync('ito_analysis.json', 'utf-8')); } catch(e) { console.warn('ito_analysis.json not found'); }
+// 議事録由来のQ&Aデータ（ground truth）
+let gijirokuData = null;
+try { gijirokuData = JSON.parse(fs.readFileSync('gijiroku_integrated.json', 'utf-8')); } catch(e) { console.warn('gijiroku_integrated.json not found'); }
 
 const { videos, memberSummary } = analysis;
 
@@ -437,7 +440,62 @@ function memberDetailHTML(m) {
       }
     })()}
     ${(() => {
-      // === 質問一覧タイムライン ===
+      // === 質問一覧タイムライン（議事録ベース） ===
+      // 議事録データ（gijiroku_integrated.json）を優先。なければ従来のYouTube字幕ベース。
+      const gjMember = gijirokuData && gijirokuData.memberData && gijirokuData.memberData[m.name];
+      if (gjMember && gjMember.questions && gjMember.questions.length > 0) {
+        const allQuestions = gjMember.questions;
+        const DISPLAY_LIMIT = 30;
+        const questions = allQuestions.slice(0, DISPLAY_LIMIT);
+        const hasMore = allQuestions.length > DISPLAY_LIMIT;
+        const qRows = questions.map((q, i) => {
+          const tc = q.sessionType === '一般質問' ? '#3498db' : q.sessionType === '大綱質疑' ? '#27ae60' : q.sessionType === '補正予算審議' ? '#e67e22' : '#95a5a6';
+          const respHTML = (q.responses && q.responses.length > 0)
+            ? `<div class="qtl-resp-list">
+                <div class="qtl-resp-label">📢 当局答弁 (${q.responses.length}件)</div>
+                ${q.responses.map((r, ri) => `
+                  <div class="qtl-resp-item">
+                    <div class="qtl-resp-speaker"><strong>${esc(r.position)}</strong> ${esc(r.responder)}</div>
+                    <div class="qtl-resp-short" id="qtl-rs-${esc(m.name)}-${i}-${ri}">${esc(r.response.length > 200 ? r.response.substring(0, 197) + '…' : r.response)}</div>
+                    ${r.response.length > 200 ? `<button class="qtl-resp-toggle" onclick="alert(this.dataset.full)" data-full="${esc(r.response)}">答弁全文を表示</button>` : ''}
+                  </div>
+                `).join('')}
+              </div>`
+            : '<div class="qtl-no-resp">答弁データなし</div>';
+          const videoBtn = q.youtubeVideo
+            ? `<a href="https://youtu.be/${q.youtubeVideo.videoId}" target="_blank" class="qtl-video-link" title="動画を見る">▶ 動画</a>`
+            : '';
+          return `<div class="qtl-card" data-date="${esc(q.date || '')}" data-type="${esc(q.sessionType || '')}">
+            <div class="qtl-header">
+              <span class="qtl-date">${esc(q.date || q.dateLabel || '')}</span>
+              <span class="qtl-type" style="background:${tc}">${esc(q.sessionType || '')}</span>
+              ${videoBtn}
+              <span class="qtl-source-badge" title="議事録が出典">📘 議事録</span>
+            </div>
+            <div class="qtl-question">${esc(q.question.length > 300 ? q.question.substring(0, 297) + '…' : q.question)}</div>
+            ${respHTML}
+          </div>`;
+        }).join('');
+
+        return `<div class="qtl-section">
+          <h3 class="section-title">📋 質問・答弁一覧 (${allQuestions.length}件)</h3>
+          <p class="qtl-source-note">📘 出典: <a href="https://itoshigikai.gijiroku.com/voices/" target="_blank">伊東市議会議事録検索システム</a>（公式記録）</p>
+          <div class="qtl-controls">
+            <input class="qtl-search" placeholder="質問・答弁をキーワードで絞り込み..." oninput="filterQtl(this,'${esc(m.name)}')">
+            <select class="qtl-filter" onchange="filterQtlType(this,'${esc(m.name)}')">
+              <option value="">全種別</option>
+              <option value="一般質問">一般質問</option>
+              <option value="大綱質疑">大綱質疑</option>
+              <option value="補正予算審議">補正予算審議</option>
+            </select>
+          </div>
+          <div class="qtl-list" id="qtl-${esc(m.name)}">${qRows}</div>
+          ${hasMore ? `<div class="qtl-more-note">直近${DISPLAY_LIMIT}件を表示中（全${allQuestions.length}件）。古い質問・答弁は <a href="https://itoshigikai.gijiroku.com/voices/" target="_blank">議事録検索システム</a> でご確認ください。</div>` : ''}
+          <div class="qtl-count" id="qtl-count-${esc(m.name)}">${hasMore ? `直近${questions.length}件 / 全${allQuestions.length}件` : `全${questions.length}件を表示中`}</div>
+        </div>`;
+      }
+
+      // フォールバック: 議事録データがない期間の動画のみYouTube字幕ベースで表示
       const allQuestions = [];
       const sortedVids = [...m.videos].sort((a,b) => (b.date||'').localeCompare(a.date||''));
       for (const v of sortedVids) {
@@ -484,6 +542,7 @@ function memberDetailHTML(m) {
             <span class="qtl-date">${esc(q.date)}</span>
             <span class="qtl-type" style="background:${q.typeColor}">${esc(q.type)}</span>
             <a href="${q.url}" target="_blank" class="qtl-video-link" title="動画を見る">▶ 動画</a>
+            <span class="qtl-source-badge-yt" title="YouTube字幕自動抽出">🎥 動画字幕</span>
           </div>
           <div class="qtl-question">${esc(q.summary)}</div>
           ${respHTML}
@@ -492,6 +551,7 @@ function memberDetailHTML(m) {
 
       return `<div class="qtl-section">
         <h3 class="section-title">📋 質問一覧 (${allQuestions.length}件)</h3>
+        <p class="qtl-source-note qtl-source-yt">⚠️ この議員の議事録データは未取得。YouTube字幕からの自動抽出のため精度が低い場合があります。</p>
         <div class="qtl-controls">
           <input class="qtl-search" placeholder="質問をキーワードで絞り込み..." oninput="filterQtl(this,'${esc(m.name)}')">
           <select class="qtl-filter" onchange="filterQtlType(this,'${esc(m.name)}')">
@@ -974,6 +1034,19 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
 .activity-summary p{font-size:.82rem;color:#444;line-height:1.7}
 .activity-highlights{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem}
 .activity-tag{padding:.25rem .6rem;border-radius:8px;font-size:.72rem;font-weight:600;background:#dbeafe;color:#1d4ed8}
+
+/* 議事録由来バッジ */
+.qtl-source-note{font-size:.82rem;color:#065f46;background:linear-gradient(135deg,#d1fae5,#a7f3d0);border-left:4px solid #10b981;padding:.7rem 1rem;border-radius:0 8px 8px 0;margin-bottom:1rem;line-height:1.6}
+.qtl-source-note a{color:#047857;font-weight:600;text-decoration:underline}
+.qtl-source-note.qtl-source-yt{color:#78350f;background:linear-gradient(135deg,#fef3c7,#fde68a);border-left-color:#f59e0b}
+.qtl-source-badge{display:inline-block;padding:.15rem .5rem;background:#d1fae5;color:#065f46;border-radius:10px;font-size:.68rem;font-weight:700;border:1px solid #10b981;margin-left:auto}
+.qtl-source-badge-yt{display:inline-block;padding:.15rem .5rem;background:#fef3c7;color:#78350f;border-radius:10px;font-size:.68rem;font-weight:700;border:1px solid #f59e0b;margin-left:auto}
+.qtl-resp-list{margin-top:.8rem}
+.qtl-resp-item{background:#f0f9ff;border-left:3px solid #0284c7;padding:.6rem .8rem;border-radius:0 6px 6px 0;margin-bottom:.5rem}
+.qtl-resp-speaker{font-size:.78rem;color:#075985;margin-bottom:.3rem}
+.qtl-resp-speaker strong{color:#0c4a6e}
+.qtl-more-note{font-size:.78rem;color:#64748b;background:#f1f5f9;padding:.8rem 1rem;border-radius:8px;margin-top:1rem;text-align:center;line-height:1.6}
+.qtl-more-note a{color:#1e40af;text-decoration:underline;font-weight:600}
 
 /* 質問一覧タイムライン */
 .qtl-section{margin:1.5rem 0}
