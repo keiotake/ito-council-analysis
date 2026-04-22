@@ -464,6 +464,35 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
 .dch-badge-current{background:#22c55e;color:#fff;padding:.1rem .45rem;border-radius:10px;font-size:.7rem;font-weight:700}
 .dch-badge-former{background:#94a3b8;color:#fff;padding:.1rem .45rem;border-radius:10px;font-size:.7rem;font-weight:700}
 
+/* 用語解説フローティングボタン */
+.explain-btn{position:absolute;z-index:9998;padding:.5rem 1rem;background:linear-gradient(135deg,#8b5cf6,#7c3aed);color:#fff;border:none;border-radius:20px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 4px 14px rgba(124,58,237,.4);animation:explainPop .2s ease-out;white-space:nowrap}
+.explain-btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(124,58,237,.5)}
+@keyframes explainPop{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+
+/* 用語解説モーダル */
+.explain-overlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,.7);z-index:3000;align-items:center;justify-content:center;padding:1.5rem;backdrop-filter:blur(4px)}
+.explain-overlay.open{display:flex;animation:fadeIn .2s}
+.explain-box{background:#fff;border-radius:20px;max-width:520px;width:100%;box-shadow:0 25px 60px rgba(0,0,0,.4);overflow:hidden;animation:slideUp .25s;position:relative}
+.explain-close{position:absolute;top:.7rem;right:.7rem;background:rgba(0,0,0,.08);border:none;border-radius:50%;width:32px;height:32px;font-size:.95rem;cursor:pointer;color:#64748b;display:flex;align-items:center;justify-content:center;z-index:1}
+.explain-close:hover{background:rgba(0,0,0,.15);color:#1e293b}
+.explain-header{background:linear-gradient(135deg,#8b5cf6,#6d28d9);color:#fff;padding:1.3rem 1.5rem;display:flex;align-items:center;gap:.8rem}
+.explain-icon{font-size:2rem}
+.explain-label{font-size:.75rem;opacity:.85;letter-spacing:.05em;margin-bottom:.2rem}
+.explain-term{font-size:1.25rem;font-weight:800;word-break:break-all}
+.explain-body{padding:1.5rem;max-height:60vh;overflow-y:auto;min-height:180px}
+.explain-loading{display:flex;flex-direction:column;align-items:center;gap:1rem;padding:2rem 0;color:#64748b;font-size:.88rem}
+.spinner{width:32px;height:32px;border:3px solid #e9d5ff;border-top-color:#7c3aed;border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.explain-summary{font-size:1.05rem;font-weight:700;color:#1e293b;line-height:1.7;margin-bottom:1rem;padding:1rem;background:linear-gradient(135deg,#faf5ff,#f3e8ff);border-radius:10px;border-left:4px solid #8b5cf6}
+.explain-detail{font-size:.9rem;line-height:1.8;color:#334155;margin-bottom:1rem;padding:0 .3rem}
+.explain-detail-label,.explain-example-label{font-size:.75rem;font-weight:700;color:#7c3aed;margin-bottom:.3rem;letter-spacing:.03em}
+.explain-example{font-size:.88rem;line-height:1.75;color:#334155;padding:.8rem 1rem;background:#fffbeb;border-radius:8px;border-left:3px solid #f59e0b}
+.explain-example-label{color:#d97706}
+.explain-error{padding:1.5rem;text-align:center;color:#b91c1c;background:#fef2f2;border-radius:8px;font-size:.88rem;line-height:1.7}
+.explain-footer{padding:.7rem 1.5rem;background:#f8fafc;border-top:1px solid #e2e8f0;text-align:center}
+.explain-powered{font-size:.7rem;color:#94a3b8}
+@media(max-width:640px){.explain-box{max-width:95vw}.explain-term{font-size:1.1rem}.explain-header{padding:1rem}}
+
 /* 答弁・再質問インジケータ（件数のみ、全文は議事録リンクで） */
 .qtl-meta-row{display:flex;gap:.4rem;margin-top:.4rem;flex-wrap:wrap}
 .qtl-resp-indicator{display:inline-block;padding:.2rem .5rem;background:#f0f9ff;border:1px solid #bae6fd;border-radius:10px;font-size:.7rem;color:#075985;font-weight:600}
@@ -20267,8 +20296,135 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
   </div>
   <div style="margin-top:.3rem">制作・運営: 伊東市議会議員 大竹圭 ｜ 最終更新: 2026/4/22</div>
 </footer>
+<!-- 用語解説ボタン（テキスト選択時に表示） -->
+<button id="explain-btn" class="explain-btn" style="display:none" onclick="openExplainModal()">💡 この言葉を解説</button>
+
+<!-- 用語解説モーダル -->
+<div class="explain-overlay" id="explain-overlay" onclick="if(event.target===this)closeExplainModal()">
+  <div class="explain-box">
+    <button class="explain-close" onclick="closeExplainModal()">✕</button>
+    <div class="explain-header">
+      <span class="explain-icon">💡</span>
+      <div>
+        <div class="explain-label">中学生にも分かる解説</div>
+        <div class="explain-term" id="explain-term"></div>
+      </div>
+    </div>
+    <div class="explain-body" id="explain-body">
+      <div class="explain-loading">
+        <div class="spinner"></div>
+        <div>AIが解説を考えています…</div>
+      </div>
+    </div>
+    <div class="explain-footer">
+      <span class="explain-powered">🤖 Claude AI による自動解説</span>
+    </div>
+  </div>
+</div>
+
 <script>
 const VOICE_API='https://ito-voice.bmwrllsor-ko.workers.dev'; // Cloudflare Worker
+
+// === 用語解説機能 ===
+let currentExplainTerm = '';
+let currentExplainContext = '';
+
+(function initExplain(){
+  const btn = document.getElementById('explain-btn');
+  if(!btn) return;
+  // テキスト選択時にボタン表示
+  document.addEventListener('mouseup', handleSelection);
+  document.addEventListener('touchend', () => setTimeout(handleSelection, 50));
+  // スクロール時に隠す
+  document.addEventListener('scroll', hideExplainBtn, { passive: true });
+  // 他の場所クリックで隠す
+  document.addEventListener('click', (e) => {
+    if (e.target && !e.target.closest('#explain-btn') && !e.target.closest('.explain-box')) {
+      setTimeout(() => {
+        if (window.getSelection().toString().trim().length === 0) hideExplainBtn();
+      }, 10);
+    }
+  });
+
+  function handleSelection(e){
+    const sel = window.getSelection();
+    if (!sel) { hideExplainBtn(); return; }
+    const text = sel.toString().trim();
+    // 1〜30文字の選択のみ解説対象
+    if (text.length < 1 || text.length > 30) { hideExplainBtn(); return; }
+    // モーダル内の選択は除外
+    if (e && e.target && e.target.closest('.explain-box')) return;
+    // ナビ、ヘッダー、フッターからの選択は除外
+    if (e && e.target && (e.target.closest('header') || e.target.closest('nav') || e.target.closest('.back-btn'))) { hideExplainBtn(); return; }
+    currentExplainTerm = text;
+    // 周辺のテキストをコンテキストとして取得
+    let context = '';
+    try {
+      const range = sel.getRangeAt(0);
+      const node = range.startContainer;
+      const parent = node.parentElement || node;
+      context = (parent.textContent || '').substring(0, 200);
+    } catch(e) {}
+    currentExplainContext = context;
+    // ボタン位置計算
+    try {
+      const range = sel.getRangeAt(0);
+      const rect = range.getBoundingClientRect();
+      btn.style.top = (window.scrollY + rect.top - 40) + 'px';
+      btn.style.left = (window.scrollX + rect.left + rect.width/2 - 80) + 'px';
+      btn.style.display = 'block';
+    } catch(e) { hideExplainBtn(); }
+  }
+
+  function hideExplainBtn(){
+    btn.style.display = 'none';
+  }
+})();
+
+function openExplainModal(){
+  if (!currentExplainTerm) return;
+  document.getElementById('explain-btn').style.display = 'none';
+  const overlay = document.getElementById('explain-overlay');
+  document.getElementById('explain-term').textContent = '「' + currentExplainTerm + '」';
+  document.getElementById('explain-body').innerHTML = '<div class="explain-loading"><div class="spinner"></div><div>AIが解説を考えています…</div></div>';
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  // API呼び出し
+  fetch(VOICE_API + '/explain', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ term: currentExplainTerm, context: currentExplainContext }),
+  })
+  .then(r => r.json())
+  .then(data => {
+    const body = document.getElementById('explain-body');
+    if (!data.ok) {
+      body.innerHTML = '<div class="explain-error">⚠️ ' + escapeHtml(data.error || '解説を取得できませんでした') + '</div>';
+      return;
+    }
+    let html = '';
+    if (data.summary) {
+      html += '<div class="explain-summary">' + escapeHtml(data.summary) + '</div>';
+    }
+    if (data.explain) {
+      html += '<div class="explain-detail"><div class="explain-detail-label">📖 詳しく</div>' + escapeHtml(data.explain) + '</div>';
+    }
+    if (data.example) {
+      html += '<div class="explain-example"><div class="explain-example-label">💭 たとえば</div>' + escapeHtml(data.example) + '</div>';
+    }
+    body.innerHTML = html || '<div class="explain-error">解説を取得できませんでした</div>';
+  })
+  .catch(err => {
+    document.getElementById('explain-body').innerHTML = '<div class="explain-error">⚠️ 通信エラー: ' + escapeHtml(err.message) + '</div>';
+  });
+}
+function closeExplainModal(){
+  document.getElementById('explain-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function escapeHtml(s){
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
 
 // === はじめてガイド ===
 (function(){

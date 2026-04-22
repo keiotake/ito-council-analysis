@@ -212,6 +212,107 @@ export default {
       }
     }
 
+    // ====== POST /explain : 行政用語の分かりやすい解説 ======
+    if (request.method === 'POST' && url.pathname === '/explain') {
+      try {
+        if (!env.ANTHROPIC_API_KEY) {
+          return jsonResp({ ok: false, error: 'APIキーが設定されていません' }, 500, env, origin);
+        }
+        const country = request.cf?.country || '';
+        if (country && country !== 'JP') {
+          return jsonResp({ ok: false, error: '日本国内からのみ利用可能です' }, 403, env, origin);
+        }
+        const ip = request.headers.get('cf-connecting-ip') || 'unknown';
+        // レート制限（10分間に30回）
+        const rateKey = new Request('https://explainlimit.local/' + ip, { method: 'GET' });
+        const rateCache = caches.default;
+        const prev = await rateCache.match(rateKey);
+        let count = 0;
+        if (prev) { try { count = parseInt(await prev.text()) || 0; } catch(e){} }
+        if (count >= 30) {
+          return jsonResp({ ok: false, error: '利用回数の上限に達しました。10分後にお試しください。' }, 429, env, origin);
+        }
+        ctx.waitUntil(rateCache.put(rateKey, new Response(String(count+1), { headers: { 'Cache-Control':'public, max-age=600' }})));
+
+        const body = await request.json();
+        const term = (body.term || '').toString().trim();
+        const context = (body.context || '').toString().trim().substring(0, 200);
+        if (term.length < 1 || term.length > 50) {
+          return jsonResp({ ok: false, error: '単語は1〜50文字で指定してください' }, 400, env, origin);
+        }
+
+        const explainSystem = [
+          'あなたは「行政・議会の言葉をやさしく解説する先生」です。',
+          '市民・特に中学生や高校生が、行政用語や議会用語、政治用語を理解できるよう、',
+          'かみ砕いた言葉で説明します。',
+          '',
+          '## 必ず守ること',
+          '- 中学生でも分かる言葉で説明する（難しい熟語を使わない）',
+          '- 身近な例え話を使う（「学校の〇〇に似ている」など）',
+          '- 120文字以内の短い説明 + 補足説明 に分ける',
+          '- 専門用語を使う場合は必ずその場で説明する',
+          '- 「〜のことだよ」「〜といいます」のように親しみやすい口調',
+          '- 政治的な立場は取らない（中立）',
+          '- 分からない言葉は「正直に分かりません」と答える',
+          '',
+          '## 書式',
+          '以下のJSON形式で返してください：',
+          '{',
+          '  "summary": "一言で言うと〇〇（50文字以内）",',
+          '  "explain": "もう少し詳しい説明（200文字程度）",',
+          '  "example": "身近な例え（100文字程度、なければ空文字）"',
+          '}',
+          '',
+          'JSON以外は一切出力しないでください。',
+        ].join('\n');
+
+        const userMsg = context
+          ? `次の言葉を、中学生にも分かるように解説してください。\n\n言葉：「${term}」\n\nこの言葉が使われている文脈（参考）：${context}`
+          : `次の言葉を、中学生にも分かるように解説してください。\n\n言葉：「${term}」`;
+
+        const claudeResp = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': env.ANTHROPIC_API_KEY,
+            'anthropic-version': '2023-06-01',
+          },
+          body: JSON.stringify({
+            model: 'claude-haiku-4-5',
+            max_tokens: 500,
+            system: explainSystem,
+            messages: [{ role: 'user', content: userMsg }],
+          }),
+        });
+
+        if (!claudeResp.ok) {
+          const errText = await claudeResp.text();
+          return jsonResp({ ok: false, error: 'AI呼び出しエラー: ' + errText.substring(0,200) }, 502, env, origin);
+        }
+        const data = await claudeResp.json();
+        const answerRaw = data.content?.[0]?.text || '';
+        // JSONパース試行、失敗時はフォールバック
+        let result = null;
+        try {
+          // コードブロック除去
+          const cleaned = answerRaw.replace(/^```json\s*|```\s*$/g, '').trim();
+          result = JSON.parse(cleaned);
+        } catch (e) {
+          result = { summary: answerRaw.substring(0, 100), explain: answerRaw, example: '' };
+        }
+
+        return jsonResp({
+          ok: true,
+          term: term,
+          summary: result.summary || '',
+          explain: result.explain || '',
+          example: result.example || '',
+        }, 200, env, origin);
+      } catch (e) {
+        return jsonResp({ ok: false, error: e.message }, 500, env, origin);
+      }
+    }
+
     // ====== POST /feedback : サイト改善要望受付 ======
     if (request.method === 'POST' && url.pathname === '/feedback') {
       try {
