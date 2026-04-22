@@ -37,9 +37,77 @@ function parseSpeechHeader(segment) {
   return { symbol, position, name, role: symbol === '◆' ? 'council_member' : symbol === '◎' ? 'authority' : 'chair' };
 }
 
+// Position-based role inference (positions are reliable indicators)
+function inferRole(symbol, position) {
+  const p = position || '';
+  // 議員の位置付け：「N番」のみ
+  if (/^[\d０-９]+番$/.test(p)) return 'council_member';
+  // 議長・副議長・委員長は chair として扱う（質問者ではない）
+  if (/議長|副議長|委員長|副委員長/.test(p) && !/議会運営|特別委員/.test(p)) return 'chair';
+  // 市長、副市長、部長、課長、局長、主幹、理事、監査、委員会事務局、教育長などは authority
+  if (/市長|副市長|部長|次長|課長|局長|主幹|室長|所長|理事|監査|教育長|教育委員|委員会事務局|参事|主査|審議監|幹事/.test(p)) return 'authority';
+  // 特別委員会委員長（議員が兼務）はcouncil_member
+  if (/特別委員|議会運営委員/.test(p)) return 'council_member';
+  // フォールバック: symbol-based
+  return symbol === '◆' ? 'council_member' : symbol === '◎' ? 'authority' : 'chair';
+}
+
+// 名前の正規化（異体字・委員会名プレフィックスなど）
+function normalizeName(name) {
+  let n = name.replace(/\s+/g, '');
+  // 崎→﨑：伊東市議会では宮﨑雅薫が正式
+  n = n.replace(/\u5d0e/g, '\ufa11');
+  // 委員会名プレフィックスを除去（greedy match：最後の「委員(長)」以降を採用）
+  // 例：「新型コロナウイルス感染症対策特別委員会委員長井戸清司」→「井戸清司」
+  // 例：「常任建設委員佐藤美音」→「佐藤美音」
+  // 例：「常任福祉文教委員鳥居康子」→「鳥居康子」
+  // 例：「発議者中田次城」→「中田次城」
+  // 段階的に剥がす（greedy）
+  const prefixKeywords = ['委員会委員長', '委員会副委員長', '委員会委員', '特別委員長', '特別副委員長', '特別委員', '副委員長', '委員長', '副委員', '委員', '副議長', '議長', '発議者', '紹介議員', '説明者', '請願者', '陳情者'];
+  // 「常任」で始まるものは強制除去
+  if (n.startsWith('常任')) {
+    for (const kw of prefixKeywords) {
+      const idx = n.lastIndexOf(kw);
+      if (idx > 0) {
+        const remain = n.substring(idx + kw.length);
+        if (remain.length >= 2 && remain.length <= 8 && /[\u4e00-\u9fff\u3040-\u309f\u30a0-\u30ff]/.test(remain)) {
+          n = remain;
+          break;
+        }
+      }
+    }
+  } else {
+    // 他のケース：lastIndexOfで後ろから「委員長」「委員」等を探して剥がす
+    const keywords = ['委員会委員長', '委員会副委員長', '委員会委員', '特別委員長', '特別副委員長', '特別委員', '副委員長', '委員長', '副議長', '議長'];
+    let bestRemain = null;
+    for (const kw of keywords) {
+      const idx = n.lastIndexOf(kw);
+      if (idx > 0) {
+        const remain = n.substring(idx + kw.length);
+        if (remain.length >= 2 && remain.length <= 8 && /^[\u4e00-\u9fff\u3040-\u309f\u30a0-\u30ff]+$/.test(remain)) {
+          bestRemain = remain;
+          break;
+        }
+      }
+    }
+    // Prefix patterns (at start of string)
+    const startPrefixes = ['発議者', '紹介議員', '説明者', '請願者', '陳情者', '提出者'];
+    for (const pre of startPrefixes) {
+      if (n.startsWith(pre)) {
+        const remain = n.substring(pre.length);
+        if (remain.length >= 2 && remain.length <= 8 && /^[\u4e00-\u9fff\u3040-\u309f\u30a0-\u30ff]+$/.test(remain)) {
+          bestRemain = remain;
+          break;
+        }
+      }
+    }
+    if (bestRemain) n = bestRemain;
+  }
+  return n;
+}
+
 // Split text into speech segments
 function splitSpeeches(text) {
-  // Match segments starting with ◆◎○ followed by role(name 君)
   const segments = [];
   const regex = /([◆◎○])([^（◆◎○]+)（([^）]+?君)\s*）([\s\S]*?)(?=[◆◎○][^（◆◎○]+（[^）]+君\s*）|$)/g;
   let m;
@@ -47,13 +115,15 @@ function splitSpeeches(text) {
     const symbol = m[1];
     const position = m[2].trim();
     const nameWithKun = m[3].trim();
-    const name = nameWithKun.replace(/\s*君$/, '').replace(/\s+/g, '');
+    let name = nameWithKun.replace(/\s*君$/, '').replace(/\s+/g, '');
+    name = normalizeName(name);
     const body = m[4].trim();
+    const role = inferRole(symbol, position);
     segments.push({
       symbol,
       position,
       name,
-      role: symbol === '◆' ? 'council_member' : symbol === '◎' ? 'authority' : 'chair',
+      role,
       body
     });
   }
