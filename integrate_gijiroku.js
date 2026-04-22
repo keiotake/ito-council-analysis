@@ -103,8 +103,11 @@ for (const meeting of gijiroku.meetings) {
       dateLabel: meeting.dateLabel,
       sessionType: inferSessionType(meeting.sessionTitle, qa.question),
       position: qa.questionerPosition,
+      topic: qa.topic,  // 「〇〇について」の端的トピック
       question: qa.question,
       questionFull: qa.questionFull,
+      followUpCount: qa.followUpCount,
+      exchangeCount: qa.exchangeCount,
       responses: qa.responses,
       youtubeVideo: qa.youtubeVideo || null,
       gijirokuUrl: gjUrl,  // 議事録直リンク

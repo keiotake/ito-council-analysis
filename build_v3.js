@@ -422,33 +422,54 @@ function memberDetailHTML(m) {
       const gjMember = gijirokuData && gijirokuData.memberData && gijirokuData.memberData[m.name];
       if (gjMember && gjMember.questions && gjMember.questions.length > 0) {
         const allQuestions = gjMember.questions;
-        const DISPLAY_LIMIT = 15;
+        const DISPLAY_LIMIT = 10;
         const questions = allQuestions.slice(0, DISPLAY_LIMIT);
         const hasMore = allQuestions.length > DISPLAY_LIMIT;
         const qRows = questions.map((q, i) => {
           const tc = q.sessionType === '一般質問' ? '#3498db' : q.sessionType === '大綱質疑' ? '#27ae60' : q.sessionType === '補正予算審議' ? '#e67e22' : '#95a5a6';
           const respCount = (q.responses || []).length;
-          // 質問要約（100文字まで）
-          const qText = q.question || '';
-          const qShort = qText.length > 100 ? qText.substring(0, 97) + '…' : qText;
-          const videoBtn = q.youtubeVideo
-            ? `<a href="https://youtu.be/${q.youtubeVideo.videoId}" target="_blank" class="qtl-video-link" title="YouTubeで動画を見る">▶</a>`
-            : '';
-          const gijirokuBtn = q.gijirokuUrl
-            ? `<a href="${esc(q.gijirokuUrl)}" target="_blank" class="qtl-gijiroku-link" title="議事録全文（質問・答弁含む）を見る">📘 全文へ</a>`
-            : '';
-          return `<div class="qtl-card" data-date="${esc(q.date || '')}" data-type="${esc(q.sessionType || '')}">
-            <div class="qtl-header">
-              <span class="qtl-date">${esc(q.date || q.dateLabel || '')}</span>
-              <span class="qtl-type" style="background:${tc}">${esc(q.sessionType || '')}</span>
-              <div class="qtl-links">${videoBtn}${gijirokuBtn}</div>
+          // トピック（端的な質問内容）を優先、なければ質問要約
+          const topic = (q.topic && q.topic.length <= 60) ? q.topic : (q.question || '').substring(0, 60) + '…';
+          const videoUrl = q.youtubeVideo ? `https://youtu.be/${q.youtubeVideo.videoId}` : '';
+          const gijirokuUrl = q.gijirokuUrl || '';
+          // 質問本文：HTMLサイズ抑制のため800文字まで
+          const qFullRaw = q.questionFull || q.question || '';
+          const qFullText = qFullRaw.length > 800 ? qFullRaw.substring(0, 797) + '…' : qFullRaw;
+          const qTruncated = qFullRaw.length > 800;
+          // 答弁リスト（各600文字まで）
+          const respList = (q.responses || []).map(r => {
+            const raw = r.responseFull || r.response || '';
+            const truncated = raw.length > 600;
+            const text = truncated ? raw.substring(0, 597) + '…' : raw;
+            return `
+            <div class="qe-resp">
+              <div class="qe-resp-head"><strong>${esc(r.position)}</strong> ${esc(r.responder)}</div>
+              <div class="qe-resp-body">${esc(text)}</div>
             </div>
-            <div class="qtl-question">${esc(qShort)}</div>
-            <div class="qtl-meta-row">
-              ${respCount > 0 ? `<span class="qtl-resp-indicator">📢 当局答弁 ${respCount}件</span>` : ''}
-              ${q.followUpCount > 0 ? `<span class="qtl-followup-indicator">💭 再質問 ${q.followUpCount}件</span>` : ''}
+          `;
+          }).join('');
+          return `<details class="qtl-topic-card" data-date="${esc(q.date || '')}" data-type="${esc(q.sessionType || '')}">
+            <summary class="qtl-topic-summary">
+              <div class="qtl-topic-meta">
+                <span class="qtl-date">${esc(q.date || q.dateLabel || '')}</span>
+                <span class="qtl-type" style="background:${tc}">${esc(q.sessionType || '')}</span>
+                ${respCount > 0 ? `<span class="qtl-resp-mini">📢${respCount}</span>` : ''}
+                ${q.followUpCount > 0 ? `<span class="qtl-fu-mini">💭${q.followUpCount}</span>` : ''}
+              </div>
+              <div class="qtl-topic-title">${esc(topic)}</div>
+              <span class="qtl-expand-hint">▼ 詳細</span>
+            </summary>
+            <div class="qtl-expand-content">
+              <div class="qe-question-label">💡 質問全文</div>
+              <div class="qe-question-body">${esc(qFullText)}</div>
+              ${respList ? `<div class="qe-resp-label">📢 当局答弁 (${respCount}件)</div>${respList}` : ''}
+              ${q.followUpCount > 0 ? `<div class="qe-note">💭 この後、再質問が${q.followUpCount}件行われています。全文は議事録でご確認ください。</div>` : ''}
+              <div class="qe-actions">
+                ${videoUrl ? `<a href="${esc(videoUrl)}" target="_blank" class="qe-action-btn video-btn">▶ YouTubeで見る</a>` : ''}
+                ${gijirokuUrl ? `<a href="${esc(gijirokuUrl)}" target="_blank" class="qe-action-btn gijiroku-btn">📘 議事録で全文を見る</a>` : ''}
+              </div>
             </div>
-          </div>`;
+          </details>`;
         }).join('');
 
         return `<div class="qtl-section">
@@ -1040,6 +1061,40 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
 .qtl-meta-row{display:flex;gap:.4rem;margin-top:.4rem;flex-wrap:wrap}
 .qtl-resp-indicator{display:inline-block;padding:.2rem .5rem;background:#f0f9ff;border:1px solid #bae6fd;border-radius:10px;font-size:.7rem;color:#075985;font-weight:600}
 .qtl-followup-indicator{display:inline-block;padding:.2rem .5rem;background:#fef3c7;border:1px solid #fcd34d;border-radius:10px;font-size:.7rem;color:#78350f;font-weight:600}
+
+/* 端的トピックカード（クリックで全文展開） */
+.qtl-topic-card{background:#fff;border:1px solid #e5e7eb;border-radius:10px;margin-bottom:.5rem;transition:.15s;overflow:hidden}
+.qtl-topic-card:hover{border-color:#93c5fd;box-shadow:0 2px 6px rgba(59,130,246,.08)}
+.qtl-topic-card[open]{border-color:#3b82f6;box-shadow:0 4px 12px rgba(59,130,246,.12);background:#fafbff}
+.qtl-topic-summary{cursor:pointer;padding:.7rem .9rem;list-style:none;display:block;user-select:none}
+.qtl-topic-summary::-webkit-details-marker{display:none}
+.qtl-topic-meta{display:flex;align-items:center;gap:.4rem;margin-bottom:.35rem;flex-wrap:wrap;font-size:.7rem}
+.qtl-topic-meta .qtl-date{color:#64748b;font-weight:600}
+.qtl-topic-meta .qtl-type{padding:.1rem .45rem;border-radius:8px;color:#fff;font-weight:600;font-size:.65rem}
+.qtl-resp-mini,.qtl-fu-mini{padding:.05rem .4rem;border-radius:10px;font-weight:700;font-size:.65rem}
+.qtl-resp-mini{background:#e0f2fe;color:#0369a1}
+.qtl-fu-mini{background:#fef3c7;color:#92400e}
+.qtl-topic-title{font-size:.92rem;font-weight:700;color:#0f172a;line-height:1.5;padding-right:3.5rem;position:relative}
+.qtl-expand-hint{position:absolute;top:.7rem;right:.9rem;font-size:.7rem;color:#2563eb;font-weight:600}
+.qtl-topic-card[open] .qtl-expand-hint{color:#dc2626}
+.qtl-topic-card[open] .qtl-expand-hint::before{content:'▲ 閉じる'}
+.qtl-topic-card[open] .qtl-expand-hint{font-size:0}
+.qtl-topic-card[open] .qtl-expand-hint::before{font-size:.7rem}
+.qtl-expand-content{padding:.8rem 1rem 1rem;border-top:1px solid #e5e7eb;background:#fff}
+.qe-question-label,.qe-resp-label{font-size:.8rem;font-weight:700;color:#1e40af;margin:.3rem 0 .4rem;padding-left:.5rem;border-left:3px solid #3b82f6}
+.qe-resp-label{color:#0c4a6e;border-left-color:#0284c7;margin-top:1rem}
+.qe-question-body{font-size:.85rem;line-height:1.8;color:#1f2937;padding:.6rem .8rem;background:#f0f9ff;border-radius:6px;white-space:pre-wrap;margin-bottom:.5rem}
+.qe-resp{background:#f9fafb;border-left:3px solid #94a3b8;border-radius:0 6px 6px 0;padding:.5rem .7rem;margin-bottom:.5rem}
+.qe-resp-head{font-size:.75rem;color:#475569;margin-bottom:.2rem}
+.qe-resp-head strong{color:#1e293b}
+.qe-resp-body{font-size:.82rem;line-height:1.7;color:#1f2937;white-space:pre-wrap}
+.qe-note{margin-top:.8rem;padding:.5rem .7rem;background:#fef3c7;border-left:3px solid #f59e0b;border-radius:0 6px 6px 0;font-size:.78rem;color:#78350f}
+.qe-actions{display:flex;gap:.5rem;margin-top:1rem;flex-wrap:wrap}
+.qe-action-btn{display:inline-flex;align-items:center;padding:.5rem 1rem;border-radius:8px;font-size:.82rem;font-weight:600;text-decoration:none;transition:.15s}
+.qe-action-btn.video-btn{background:#ef4444;color:#fff}
+.qe-action-btn.video-btn:hover{background:#dc2626}
+.qe-action-btn.gijiroku-btn{background:#0284c7;color:#fff}
+.qe-action-btn.gijiroku-btn:hover{background:#0369a1}
 
 /* 詳細ページのテーマ行（1行コンパクト） */
 .detail-topic-row{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem;padding:.6rem 1rem;background:#faf5ff;border-radius:8px;margin-bottom:1rem;border-left:3px solid #a855f7;font-size:.82rem}

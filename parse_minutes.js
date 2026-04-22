@@ -147,6 +147,67 @@ function summarize(body, maxLen = 150) {
   return clean.substring(0, maxLen - 1) + '…';
 }
 
+// 質問本文から「〇〇について」というトピックを端的に抽出
+// 例：「商店街の活性化について伺います」→「商店街の活性化について」
+function extractTopic(body) {
+  if (!body) return '';
+  const clean = body.replace(/\s+/g, '');
+
+  // フィラーや決まり文句を除去
+  const cleanBody = clean
+    .replace(/^[えあのまずそうですさて]{1,5}/, '')
+    .replace(/^([０-９\d]+番|議員|皆様|皆さん|議長|ただいま|まず)/, '')
+    .replace(/^[、。]+/, '');
+
+  // パターン1: 「...について〜を伺う」形式を探す
+  // （最も典型的：「〇〇について伺います」「〇〇についてお聞きします」）
+  const patterns = [
+    // 「XXについて〜伺う/質問する/確認する」
+    /([^、。]{4,50})について(?:(?:(?:は|を|の|のうち|、))?(?:(?:お)?(?:伺い|聞き|尋ね|質問|確認|見解|説明|答弁))[^、。]{0,20})/,
+    // 「XXを伺う/質問する」
+    /([^、。]{4,40})(?:を(?:お)?(?:伺い|聞き|尋ね|質問))/,
+    // 「XXについて」（より緩い）
+    /([^、。]{4,50})について/,
+    // 「XXはどうか/はいかがか」
+    /([^、。]{4,40})(?:は(?:どう|いかが|何|どのよう))/,
+  ];
+
+  let topics = [];
+  for (const pat of patterns) {
+    const re = new RegExp(pat.source, 'g');
+    let m;
+    while ((m = re.exec(cleanBody)) !== null && topics.length < 5) {
+      let t = m[1].trim();
+      // 先頭のフィラーを除去
+      t = t.replace(/^(?:まず|次に|続いて|さらに|また|第[\d０-９一二三四五六七八九十]+(?:点目|項目|の質問|として)?[、。,.]?|最初に|最後に|以上|なお|ところで|ちなみに)/, '');
+      // 「点目、」「項目、」等を除去
+      t = t.replace(/^[、。,.]+/, '');
+      // 数字の先頭（"１つ目"など）
+      t = t.replace(/^[０-９\d]+(?:つ目|番目|点目)[、,.]?/, '');
+      if (t.length >= 4 && t.length <= 50 && !topics.includes(t)) {
+        topics.push(t);
+      }
+    }
+    if (topics.length > 0) break;
+  }
+
+  if (topics.length > 0) {
+    // 最も内容の濃いもの（長いが冗長でない）を選ぶ
+    topics.sort((a, b) => {
+      // 短すぎず長すぎない20〜40字程度を優先
+      const scoreA = a.length >= 8 && a.length <= 40 ? -a.length : a.length;
+      const scoreB = b.length >= 8 && b.length <= 40 ? -b.length : b.length;
+      return scoreA - scoreB;
+    });
+    return topics[0] + 'について';
+  }
+
+  // フォールバック：最初の一文または70字
+  const firstSentence = clean.split(/[。．]/).find(s => s.trim().length > 10);
+  if (firstSentence && firstSentence.length <= 70) return firstSentence.trim();
+  return clean.substring(0, 70) + (clean.length > 70 ? '…' : '');
+}
+
 // Process one meeting file
 function processMeeting(fino) {
   const htmlFile = path.join(MINUTES_DIR, `${fino}.html`);
@@ -174,6 +235,8 @@ function processMeeting(fino) {
       qaPairs.push({
         questioner: currentSession.name,
         questionerPosition: currentSession.position,
+        // トピック（端的な質問内容：「〇〇について」形式）
+        topic: extractTopic(mainQ),
         // メイン質問要約（100文字）
         question: summarize(mainQ, 100),
         // メイン質問全文
@@ -258,6 +321,7 @@ function main() {
         sessionTitle: r.sessionTitle,
         dateLabel: r.dateLabel,
         position: q.questionerPosition,
+        topic: q.topic,
         question: q.question,
         questionFull: q.questionFull,
         exchangeCount: q.exchangeCount,
