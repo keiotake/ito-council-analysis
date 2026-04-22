@@ -167,11 +167,17 @@ function processMeeting(fino) {
       qaPairs.push({
         questioner: currentQ.name,
         questionerPosition: currentQ.position,
-        question: summarize(currentQ.body, 400),
+        // 質問要約（表示用）
+        question: summarize(currentQ.body, 300),
+        // 質問全文（詳細表示用、最大2000文字）
+        questionFull: summarize(currentQ.body, 2000),
         responses: currentResponses.map(r => ({
           responder: r.name,
           position: r.position,
-          response: summarize(r.body, 400),
+          // 答弁要約（表示用）
+          response: summarize(r.body, 300),
+          // 答弁全文（最大2000文字）
+          responseFull: summarize(r.body, 2000),
         }))
       });
     }

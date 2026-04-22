@@ -77,10 +77,17 @@ for (const meeting of gijiroku.meetings) {
   }
 }
 
+// 議事録検索システムの直リンクを構築
+function buildGijirokuUrl(meeting) {
+  // ACT=200: popup view of the meeting
+  if (!meeting.kgno || !meeting.fino || !meeting.unid) return null;
+  return `https://itoshigikai.gijiroku.com/voices/CGI/voiweb.exe?ACT=200&KGNO=${encodeURIComponent(meeting.kgno)}&FINO=${encodeURIComponent(meeting.fino)}&UNID=${encodeURIComponent(meeting.unid)}`;
+}
+
 // Build member-indexed question database (from gijiroku)
-// Map gijiroku names to council member names (they should match since both use 議員名 from 伊東市議会)
 const memberGijirokuData = {};
 for (const meeting of gijiroku.meetings) {
+  const gjUrl = buildGijirokuUrl(meeting);
   for (const qa of meeting.qaPairs) {
     const name = qa.questioner;
     if (!memberGijirokuData[name]) {
@@ -97,8 +104,10 @@ for (const meeting of gijiroku.meetings) {
       sessionType: inferSessionType(meeting.sessionTitle, qa.question),
       position: qa.questionerPosition,
       question: qa.question,
+      questionFull: qa.questionFull,
       responses: qa.responses,
       youtubeVideo: qa.youtubeVideo || null,
+      gijirokuUrl: gjUrl,  // 議事録直リンク
     });
   }
 }

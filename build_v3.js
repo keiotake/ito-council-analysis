@@ -383,61 +383,38 @@ function memberDetailHTML(m) {
       </div>`;
     }).join('');
 
+  // 議員本人コメント
+  const cm = memberComments[m.name];
+  const hasComment = cm && cm.comment && cm.comment.trim().length > 0;
+
   return `<div class="detail-panel" id="dp-${esc(m.name)}" style="display:none">
     <button class="back-btn" onclick="hideDetail()">&#9664; 一覧に戻る</button>
-    <div class="detail-top">
-      <div class="detail-left">
-        ${avatarContent}
-        <h2>${esc(m.name)}</h2>
-        <div class="detail-reading">${esc(p.reading || '')}</div>
-        ${m.isCurrent ? '<span class="current-badge">現職</span>' : '<span class="former-badge">元職</span>'}
-        <div class="detail-roles">${roles}</div>
-        <div class="detail-info">
-          <div><span class="info-label">${glossary('会派')}</span><span class="info-val" style="color:${fc}">${esc(p.faction || '不明')}</span></div>
-          ${p.terms ? `<div><span class="info-label">期数</span><span class="info-val">${p.terms}期</span></div>` : ''}
-          <div><span class="info-label">生年</span><span class="info-val">${esc(p.birthYear || '不明')}</span></div>
+    <div class="detail-compact-header">
+      <div class="dch-avatar">${avatarContent}</div>
+      <div class="dch-info">
+        <h2 class="dch-name">${esc(m.name)}</h2>
+        <div class="dch-meta">
+          <span class="dch-faction" style="color:${fc}">${esc(p.faction || '無所属')}</span>
+          ${p.terms ? `<span class="dch-term">${p.terms}期目</span>` : ''}
+          ${m.isCurrent ? '<span class="dch-badge-current">現職</span>' : '<span class="dch-badge-former">元職</span>'}
         </div>
-        <div class="detail-committees">
-          <div class="cm-title">所属${glossary('委員会')}</div>
-          ${committees}
-        </div>
-        ${m.description ? `<div class="member-desc"><p>${esc(m.description)}</p></div>` : ''}
-      </div>
-      <div class="detail-right">
-        <h3>よく取り上げるテーマ</h3>
-        <div class="topic-pills">${(() => {
-          const cats = (m.topics.topCategories || []).slice(0, 5);
-          return cats.map(t => `<span class="topic-pill" style="background:${catColors[t.category] || '#999'}" onclick="jumpToThemeQuestions('${esc(t.category)}')" title="${esc(t.category)}に関する議会質問へ">${esc(t.category)}</span>`).join('');
-        })()}</div>
-        <p class="topic-note-mini">※ 機械抽出のため参考情報。クリックで関連質問へ</p>
       </div>
     </div>
+    ${hasComment ? `<div class="member-voice filled">
+      <div class="mv-header">
+        <span class="mv-icon">💬</span>
+        <span class="mv-title">${esc(m.name)}議員からのひとこと</span>
+        ${cm.updated ? `<span class="mv-date">${esc(cm.updated)}</span>` : ''}
+      </div>
+      <div class="mv-body">${esc(cm.comment).replace(/\n/g,'<br>')}</div>
+    </div>` : ''}
     ${(() => {
-      // === 議員本人コメント欄 ===
-      const cm = memberComments[m.name];
-      const hasComment = cm && cm.comment && cm.comment.trim().length > 0;
-      if (hasComment) {
-        return `<div class="member-voice filled">
-          <div class="mv-header">
-            <span class="mv-icon">💬</span>
-            <span class="mv-title">${esc(m.name)}議員からのひとこと</span>
-            ${cm.updated ? `<span class="mv-date">${esc(cm.updated)}</span>` : ''}
-          </div>
-          <div class="mv-body">${esc(cm.comment).replace(/\n/g,'<br>')}</div>
-          <div class="mv-note">※ 活動の背景・方針は本人の言葉で記載されています。数字だけでは伝わらない想いをお読みください。</div>
-        </div>`;
-      } else {
-        return `<div class="member-voice empty">
-          <div class="mv-header">
-            <span class="mv-icon">💬</span>
-            <span class="mv-title">${esc(m.name)}議員からのひとこと</span>
-          </div>
-          <div class="mv-body-empty">
-            <p>本人からのコメントはまだ記入されていません。</p>
-            <p class="mv-sub">活動の背景や想いは、議員ご本人に直接お尋ねください。このサイトに表示されている数字や傾向だけで議員を判断することのないよう、お願いいたします。</p>
-          </div>
-        </div>`;
-      }
+      const cats = (m.topics.topCategories || []).slice(0, 4);
+      if (!cats.length) return '';
+      return `<div class="detail-topic-row">
+        <span class="detail-topic-label">🔍 よく取り上げるテーマ：</span>
+        ${cats.map(t => `<span class="topic-pill" style="background:${catColors[t.category] || '#999'}" onclick="jumpToThemeQuestions('${esc(t.category)}')">${esc(t.category)}</span>`).join('')}
+      </div>`;
     })()}
     ${(() => {
       // === 質問一覧タイムライン（議事録ベース） ===
@@ -445,34 +422,29 @@ function memberDetailHTML(m) {
       const gjMember = gijirokuData && gijirokuData.memberData && gijirokuData.memberData[m.name];
       if (gjMember && gjMember.questions && gjMember.questions.length > 0) {
         const allQuestions = gjMember.questions;
-        const DISPLAY_LIMIT = 30;
+        const DISPLAY_LIMIT = 15;
         const questions = allQuestions.slice(0, DISPLAY_LIMIT);
         const hasMore = allQuestions.length > DISPLAY_LIMIT;
         const qRows = questions.map((q, i) => {
           const tc = q.sessionType === '一般質問' ? '#3498db' : q.sessionType === '大綱質疑' ? '#27ae60' : q.sessionType === '補正予算審議' ? '#e67e22' : '#95a5a6';
           const respCount = (q.responses || []).length;
-          const respHTML = respCount > 0
-            ? `<details class="qtl-resp-details">
-                <summary class="qtl-resp-summary">📢 当局答弁 ${respCount}件を見る</summary>
-                ${q.responses.map((r) => `
-                  <div class="qtl-resp-item">
-                    <div class="qtl-resp-speaker"><strong>${esc(r.position)}</strong> ${esc(r.responder)}</div>
-                    <div class="qtl-resp-body">${esc(r.response)}</div>
-                  </div>
-                `).join('')}
-              </details>`
-            : '';
+          // 質問要約（100文字まで）
+          const qText = q.question || '';
+          const qShort = qText.length > 100 ? qText.substring(0, 97) + '…' : qText;
           const videoBtn = q.youtubeVideo
-            ? `<a href="https://youtu.be/${q.youtubeVideo.videoId}" target="_blank" class="qtl-video-link" title="動画を見る">▶</a>`
+            ? `<a href="https://youtu.be/${q.youtubeVideo.videoId}" target="_blank" class="qtl-video-link" title="YouTubeで動画を見る">▶</a>`
+            : '';
+          const gijirokuBtn = q.gijirokuUrl
+            ? `<a href="${esc(q.gijirokuUrl)}" target="_blank" class="qtl-gijiroku-link" title="議事録全文（質問・答弁含む）を見る">📘 全文へ</a>`
             : '';
           return `<div class="qtl-card" data-date="${esc(q.date || '')}" data-type="${esc(q.sessionType || '')}">
             <div class="qtl-header">
               <span class="qtl-date">${esc(q.date || q.dateLabel || '')}</span>
               <span class="qtl-type" style="background:${tc}">${esc(q.sessionType || '')}</span>
-              ${videoBtn}
+              <div class="qtl-links">${videoBtn}${gijirokuBtn}</div>
             </div>
-            <div class="qtl-question">${esc(q.question.length > 200 ? q.question.substring(0, 197) + '…' : q.question)}</div>
-            ${respHTML}
+            <div class="qtl-question">${esc(qShort)}</div>
+            ${respCount > 0 ? `<div class="qtl-resp-indicator">📢 当局答弁 ${respCount}件（📘全文へ）</div>` : ''}
           </div>`;
         }).join('');
 
@@ -1047,7 +1019,33 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
 .qtl-resp-summary{cursor:pointer;color:#1e40af;font-size:.8rem;font-weight:600;padding:.2rem 0;user-select:none}
 .qtl-resp-summary:hover{color:#1e3a8a}
 .qtl-resp-details[open] .qtl-resp-summary{margin-bottom:.5rem;padding-bottom:.4rem;border-bottom:1px dashed #cbd5e1}
-.qtl-resp-body{font-size:.82rem;line-height:1.7;color:#1f2937;margin-top:.3rem}
+.qtl-resp-body{font-size:.82rem;line-height:1.7;color:#1f2937;margin-top:.3rem;white-space:pre-wrap}
+
+/* 議員詳細のコンパクトヘッダー */
+.detail-compact-header{display:flex;gap:1rem;align-items:center;padding:1rem 1.2rem;background:linear-gradient(135deg,#f8fafc,#f1f5f9);border-radius:12px;margin-bottom:1rem;border:1px solid #e2e8f0}
+.dch-avatar{flex-shrink:0}
+.dch-avatar .m-avatar,.dch-avatar .m-avatar-photo{width:64px;height:64px;margin:0}
+.dch-info{flex:1;min-width:0}
+.dch-name{font-size:1.4rem;font-weight:800;color:#0f172a;margin:0 0 .2rem 0}
+.dch-meta{display:flex;flex-wrap:wrap;gap:.4rem;align-items:center;font-size:.82rem}
+.dch-faction{font-weight:700}
+.dch-term{color:#64748b}
+.dch-badge-current{background:#22c55e;color:#fff;padding:.1rem .45rem;border-radius:10px;font-size:.7rem;font-weight:700}
+.dch-badge-former{background:#94a3b8;color:#fff;padding:.1rem .45rem;border-radius:10px;font-size:.7rem;font-weight:700}
+
+/* 答弁インジケータ（件数のみ、全文は議事録リンクで） */
+.qtl-resp-indicator{margin-top:.4rem;padding:.3rem .6rem;background:#f0f9ff;border-left:3px solid #0284c7;border-radius:0 4px 4px 0;font-size:.75rem;color:#075985;font-weight:600}
+
+/* 詳細ページのテーマ行（1行コンパクト） */
+.detail-topic-row{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem;padding:.6rem 1rem;background:#faf5ff;border-radius:8px;margin-bottom:1rem;border-left:3px solid #a855f7;font-size:.82rem}
+.detail-topic-label{color:#7c3aed;font-weight:600}
+
+/* リンクボタン */
+.qtl-links{display:flex;gap:.3rem;margin-left:auto}
+.qtl-gijiroku-link{display:inline-flex;align-items:center;padding:.2rem .5rem;background:#f0f9ff;color:#0369a1;border-radius:6px;font-size:.72rem;font-weight:600;text-decoration:none;border:1px solid #bae6fd}
+.qtl-gijiroku-link:hover{background:#e0f2fe;color:#0c4a6e}
+.qtl-video-link{display:inline-flex;align-items:center;padding:.2rem .5rem;background:#fee2e2;color:#991b1b;border-radius:6px;font-size:.72rem;font-weight:600;text-decoration:none;border:1px solid #fecaca}
+.qtl-video-link:hover{background:#fecaca;color:#7f1d1d}
 .qtl-more-note{font-size:.78rem;color:#64748b;background:#f1f5f9;padding:.8rem 1rem;border-radius:8px;margin-top:1rem;text-align:center;line-height:1.6}
 .qtl-more-note a{color:#1e40af;text-decoration:underline;font-weight:600}
 
