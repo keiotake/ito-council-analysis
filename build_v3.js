@@ -405,11 +405,11 @@ function memberDetailHTML(m) {
       </div>
       <div class="detail-right">
         <h3>よく取り上げるテーマ</h3>
-        <p class="topic-note">※ これまでの質問内容から機械的に抽出した関心領域です。議員の活動を"評価"するものではありません。背景や戦略は各議員本人にお尋ねください。</p>
-        <div class="cat-bars">${(() => {
+        <div class="topic-pills">${(() => {
           const cats = (m.topics.topCategories || []).slice(0, 5);
-          return cats.map(t => `<div class="cat-bar-row"><span class="cat-bar-label">${t.category}</span><span class="cat-tag" style="background:${catColors[t.category] || '#999'}">言及あり</span></div>`).join('');
+          return cats.map(t => `<span class="topic-pill" style="background:${catColors[t.category] || '#999'}" onclick="jumpToThemeQuestions('${esc(t.category)}')" title="${esc(t.category)}に関する議会質問へ">${esc(t.category)}</span>`).join('');
         })()}</div>
+        <p class="topic-note-mini">※ 機械抽出のため参考情報。クリックで関連質問へ</p>
       </div>
     </div>
     ${(() => {
@@ -450,29 +450,28 @@ function memberDetailHTML(m) {
         const hasMore = allQuestions.length > DISPLAY_LIMIT;
         const qRows = questions.map((q, i) => {
           const tc = q.sessionType === '一般質問' ? '#3498db' : q.sessionType === '大綱質疑' ? '#27ae60' : q.sessionType === '補正予算審議' ? '#e67e22' : '#95a5a6';
-          const respHTML = (q.responses && q.responses.length > 0)
-            ? `<div class="qtl-resp-list">
-                <div class="qtl-resp-label">📢 当局答弁 (${q.responses.length}件)</div>
-                ${q.responses.map((r, ri) => `
+          const respCount = (q.responses || []).length;
+          const respHTML = respCount > 0
+            ? `<details class="qtl-resp-details">
+                <summary class="qtl-resp-summary">📢 当局答弁 ${respCount}件を見る</summary>
+                ${q.responses.map((r) => `
                   <div class="qtl-resp-item">
                     <div class="qtl-resp-speaker"><strong>${esc(r.position)}</strong> ${esc(r.responder)}</div>
-                    <div class="qtl-resp-short" id="qtl-rs-${esc(m.name)}-${i}-${ri}">${esc(r.response.length > 200 ? r.response.substring(0, 197) + '…' : r.response)}</div>
-                    ${r.response.length > 200 ? `<button class="qtl-resp-toggle" onclick="alert(this.dataset.full)" data-full="${esc(r.response)}">答弁全文を表示</button>` : ''}
+                    <div class="qtl-resp-body">${esc(r.response)}</div>
                   </div>
                 `).join('')}
-              </div>`
-            : '<div class="qtl-no-resp">答弁データなし</div>';
+              </details>`
+            : '';
           const videoBtn = q.youtubeVideo
-            ? `<a href="https://youtu.be/${q.youtubeVideo.videoId}" target="_blank" class="qtl-video-link" title="動画を見る">▶ 動画</a>`
+            ? `<a href="https://youtu.be/${q.youtubeVideo.videoId}" target="_blank" class="qtl-video-link" title="動画を見る">▶</a>`
             : '';
           return `<div class="qtl-card" data-date="${esc(q.date || '')}" data-type="${esc(q.sessionType || '')}">
             <div class="qtl-header">
               <span class="qtl-date">${esc(q.date || q.dateLabel || '')}</span>
               <span class="qtl-type" style="background:${tc}">${esc(q.sessionType || '')}</span>
               ${videoBtn}
-              <span class="qtl-source-badge" title="議事録が出典">📘 議事録</span>
             </div>
-            <div class="qtl-question">${esc(q.question.length > 300 ? q.question.substring(0, 297) + '…' : q.question)}</div>
+            <div class="qtl-question">${esc(q.question.length > 200 ? q.question.substring(0, 197) + '…' : q.question)}</div>
             ${respHTML}
           </div>`;
         }).join('');
@@ -565,8 +564,6 @@ function memberDetailHTML(m) {
         <div class="qtl-count" id="qtl-count-${esc(m.name)}">全${allQuestions.length}件を表示中</div>
       </div>`;
     })()}
-    <h3 class="section-title">発言動画 (${m.videos.length}本)</h3>
-    <div class="v-list">${videoItems}</div>
   </div>`;
 }
 
@@ -1046,6 +1043,11 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
 .qtl-resp-item{background:#f0f9ff;border-left:3px solid #0284c7;padding:.6rem .8rem;border-radius:0 6px 6px 0;margin-bottom:.5rem}
 .qtl-resp-speaker{font-size:.78rem;color:#075985;margin-bottom:.3rem}
 .qtl-resp-speaker strong{color:#0c4a6e}
+.qtl-resp-details{margin-top:.6rem;background:#f8fafc;border-radius:6px;padding:.4rem .7rem;border:1px solid #e2e8f0}
+.qtl-resp-summary{cursor:pointer;color:#1e40af;font-size:.8rem;font-weight:600;padding:.2rem 0;user-select:none}
+.qtl-resp-summary:hover{color:#1e3a8a}
+.qtl-resp-details[open] .qtl-resp-summary{margin-bottom:.5rem;padding-bottom:.4rem;border-bottom:1px dashed #cbd5e1}
+.qtl-resp-body{font-size:.82rem;line-height:1.7;color:#1f2937;margin-top:.3rem}
 .qtl-more-note{font-size:.78rem;color:#64748b;background:#f1f5f9;padding:.8rem 1rem;border-radius:8px;margin-top:1rem;text-align:center;line-height:1.6}
 .qtl-more-note a{color:#1e40af;text-decoration:underline;font-weight:600}
 
@@ -1132,6 +1134,10 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
 
 /* 注力分野の注意書き */
 .topic-note{font-size:.75rem;color:#6b7280;line-height:1.6;margin-bottom:.8rem;padding:.5rem .7rem;background:#f9fafb;border-left:3px solid #9ca3af;border-radius:4px}
+.topic-note-mini{font-size:.7rem;color:#9ca3af;margin-top:.4rem;font-style:italic}
+.topic-pills{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.5rem}
+.topic-pill{padding:.25rem .6rem;border-radius:12px;color:#fff;font-size:.75rem;font-weight:600;cursor:pointer;transition:.15s}
+.topic-pill:hover{transform:translateY(-1px);box-shadow:0 2px 6px rgba(0,0,0,.15)}
 .cat-tag{padding:.15rem .55rem;border-radius:10px;color:#fff;font-size:.7rem;font-weight:600}
 
 /* 伊東市徹底分析タブ */
@@ -1245,8 +1251,13 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
 .chapter-sec-body th{background:#1e40af;color:#fff;font-weight:700;font-size:.8rem}
 .chapter-sec-body tbody tr:nth-child(even){background:#f8fafc}
 .chapter-sec-body tbody tr:hover{background:#eff6ff}
-.chapter-sources{margin-top:1.5rem;padding-top:1rem;border-top:1px dashed #cbd5e1;font-size:.75rem;color:#64748b;line-height:1.6}
-.chapter-sources strong{color:#475569}
+.chapter-sources{margin-top:1.5rem;padding:1rem 1.2rem;background:#f8fafc;border-radius:8px;border-left:4px solid #64748b;font-size:.8rem;color:#475569;line-height:1.7}
+.chapter-sources strong{color:#1e293b;display:block;margin-bottom:.5rem;font-size:.85rem}
+.chapter-sources-list{list-style:none;padding:0;margin:0}
+.chapter-sources-list li{padding:.3rem 0;border-bottom:1px dotted #e2e8f0;display:flex;flex-direction:column;gap:.15rem}
+.chapter-sources-list li:last-child{border-bottom:none}
+.chapter-source-link{color:#2563eb;font-size:.72rem;word-break:break-all;text-decoration:none}
+.chapter-source-link:hover{text-decoration:underline;color:#1e40af}
 @media(max-width:640px){.analysis-chapter{padding:1.3rem;border-radius:12px}.chapter-title{font-size:1.3rem}.chapter-icon{font-size:1.5rem}.stat-value{font-size:1.3rem}.chapter-sec-body table{font-size:.72rem}.chapter-sec-body th,.chapter-sec-body td{padding:.4rem .5rem}}
 
 /* SWOT */
@@ -1609,12 +1620,11 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
       </div>
     </div>
     <div class="tab-notice">ℹ️ 議員情報は伊東市公式サイトの公開資料に基づきます。質問内容は動画字幕の自動抽出であり、正確な内容は各動画・会議録でご確認ください。</div>
-    <!-- パーソナライズバー -->
+    <!-- 関心テーマから質問にジャンプ -->
     <div class="personalize-bar" id="personalize-bar">
-      <h4>⭐ 関心のあるテーマを選んでください（複数可）</h4>
+      <h4>🔍 テーマをクリックすると、関連する議会質問が見られます</h4>
       <div class="personalize-tags" id="p-tags">
-        ${Object.keys(catColors).map(c => `<button class="p-tag" onclick="toggleInterest(this)" data-cat="${esc(c)}">${esc(c)}</button>`).join('')}
-        <button class="p-tag-save" onclick="saveInterests()">保存して反映</button>
+        ${Object.keys(catColors).map(c => `<button class="p-tag" onclick="jumpToThemeQuestions('${esc(c)}')" data-cat="${esc(c)}" title="${esc(c)}に関する質問一覧へ">${esc(c)}</button>`).join('')}
       </div>
       <div id="p-status" style="font-size:.72rem;color:var(--sub);margin-top:.3rem"></div>
     </div>
@@ -1943,7 +1953,15 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
             </div>
             ${(ch.sources && ch.sources.length > 0) ? `
               <div class="chapter-sources">
-                <strong>出典:</strong> ${ch.sources.map(src => esc(src)).join(' / ')}
+                <strong>📚 この章の出典・データソース:</strong>
+                <ul class="chapter-sources-list">
+                  ${ch.sources.map(src => {
+                    if (typeof src === 'string') {
+                      return `<li>${esc(src)}</li>`;
+                    }
+                    return `<li>${esc(src.name)}${src.url ? ` <a href="${esc(src.url)}" target="_blank" rel="noopener" class="chapter-source-link">🔗 ${esc(src.url)}</a>` : ''}</li>`;
+                  }).join('')}
+                </ul>
               </div>
             ` : ''}
           </article>
@@ -2481,11 +2499,42 @@ function toggleFontSize(){
 })();
 
 // === パーソナライズ ===
+// テーマタグをクリックしたら、そのテーマに関連する質問に絞り込んで「動画・検索」タブに切替
+function jumpToThemeQuestions(theme){
+  const keywordMap={
+    '教育・子育て':'子育て 教育 学校 保育',
+    '医療・福祉':'医療 福祉 介護 高齢 病院',
+    '防災・安全':'防災 災害 避難 地震 津波',
+    '観光・経済':'観光 インバウンド 温泉 イベント',
+    '都市整備・交通':'道路 交通 バス 駐車場',
+    '環境・衛生':'環境 ごみ ゴミ メガソーラー 太陽光',
+    '農林水産':'農業 水産 漁業',
+    '行財政・議会':'財政 予算 決算 行政',
+  };
+  const kw=keywordMap[theme]||theme;
+  // 「動画・検索」タブに切替
+  const navBtns=document.querySelectorAll('nav button');
+  for(const b of navBtns){
+    if(b.textContent.includes('動画・検索')){b.click();break;}
+  }
+  // 検索ボックスに入れてフィルタ発火
+  setTimeout(()=>{
+    const input=document.getElementById('v-search');
+    if(input){
+      input.value=kw.split(' ')[0];
+      input.dataset.themeKeywords=kw;
+      if(typeof filterVids==='function')filterVids();
+      input.scrollIntoView({behavior:'smooth',block:'center'});
+    }
+  },100);
+}
+
 function toggleInterest(btn){btn.classList.toggle('selected')}
 function saveInterests(){
   const sel=[...document.querySelectorAll('.p-tag.selected')].map(b=>b.dataset.cat);
   localStorage.setItem('ito_interests',JSON.stringify(sel));
-  document.getElementById('p-status').textContent=sel.length>0?sel.join('・')+' を保存しました。関連議員が上部に表示されます。':'テーマ選択がクリアされました。';
+  const st=document.getElementById('p-status');
+  if(st) st.textContent=sel.length>0?sel.join('・')+' を保存しました。テーマをクリックすると、そのテーマに関する議会質問一覧に移動します。':'テーマ選択がクリアされました。';
   applyPersonalize();
 }
 function applyPersonalize(){
@@ -2493,24 +2542,9 @@ function applyPersonalize(){
   if(!stored) return;
   const interests=JSON.parse(stored);
   if(!interests.length) return;
-  // タグのUI復元
+  // タグのUI復元のみ（おすすめバッジ追加は廃止）
   document.querySelectorAll('.p-tag').forEach(b=>{
     if(interests.includes(b.dataset.cat)) b.classList.add('selected');
-  });
-  // 議員カードに「おすすめ」バッジ追加
-  const cards=document.querySelectorAll('.m-card');
-  cards.forEach(card=>{
-    const cats=[...card.querySelectorAll('.cat-pill')].map(e=>e.textContent.trim());
-    const match=cats.some(c=>interests.includes(c));
-    if(match){
-      if(!card.querySelector('.recommend-badge')){
-        const badge=document.createElement('div');
-        badge.className='recommend-badge';
-        badge.textContent='⭐ おすすめ';
-        badge.style.cssText='background:#7c3aed;color:#fff;font-size:.65rem;padding:.15rem .4rem;border-radius:6px;display:inline-block;margin-bottom:.3rem;font-weight:700';
-        card.prepend(badge);
-      }
-    }
   });
 }
 document.addEventListener('DOMContentLoaded',applyPersonalize);
