@@ -158,42 +158,62 @@ function processMeeting(fino) {
   const header = extractHeaderInfo(text);
   const segments = splitSpeeches(text);
 
-  // Group Q&A: council member speech followed by authority responses until next council member
+  // Group by session: consecutive ◆-◎ exchanges by the same council member = 1 session
+  // 一般質問の「再質問」も同じセッションに統合
   const qaPairs = [];
-  let currentQ = null;
-  let currentResponses = [];
-  const flushPair = () => {
-    if (currentQ) {
+  let currentSession = null;
+  const flushSession = () => {
+    if (currentSession && currentSession.exchanges.length > 0) {
+      // メイン質問は最初の質問（通常は壇上からの長い質問）
+      const mainQ = currentSession.exchanges[0].question;
+      const allFollowUps = currentSession.exchanges.slice(1).map(e => e.question);
+      const allResponses = [];
+      for (const ex of currentSession.exchanges) {
+        allResponses.push(...ex.responses);
+      }
       qaPairs.push({
-        questioner: currentQ.name,
-        questionerPosition: currentQ.position,
-        // 質問要約（表示用）
-        question: summarize(currentQ.body, 300),
-        // 質問全文（詳細表示用、最大2000文字）
-        questionFull: summarize(currentQ.body, 2000),
-        responses: currentResponses.map(r => ({
+        questioner: currentSession.name,
+        questionerPosition: currentSession.position,
+        // メイン質問要約（100文字）
+        question: summarize(mainQ, 100),
+        // メイン質問全文
+        questionFull: summarize(mainQ, 2000),
+        // やり取り件数（再質問含む）
+        exchangeCount: currentSession.exchanges.length,
+        followUpCount: allFollowUps.length,
+        // 全答弁
+        responses: allResponses.map(r => ({
           responder: r.name,
           position: r.position,
-          // 答弁要約（表示用）
           response: summarize(r.body, 300),
-          // 答弁全文（最大2000文字）
           responseFull: summarize(r.body, 2000),
-        }))
+        })),
       });
     }
   };
+  // 新しいロジック：同じ議員の連続するやり取りを1セッションにまとめる
+  // 別議員の発言が出てきた時だけセッションを切る（議長の「次に」では切らない）
+  let currentExchange = null;
   for (const seg of segments) {
     if (seg.role === 'council_member') {
-      // New question - flush previous pair
-      flushPair();
-      currentQ = seg;
-      currentResponses = [];
-    } else if (seg.role === 'authority' && currentQ) {
-      currentResponses.push(seg);
+      if (currentSession && currentSession.name === seg.name) {
+        // 同じ議員 → 再質問として同一セッションに追加
+        if (currentExchange) currentSession.exchanges.push(currentExchange);
+        currentExchange = { question: seg.body, responses: [] };
+      } else {
+        // 別議員 → 前セッションをflushして新セッション開始
+        if (currentExchange && currentSession) currentSession.exchanges.push(currentExchange);
+        flushSession();
+        currentSession = { name: seg.name, position: seg.position, exchanges: [] };
+        currentExchange = { question: seg.body, responses: [] };
+      }
+    } else if (seg.role === 'authority' && currentExchange) {
+      currentExchange.responses.push(seg);
     }
-    // Skip chair (○) segments - they're procedural
+    // chair (議長) の発言は無視（セッション切り替えは議員の切替で判定）
   }
-  flushPair();
+  if (currentExchange && currentSession) currentSession.exchanges.push(currentExchange);
+  flushSession();
 
   return {
     fino: meta.fino,
@@ -239,10 +259,14 @@ function main() {
         dateLabel: r.dateLabel,
         position: q.questionerPosition,
         question: q.question,
+        questionFull: q.questionFull,
+        exchangeCount: q.exchangeCount,
+        followUpCount: q.followUpCount,
         responses: q.responses.map(x => ({
           responder: x.responder,
           position: x.position,
-          response: x.response
+          response: x.response,
+          responseFull: x.responseFull,
         }))
       });
     }

@@ -444,7 +444,10 @@ function memberDetailHTML(m) {
               <div class="qtl-links">${videoBtn}${gijirokuBtn}</div>
             </div>
             <div class="qtl-question">${esc(qShort)}</div>
-            ${respCount > 0 ? `<div class="qtl-resp-indicator">📢 当局答弁 ${respCount}件（📘全文へ）</div>` : ''}
+            <div class="qtl-meta-row">
+              ${respCount > 0 ? `<span class="qtl-resp-indicator">📢 当局答弁 ${respCount}件</span>` : ''}
+              ${q.followUpCount > 0 ? `<span class="qtl-followup-indicator">💭 再質問 ${q.followUpCount}件</span>` : ''}
+            </div>
           </div>`;
         }).join('');
 
@@ -1033,8 +1036,10 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
 .dch-badge-current{background:#22c55e;color:#fff;padding:.1rem .45rem;border-radius:10px;font-size:.7rem;font-weight:700}
 .dch-badge-former{background:#94a3b8;color:#fff;padding:.1rem .45rem;border-radius:10px;font-size:.7rem;font-weight:700}
 
-/* 答弁インジケータ（件数のみ、全文は議事録リンクで） */
-.qtl-resp-indicator{margin-top:.4rem;padding:.3rem .6rem;background:#f0f9ff;border-left:3px solid #0284c7;border-radius:0 4px 4px 0;font-size:.75rem;color:#075985;font-weight:600}
+/* 答弁・再質問インジケータ（件数のみ、全文は議事録リンクで） */
+.qtl-meta-row{display:flex;gap:.4rem;margin-top:.4rem;flex-wrap:wrap}
+.qtl-resp-indicator{display:inline-block;padding:.2rem .5rem;background:#f0f9ff;border:1px solid #bae6fd;border-radius:10px;font-size:.7rem;color:#075985;font-weight:600}
+.qtl-followup-indicator{display:inline-block;padding:.2rem .5rem;background:#fef3c7;border:1px solid #fcd34d;border-radius:10px;font-size:.7rem;color:#78350f;font-weight:600}
 
 /* 詳細ページのテーマ行（1行コンパクト） */
 .detail-topic-row{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem;padding:.6rem 1rem;background:#faf5ff;border-radius:8px;margin-bottom:1rem;border-left:3px solid #a855f7;font-size:.82rem}
