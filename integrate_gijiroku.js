@@ -92,12 +92,31 @@ function buildGijirokuUrl(meeting) {
   return `https://itoshigikai.gijiroku.com/voices/CGI/voiweb.exe?ACT=200&KGNO=${encodeURIComponent(meeting.kgno)}&FINO=${encodeURIComponent(meeting.fino)}&UNID=${encodeURIComponent(meeting.unid)}`;
 }
 
+// 委員会報告・少数意見は除外（議員個人の質問とは別のもの）
+function isCommitteeReport(qa, meetingData) {
+  const qText = qa.questionFull || qa.question || '';
+  const topic = qa.topic || '';
+  const combined = qText.substring(0, 500) + ' ' + topic;
+  // 予算・決算特別委員会の委員長報告または少数意見
+  if (/予算[・]?決算特別委員会|予算[・]?決算特別委員|予算決算特別委員会/.test(combined)) return true;
+  if (/少数意見.*(報告|留保|提出)|少数意見(書|者)/.test(combined)) return true;
+  // 特別委員会委員長としての報告
+  if (/特別委員会における審査の結果を?報告/.test(combined)) return true;
+  return false;
+}
+
 // Build member-indexed question database (from gijiroku)
 const memberGijirokuData = {};
+let excludedCount = 0;
 for (const meeting of gijiroku.meetings) {
   const gjUrl = buildGijirokuUrl(meeting);
   for (const qa of meeting.qaPairs) {
     const name = qa.questioner;
+    // 予算・決算特別委員会の報告・少数意見は除外
+    if (isCommitteeReport(qa, meeting)) {
+      excludedCount++;
+      continue;
+    }
     if (!memberGijirokuData[name]) {
       memberGijirokuData[name] = {
         name,
@@ -153,6 +172,7 @@ const finalOutput = {
 
 fs.writeFileSync('gijiroku_integrated.json', JSON.stringify(finalOutput, null, 2));
 console.log(`✓ Generated gijiroku_integrated.json`);
+console.log(`✓ Excluded (予算・決算特別委員会報告・少数意見): ${excludedCount}件`);
 console.log(`✓ Meetings: ${finalOutput.meta.totalMeetings}`);
 console.log(`✓ Q&A pairs: ${finalOutput.meta.totalQaPairs}`);
 console.log(`✓ Members with Q&A: ${finalOutput.meta.totalMembers}`);

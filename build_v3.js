@@ -11,14 +11,26 @@ try { councilData = JSON.parse(fs.readFileSync('ito_council_members.json', 'utf-
 let photos = {};
 try {
   const rawPhotos = JSON.parse(fs.readFileSync('member_photos.json', 'utf-8'));
+  // 写真URLの上書き（全身写真→顔アップ写真に差し替えたい議員用）
+  const photoUrlOverrides = {
+    // 大竹圭の photo_url は全身写真のため、election_photo_url（顔アップ）を使用
+    '大竹圭': 'election_photo_url',
+  };
   for (const [name, data] of Object.entries(rawPhotos)) {
-    photos[name] = data.photo_url || data.election_photo_url || '';
+    const override = photoUrlOverrides[name];
+    if (override && data[override]) {
+      photos[name] = data[override];
+    } else {
+      photos[name] = data.photo_url || data.election_photo_url || '';
+    }
   }
 } catch(e) {}
 
-// 議員写真のズーム・位置調整（顔のサイズを統一するため）
+// 議員写真の位置調整（顔が見切れる場合、object-positionで補正）
+// 形式: { name: { objectPosition: 'center 20%' } }
+// デフォルトは 'center 30%'（顔が上部にある肖像写真を想定）
 const photoAdjustments = {
-  '大竹圭': { scale: 1.35, offsetY: '-5%' },
+  // 必要に応じて個別調整を追加
 };
 let responsesData = null;
 try { responsesData = JSON.parse(fs.readFileSync('analysis_with_responses.json', 'utf-8')); } catch(e) {}
@@ -308,7 +320,8 @@ function memberCardHTML(m) {
   }
 
   const adj = photoAdjustments[m.name];
-  const imgStyle = adj ? `style="transform:scale(${adj.scale||1}) translateY(${adj.offsetY||'0'});transform-origin:center center"` : '';
+  const objPos = adj?.objectPosition || 'center 25%';
+  const imgStyle = `style="object-position:${objPos}"`;
   const avatarContent = m.photoUrl
     ? `<div class="m-avatar-photo" style="border-color:${fc}"><img src="${esc(m.photoUrl)}" alt="${esc(m.name)}" ${imgStyle} onerror="this.parentElement.innerHTML='<div class=m-avatar-fb style=background:${fc}>${initial}</div>'"></div>`
     : `<div class="m-avatar" style="background:${fc}">${initial}</div>`;
@@ -336,7 +349,8 @@ function memberDetailHTML(m) {
   const committees = committeeHTML(m.name);
 
   const adj2 = photoAdjustments[m.name];
-  const imgStyle2 = adj2 ? `style="transform:scale(${adj2.scale||1}) translateY(${adj2.offsetY||'0'});transform-origin:center center"` : '';
+  const objPos2 = adj2?.objectPosition || 'center 25%';
+  const imgStyle2 = `style="object-position:${objPos2}"`;
   const avatarContent = m.photoUrl
     ? `<div class="detail-avatar-photo" style="border-color:${fc}"><img src="${esc(m.photoUrl)}" alt="${esc(m.name)}" ${imgStyle2} onerror="this.parentElement.innerHTML='<div class=detail-avatar style=background:${fc}>${initial}</div>'"></div>`
     : `<div class="detail-avatar" style="background:${fc}">${initial}</div>`;
