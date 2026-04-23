@@ -252,18 +252,6 @@ const searchIndex = videos.map(v => {
   };
 }).filter(v => v.q.length > 0 || v.t);
 
-// 比較用議員データ（現役のみ・軽量化）
-const compareData = currentMembersList.map(m => ({
-  name: m.name,
-  faction: m.profile.faction || '',
-  factionColor: factionColors[m.profile.faction] || '#607D8B',
-  photo: m.photoUrl || '',
-  questionCount: m.questionCount,
-  videoCount: m.videoCount,
-  percentage: m.topics.percentage || {},
-  topCategories: (m.topics.topCategories || []).slice(0, 3),
-}));
-
 // 委員会情報をHTML化
 function committeeHTML(name) {
   const cd = memberCommitteeMap[name];
@@ -710,6 +698,18 @@ nav button{padding:.5rem 1rem;border:none;border-radius:8px;font-size:.85rem;fon
 nav button:hover{background:#f0f4f8;color:var(--text)}
 nav button.active{color:var(--accent);background:#eff6ff}
 nav button.active::after{content:'';position:absolute;bottom:0;left:20%;right:20%;height:3px;background:var(--accent);border-radius:3px}
+/* サブメニュー（もっと見る） */
+.nav-more-wrap{position:relative;margin-left:auto;flex-shrink:0}
+.nav-more-btn{padding:.5rem 1rem;border:none;border-radius:8px;font-size:.85rem;font-weight:600;cursor:pointer;background:#f1f5f9;color:#475569;transition:.15s}
+.nav-more-btn:hover{background:#e2e8f0;color:#1e293b}
+.nav-more-btn.sub-active{background:#eff6ff;color:var(--accent)}
+.nav-more-menu{display:none;position:absolute;top:calc(100% + .4rem);right:0;background:#fff;border:1px solid #e5e7eb;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.12);min-width:220px;padding:.4rem;z-index:200}
+.nav-more-menu.open{display:block;animation:fadeIn .15s}
+.nav-more-menu button{display:block;width:100%;text-align:left;padding:.6rem 1rem;border:none;background:transparent;border-radius:6px;font-size:.85rem;font-weight:600;cursor:pointer;color:#1e293b;white-space:nowrap}
+.nav-more-menu button:hover{background:#f0f4f8;color:var(--accent)}
+.nav-more-menu button.sub-current{background:#eff6ff;color:var(--accent)}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:640px){.nav-more-menu{min-width:180px;right:-1rem}}
 .tab-notice{font-size:.72rem;color:#6b7280;background:#f8fafc;border-left:3px solid #d1d5db;padding:.4rem .7rem;margin-bottom:.8rem;border-radius:0 6px 6px 0;line-height:1.5}
 .tab-notice a{color:var(--accent)}
 .container{max-width:1200px;margin:0 auto;padding:1rem 1.2rem}
@@ -1805,32 +1805,31 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
 <div class="welcome-overlay" id="welcome-overlay" style="display:none">
   <div class="welcome-box">
     <h2>ようこそ「みんなの伊東市」へ</h2>
-    <p class="welcome-sub">伊東市議会の活動を、わかりやすくお届けするサイトです。<br>まずは気になるものを選んでみてください。</p>
+    <p class="welcome-sub">伊東市議会の議論を、市民にわかりやすく。<br>気になるテーマや議員の発言を検索できます。</p>
     <div class="welcome-cards">
       <div class="welcome-card" onclick="welcomeGo('members')">
-        <div class="welcome-card-icon">🏛️</div>
+        <div class="welcome-card-icon">👥</div>
         <div class="welcome-card-text">
-          <strong>あなたの地域の議員を探す</strong>
-          <span>${currentMembersList.length}名の議員プロフィール・質問内容を確認</span>
+          <strong>議員を見る</strong>
+          <span>${currentMembersList.length}名の議員の質問＆当局答弁</span>
         </div>
       </div>
       <div class="welcome-card" onclick="welcomeGo('theme')">
         <div class="welcome-card-icon">🔍</div>
         <div class="welcome-card-text">
-          <strong>テーマで議会活動を調べる</strong>
-          <span>子育て・防災・観光など、気になるテーマから探せます</span>
+          <strong>テーマから探す</strong>
+          <span>子育て・防災・観光など関心のある話題で</span>
         </div>
       </div>
-      <div class="welcome-card" onclick="welcomeGo('voice')">
-        <div class="welcome-card-icon">📢</div>
+      <div class="welcome-card" onclick="welcomeGo('participate')">
+        <div class="welcome-card-icon">🗣️</div>
         <div class="welcome-card-text">
-          <strong>市政に声を届ける</strong>
-          <span>市民の声を投稿・閲覧。サイト改善要望も受付中</span>
+          <strong>参加する</strong>
+          <span>意見を届ける方法・議会傍聴・選挙情報</span>
         </div>
       </div>
     </div>
-    <button class="welcome-close" onclick="closeWelcome()">サイトを見る</button>
-    <button class="welcome-skip" onclick="closeWelcome(true)">次回から表示しない</button>
+    <button class="welcome-close" onclick="closeWelcome(true)">サイトを見る</button>
   </div>
 </div>
 <header>
@@ -1851,14 +1850,19 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
   <div class="header-credit">制作・運営: <wbr>伊東市議会議員 大竹圭</div>
 </header>
 <nav role="tablist" aria-label="メインナビゲーション">
-  <button class="active" role="tab" aria-selected="true" onclick="switchTab('members',this)">議員一覧</button>
-  <button role="tab" aria-selected="false" onclick="switchTab('themes',this)">🔍 テーマ横断</button>
-  <button role="tab" aria-selected="false" onclick="switchTab('all',this)">動画・検索</button>
-  <button role="tab" aria-selected="false" onclick="switchTab('plan',this)">総合計画</button>
-  <button role="tab" aria-selected="false" onclick="switchTab('analysis',this)">🔎 伊東市分析</button>
-  <button role="tab" aria-selected="false" onclick="switchTab('voice',this)">市民の声</button>
-  <button role="tab" aria-selected="false" onclick="switchTab('participate',this)">🗣️ 参加ガイド</button>
-  <button role="tab" aria-selected="false" onclick="switchTab('stats',this)">議会全体の動き</button>
+  <button class="active" role="tab" aria-selected="true" onclick="switchTab('members',this)">👥 議員一覧</button>
+  <button role="tab" aria-selected="false" onclick="switchTab('themes',this)">🔍 テーマから探す</button>
+  <button role="tab" aria-selected="false" onclick="switchTab('voice',this)">💬 市民の声</button>
+  <button role="tab" aria-selected="false" onclick="switchTab('participate',this)">🗣️ 参加する</button>
+  <div class="nav-more-wrap">
+    <button class="nav-more-btn" onclick="toggleNavMore(event)" aria-haspopup="true" aria-expanded="false">⋯ もっと見る</button>
+    <div class="nav-more-menu" id="nav-more-menu" role="menu">
+      <button role="menuitem" onclick="switchTab('all',this);closeNavMore()">🎥 動画・全文検索</button>
+      <button role="menuitem" onclick="switchTab('plan',this);closeNavMore()">📘 総合計画</button>
+      <button role="menuitem" onclick="switchTab('analysis',this);closeNavMore()">🔎 伊東市徹底分析</button>
+      <button role="menuitem" onclick="switchTab('stats',this);closeNavMore()">📊 議会全体の動き</button>
+    </div>
+  </div>
 </nav>
 <div class="container" id="main-content" role="main">
   <div id="tab-members" class="tab-panel active">
@@ -2459,7 +2463,7 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
             <li>電子メール・郵送・FAX・窓口持参のいずれかで提出</li>
           </ol>
         </div>
-        <a href="https://www.city.ito.shizuoka.jp/jouhou_kanri/iken/" target="_blank" class="pg-btn">🔗 伊東市パブコメ募集案内</a>
+        <a href="https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/publiccomment/index.html" target="_blank" class="pg-btn">🔗 伊東市パブコメ募集案内</a>
       </div>
 
       <div class="pg-card">
@@ -2521,7 +2525,7 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
             <li>投票所は住民登録地の最寄り施設</li>
           </ul>
         </div>
-        <a href="https://www.city.ito.shizuoka.jp/senkyo/" target="_blank" class="pg-btn">🔗 伊東市選挙管理委員会</a>
+        <a href="https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/senkyo/index.html" target="_blank" class="pg-btn">🔗 伊東市選挙管理委員会</a>
       </div>
 
       <div class="pg-card">
@@ -2898,14 +2902,12 @@ function closeWelcome(dontShow){
 function welcomeGo(target){
   closeWelcome(false);
   localStorage.setItem('ito_welcomed','1');
-  if(target==='members'){
-    switchTab('members',document.querySelector('nav button:nth-child(1)'));
-  } else if(target==='theme'){
-    switchTab('all',document.querySelector('nav button:nth-child(2)'));
-    setTimeout(()=>document.getElementById('v-search')?.focus(),300);
-  } else if(target==='voice'){
-    switchTab('voice',document.querySelector('nav button:nth-child(4)'));
-  }
+  const navBtns = {
+    'members': 1, 'theme': 2, 'voice': 3, 'participate': 4
+  };
+  const tabId = target === 'theme' ? 'themes' : target;
+  const n = navBtns[target] || 1;
+  switchTab(tabId, document.querySelector('nav > button:nth-child(' + n + ')'));
 }
 
 // === メール購読登録 ===
@@ -3243,6 +3245,27 @@ function applyPersonalize(){
 }
 document.addEventListener('DOMContentLoaded',applyPersonalize);
 
+// === ナビゲーション「もっと見る」サブメニュー ===
+function toggleNavMore(ev){
+  ev && ev.stopPropagation();
+  const menu = document.getElementById('nav-more-menu');
+  const btn = document.querySelector('.nav-more-btn');
+  const open = menu.classList.toggle('open');
+  if (btn) btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+function closeNavMore(){
+  const menu = document.getElementById('nav-more-menu');
+  if (menu) menu.classList.remove('open');
+  const btn = document.querySelector('.nav-more-btn');
+  if (btn) btn.setAttribute('aria-expanded', 'false');
+}
+document.addEventListener('click', (e) => {
+  const wrap = document.querySelector('.nav-more-wrap');
+  if (wrap && !wrap.contains(e.target)) closeNavMore();
+});
+// サブメニューから選んだ時、親ボタンにactive表示
+const origSwitchTab = (typeof switchTab === 'function') ? switchTab : null;
+
 // === PWA Service Worker 登録 ===
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
@@ -3270,7 +3293,6 @@ function themeSearch(keywords){
   filterVids();
 }
 
-const COMPARE_DATA = ${JSON.stringify(compareData)};
 const SEARCH_INDEX = ${JSON.stringify(searchIndex)};
 const CAT_COLORS = ${JSON.stringify(catColors)};
 const SUB_POLICIES = ${JSON.stringify(sougouPlan ? sougouPlan.sub_policies : [])};
@@ -3494,21 +3516,32 @@ async function submitSiteFeedback(){
 let vCount=30;
 function switchTab(id,btn){
   document.querySelectorAll('.tab-panel').forEach(e=>e.classList.remove('active'));
-  document.querySelectorAll('nav button').forEach(e=>{e.classList.remove('active');e.setAttribute('aria-selected','false')});
+  document.querySelectorAll('nav > button').forEach(e=>{e.classList.remove('active');e.setAttribute('aria-selected','false')});
+  document.querySelectorAll('.nav-more-menu button').forEach(e=>e.classList.remove('sub-current'));
+  const moreBtn = document.querySelector('.nav-more-btn');
+  if (moreBtn) moreBtn.classList.remove('sub-active');
   document.getElementById('tab-'+id).classList.add('active');
-  btn.classList.add('active');
-  btn.setAttribute('aria-selected','true');
+  // サブメニュー内のボタンか、トップレベルのボタンかを判定
+  const isInSubmenu = btn && btn.parentElement && btn.parentElement.classList.contains('nav-more-menu');
+  if (isInSubmenu) {
+    btn.classList.add('sub-current');
+    if (moreBtn) { moreBtn.classList.add('sub-active', 'active'); moreBtn.setAttribute('aria-selected','true'); }
+  } else if (btn) {
+    btn.classList.add('active');
+    btn.setAttribute('aria-selected','true');
+  }
   if(id==='all'){vCount=30;showVids();}
   if(id==='voice' && !voicesLoaded){loadVoices();}
   if(id==='plan'){ renderHeatmap(); }
   if(id==='stats'){
-    // トレンドチャートをstatsタブ内に移動（初回のみ）
     const embed=document.getElementById('trend-embed');
     if(embed && !embed.hasChildNodes()){
       const src=document.getElementById('tab-trend');
       if(src){ embed.innerHTML=src.innerHTML; }
     }
   }
+  // ページ先頭にスクロール
+  window.scrollTo({top: 0, behavior: 'smooth'});
 }
 
 // ============ 市民の声タブ ============

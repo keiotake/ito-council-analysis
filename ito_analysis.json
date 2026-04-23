@@ -132,7 +132,7 @@
         },
         {
           "name": "伊東市 人口統計(R8.2.28)",
-          "url": "https://www.city.ito.shizuoka.jp/jouhou_kanri/jinkou/"
+          "url": "https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/"
         }
       ]
     },
@@ -236,15 +236,15 @@
       "sources": [
         {
           "name": "伊東市 令和8年度当初予算概要",
-          "url": "https://www.city.ito.shizuoka.jp/jouhou_kanri/jinkou/"
+          "url": "https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/"
         },
         {
           "name": "伊東市 令和5年度決算",
-          "url": "https://www.city.ito.shizuoka.jp/jouhou_kanri/jinkou/"
+          "url": "https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/"
         },
         {
           "name": "伊東市 財政状況・決算資料",
-          "url": "https://www.city.ito.shizuoka.jp/jouhou_kanri/jinkou/"
+          "url": "https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/"
         },
         {
           "name": "総務省 地方財政状況調査",
@@ -304,7 +304,7 @@
         },
         {
           "name": "伊東市民病院 経営データ",
-          "url": "https://www.city.ito.shizuoka.jp/jouhou_kanri/jinkou/"
+          "url": "https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/"
         }
       ]
     },
@@ -340,11 +340,11 @@
       "sources": [
         {
           "name": "伊東市 人口統計",
-          "url": "https://www.city.ito.shizuoka.jp/jouhou_kanri/jinkou/"
+          "url": "https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/"
         },
         {
           "name": "伊東市 介護保険事業計画",
-          "url": "https://www.city.ito.shizuoka.jp/jouhou_kanri/jinkou/"
+          "url": "https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/"
         },
         {
           "name": "JMAP",
@@ -392,11 +392,11 @@
       "sources": [
         {
           "name": "伊東市教育委員会 学校別児童生徒数",
-          "url": "https://www.city.ito.shizuoka.jp/jouhou_kanri/jinkou/"
+          "url": "https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/"
         },
         {
           "name": "伊東市 子ども・子育て支援事業計画",
-          "url": "https://www.city.ito.shizuoka.jp/jouhou_kanri/jinkou/"
+          "url": "https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/"
         }
       ]
     },
@@ -432,7 +432,7 @@
         },
         {
           "name": "伊東市地域公共交通計画",
-          "url": "https://www.city.ito.shizuoka.jp/kotsu/"
+          "url": "https://www.city.ito.shizuoka.jp/gyosei/"
         },
         {
           "name": "RESAS",
@@ -488,7 +488,7 @@
         },
         {
           "name": "伊東市 ゼロカーボンシティ宣言",
-          "url": "https://www.city.ito.shizuoka.jp/jouhou_kanri/jinkou/"
+          "url": "https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/"
         },
         {
           "name": "環境省 一般廃棄物処理実態調査",
@@ -544,7 +544,7 @@
         },
         {
           "name": "伊東市空家等対策計画",
-          "url": "https://www.city.ito.shizuoka.jp/toshi_seisaku/"
+          "url": "https://www.city.ito.shizuoka.jp/gyosei/"
         }
       ]
     },
@@ -604,7 +604,7 @@
         },
         {
           "name": "伊東市地域防災計画(R4修正)",
-          "url": "https://www.city.ito.shizuoka.jp/jouhou_kanri/jinkou/"
+          "url": "https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/"
         }
       ]
     },
@@ -640,7 +640,7 @@
       "sources": [
         {
           "name": "伊東市DX推進計画・デジタルファースト宣言",
-          "url": "https://www.city.ito.shizuoka.jp/dx/"
+          "url": "https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/"
         },
         {
           "name": "Well-being Compass 地域幸福度指標",
@@ -684,15 +684,15 @@
       "sources": [
         {
           "name": "伊東市選挙管理委員会 令和7年伊東市長選挙",
-          "url": "https://www.city.ito.shizuoka.jp/jouhou_kanri/jinkou/"
+          "url": "https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/"
         },
         {
           "name": "伊東市監査委員報告",
-          "url": "https://www.city.ito.shizuoka.jp/kansa/"
+          "url": "https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/kansa/index.html"
         },
         {
           "name": "伊東市パブリックコメント結果",
-          "url": "https://www.city.ito.shizuoka.jp/jouhou_kanri/iken/"
+          "url": "https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/publiccomment/index.html"
         }
       ]
     },
@@ -1057,7 +1057,7 @@
       "num": 24,
       "title": "伊東市「人口統計」(R8.2.28)",
       "desc": "住民基本台帳人口",
-      "url": "https://www.city.ito.shizuoka.jp/jouhou_kanri/jinkou/"
+      "url": "https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/"
     },
     {
       "num": 25,
@@ -1069,19 +1069,19 @@
       "num": 26,
       "title": "伊東市「令和8年度当初予算概要」",
       "desc": "326億円・3年連続過去最大",
-      "url": "https://www.city.ito.shizuoka.jp/zaisei/yosan/"
+      "url": "https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/zaisei/yosan/"
     },
     {
       "num": 27,
       "title": "伊東市「財政状況・決算資料」",
       "desc": "R8予算・R5決算",
-      "url": "https://www.city.ito.shizuoka.jp/zaisei/"
+      "url": "https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/zaisei/"
     },
     {
       "num": 28,
       "title": "伊東市「令和5年度決算」",
       "desc": "経常収支比率88.1%等",
-      "url": "https://www.city.ito.shizuoka.jp/zaisei/kessan/"
+      "url": "https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/zaisei/kessan/"
     },
     {
       "num": 29,
@@ -1099,37 +1099,37 @@
       "num": 31,
       "title": "伊東市パブリックコメント結果",
       "desc": "市民参画状況",
-      "url": "https://www.city.ito.shizuoka.jp/jouhou_kanri/iken/"
+      "url": "https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/publiccomment/index.html"
     },
     {
       "num": 32,
       "title": "伊東市「介護保険事業計画」",
       "desc": "高齢福祉",
-      "url": "https://www.city.ito.shizuoka.jp/koureisha/"
+      "url": "https://www.city.ito.shizuoka.jp/gyosei/kenko_fukushi/index.html"
     },
     {
       "num": 33,
       "title": "伊東市教育委員会「学校別児童生徒数」",
       "desc": "小中学校・幼稚園",
-      "url": "https://www.city.ito.shizuoka.jp/kyoiku/"
+      "url": "https://www.city.ito.shizuoka.jp/gyosei/kosodate_kyoiku/index.html"
     },
     {
       "num": 34,
       "title": "伊東市「子ども・子育て支援事業計画」",
       "desc": "こども誰でも通園制度ほか",
-      "url": "https://www.city.ito.shizuoka.jp/kodomo/"
+      "url": "https://www.city.ito.shizuoka.jp/gyosei/kosodate_kyoiku/index.html"
     },
     {
       "num": 35,
       "title": "伊東市地域公共交通計画",
       "desc": "交通カバー率70.3%",
-      "url": "https://www.city.ito.shizuoka.jp/kotsu/"
+      "url": "https://www.city.ito.shizuoka.jp/gyosei/"
     },
     {
       "num": 36,
       "title": "伊東市「ゼロカーボンシティ宣言」(R5.3)",
       "desc": "2050年実質ゼロ",
-      "url": "https://www.city.ito.shizuoka.jp/kankyo/"
+      "url": "https://www.city.ito.shizuoka.jp/gyosei/"
     },
     {
       "num": 37,
@@ -1141,7 +1141,7 @@
       "num": 38,
       "title": "伊東市空家等対策計画",
       "desc": "空き家2万戸対応",
-      "url": "https://www.city.ito.shizuoka.jp/toshi_seisaku/"
+      "url": "https://www.city.ito.shizuoka.jp/gyosei/"
     },
     {
       "num": 39,
@@ -1153,7 +1153,7 @@
       "num": 40,
       "title": "伊東市地域防災計画(R4修正)・総合防災ガイドブック",
       "desc": "三重リスク対策",
-      "url": "https://www.city.ito.shizuoka.jp/bosai/"
+      "url": "https://www.city.ito.shizuoka.jp/gyosei/bosai_anzen/index.html"
     },
     {
       "num": 41,
@@ -1165,7 +1165,7 @@
       "num": 42,
       "title": "伊東市DX推進計画・デジタルファースト宣言",
       "desc": "R6.2宣言・KPI",
-      "url": "https://www.city.ito.shizuoka.jp/dx/"
+      "url": "https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/"
     },
     {
       "num": 43,
@@ -1177,13 +1177,13 @@
       "num": 44,
       "title": "伊東市選挙管理委員会「令和7年伊東市長選挙」",
       "desc": "投票率60.54%・9名立候補",
-      "url": "https://www.city.ito.shizuoka.jp/senkyo/"
+      "url": "https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/senkyo/index.html"
     },
     {
       "num": 45,
       "title": "伊東市監査委員報告",
       "desc": "監査指摘事項",
-      "url": "https://www.city.ito.shizuoka.jp/kansa/"
+      "url": "https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/kansa/index.html"
     },
     {
       "num": 46,
