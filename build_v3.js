@@ -439,6 +439,34 @@ function memberDetailHTML(m) {
         const DISPLAY_LIMIT = 10;
         const questions = allQuestions.slice(0, DISPLAY_LIMIT);
         const hasMore = allQuestions.length > DISPLAY_LIMIT;
+        // 関連質問（同テーマの他の質問）を事前計算
+        // 同一議員内で、topicに共通キーワードが含まれる質問を「続き」として紐付け
+        const findRelated = (q) => {
+          const topic = q.topic || '';
+          if (!topic || topic.length < 8) return [];
+          // トピックから名詞キーワードを抽出（簡易：2文字以上の漢字連続）
+          const keywords = [];
+          const m1 = topic.match(/[\u4e00-\u9fff]{2,}/g) || [];
+          m1.forEach(k => {
+            if (k.length >= 2 && k.length <= 10 && !['について','場合','それぞれ','令和','平成','予算','決算','本市','伊東市','市長','議員','答弁','質問','以上','以下','今後','今回'].some(sk => sk === k)) {
+              keywords.push(k);
+            }
+          });
+          if (!keywords.length) return [];
+          // 全質問の中から同じ議員内で、keywordsを含む別質問を抽出
+          const related = [];
+          for (const other of allQuestions) {
+            if (other.fino === q.fino) continue; // 同じ会議は除く
+            const oTopic = other.topic || '';
+            const matchCount = keywords.filter(k => oTopic.includes(k)).length;
+            if (matchCount >= 1) {
+              related.push({ q: other, score: matchCount });
+            }
+          }
+          related.sort((a, b) => b.score - a.score || (b.q.date || '').localeCompare(a.q.date || ''));
+          return related.slice(0, 3).map(r => r.q);
+        };
+
         const qRows = questions.map((q, i) => {
           const tc = q.sessionType === '一般質問' ? '#3498db' : q.sessionType === '大綱質疑' ? '#27ae60' : q.sessionType === '補正予算審議' ? '#e67e22' : '#95a5a6';
           const respCount = (q.responses || []).length;
@@ -478,6 +506,14 @@ function memberDetailHTML(m) {
               <div class="qe-question-body">${esc(qFullText)}</div>
               ${respList ? `<div class="qe-resp-label">📢 当局答弁 (${respCount}件)</div>${respList}` : ''}
               ${q.followUpCount > 0 ? `<div class="qe-note">💭 この後、再質問が${q.followUpCount}件行われています。全文は議事録でご確認ください。</div>` : ''}
+              ${(() => {
+                const related = findRelated(q);
+                if (!related.length) return '';
+                return `<div class="qe-related-label">🔗 関連する同議員の質問</div>
+                  <ul class="qe-related-list">
+                    ${related.map(r => `<li><span class="qe-related-date">${esc(r.date || '')}</span><span class="qe-related-type" style="background:${r.sessionType === '一般質問' ? '#3498db' : r.sessionType === '大綱質疑' ? '#27ae60' : '#95a5a6'}">${esc(r.sessionType || '')}</span> ${esc(r.topic || '')}${r.gijirokuUrl ? ` <a href="${esc(r.gijirokuUrl)}" target="_blank" class="qe-related-link">📘</a>` : ''}</li>`).join('')}
+                  </ul>`;
+              })()}
               <div class="qe-actions">
                 ${videoUrl ? `<a href="${esc(videoUrl)}" target="_blank" class="qe-action-btn video-btn">▶ YouTubeで見る</a>` : ''}
                 ${gijirokuUrl ? `<a href="${esc(gijirokuUrl)}" target="_blank" class="qe-action-btn gijiroku-btn">📘 議事録で全文を見る</a>` : ''}
@@ -611,6 +647,10 @@ const html = `<!DOCTYPE html>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="伊東市議会の活動を市民にわかりやすく。議員プロフィール・議会動画・質問要約・市民の声を掲載。">
+<meta name="theme-color" content="#1e40af">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png" sizes="192x192" type="image/png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
 <title>みんなの伊東市 — 伊東市議会の活動をわかりやすく</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -626,6 +666,20 @@ body.font-large *{font-size-adjust:inherit}
 body.font-large .m-name,body.font-large .voice-title,body.font-large .v-title{font-size:calc(1.05rem * 1.15)}
 body.font-large p,body.font-large .voice-body,body.font-large .q-bullet,body.font-large .activity-summary p{font-size:calc(.85rem * 1.15);line-height:1.8}
 body.font-large .header-sub,body.font-large nav button{font-size:calc(.88rem * 1.15)}
+
+/* 高コントラストモード（シニア・視覚障害対応） */
+body.high-contrast{--bg:#000;--card:#fff;--text:#000;--sub:#222;--accent:#0033ff}
+body.high-contrast{background:#fff;color:#000}
+body.high-contrast .m-card,body.high-contrast .tab-panel{background:#fff;border:2px solid #000}
+body.high-contrast nav{background:#000;color:#fff}
+body.high-contrast nav button{background:#222;color:#fff;border:1px solid #fff}
+body.high-contrast nav button.active{background:#fff;color:#000}
+body.high-contrast header{background:#000;color:#fff;border-bottom:4px solid #fff}
+body.high-contrast a{color:#0033ff;text-decoration:underline}
+body.high-contrast .qtl-topic-card{border:2px solid #000}
+body.high-contrast .qtl-topic-card:hover,body.high-contrast .qtl-topic-card[open]{background:#ffffaa;border-color:#000}
+body.high-contrast .qtl-question,body.high-contrast .qtl-topic-title{color:#000;font-weight:700}
+body.high-contrast button,body.high-contrast .pg-btn,body.high-contrast .qe-action-btn{border:2px solid #000;font-weight:700}
 /* アクセシビリティバー */
 .a11y-bar{display:flex;justify-content:flex-end;align-items:center;gap:.3rem;padding:.2rem .6rem;background:rgba(255,255,255,.1)}
 .a11y-btn{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:6px;padding:.15rem .5rem;font-size:.72rem;cursor:pointer;font-weight:600}
@@ -1138,6 +1192,14 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
 .qe-action-btn.video-btn:hover{background:#dc2626}
 .qe-action-btn.gijiroku-btn{background:#0284c7;color:#fff}
 .qe-action-btn.gijiroku-btn:hover{background:#0369a1}
+/* 関連質問リンク */
+.qe-related-label{margin-top:1rem;font-size:.82rem;font-weight:700;color:#7c3aed;padding-left:.5rem;border-left:3px solid #a855f7}
+.qe-related-list{list-style:none;padding:0;margin:.4rem 0 .5rem}
+.qe-related-list li{padding:.4rem .6rem;margin-bottom:.3rem;background:#faf5ff;border-radius:6px;font-size:.8rem;color:#1f2937;line-height:1.6;display:flex;align-items:center;gap:.4rem;flex-wrap:wrap}
+.qe-related-date{color:#64748b;font-size:.72rem;flex-shrink:0}
+.qe-related-type{padding:.05rem .4rem;border-radius:8px;color:#fff;font-size:.65rem;font-weight:600;flex-shrink:0}
+.qe-related-link{color:#0369a1;text-decoration:none;font-size:.8rem;margin-left:auto}
+.qe-related-link:hover{text-decoration:underline}
 
 /* 詳細ページのテーマ行（1行コンパクト） */
 .detail-topic-row{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem;padding:.6rem 1rem;background:#faf5ff;border-radius:8px;margin-bottom:1rem;border-left:3px solid #a855f7;font-size:.82rem}
@@ -1404,6 +1466,75 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
 .ref-desc{font-size:.76rem;color:#64748b;margin-bottom:.3rem;line-height:1.5}
 .ref-url{font-size:.72rem;color:#3b82f6;text-decoration:underline;word-break:break-all}
 .ref-url:hover{color:#1e40af}
+
+/* 市民参加ガイドタブ */
+.participate-hero{background:linear-gradient(135deg,#065f46,#10b981);color:#fff;border-radius:16px;padding:2rem 2rem;margin-bottom:1.5rem;text-align:center}
+.participate-hero-badge{display:inline-block;background:rgba(255,255,255,.2);padding:.3rem .8rem;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:.8rem}
+.participate-hero h1{font-size:1.6rem;margin-bottom:.6rem;font-weight:800}
+.participate-hero p{font-size:.95rem;opacity:.95;line-height:1.75;max-width:720px;margin:0 auto}
+.participate-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1.2rem;margin-bottom:1.5rem}
+.pg-card{background:#fff;border-radius:14px;padding:1.5rem;box-shadow:0 2px 12px rgba(0,0,0,.06);border:1px solid #e2e8f0;transition:.2s}
+.pg-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.1)}
+.pg-icon{font-size:2.3rem;margin-bottom:.5rem}
+.pg-card h2{font-size:1.2rem;color:#065f46;margin-bottom:.6rem;font-weight:800}
+.pg-desc{font-size:.88rem;line-height:1.75;color:#334155;margin-bottom:1rem}
+.pg-steps{background:#f0fdf4;border-radius:8px;padding:.8rem 1rem;margin-bottom:1rem;font-size:.85rem;color:#14532d;line-height:1.7}
+.pg-steps strong{color:#065f46;display:block;margin-bottom:.3rem}
+.pg-steps ol,.pg-steps ul{margin:.3rem 0 .5rem;padding-left:1.3rem}
+.pg-steps li{margin-bottom:.2rem}
+.pg-btn{display:inline-flex;align-items:center;gap:.3rem;padding:.6rem 1rem;background:#10b981;color:#fff;text-decoration:none;border-radius:8px;font-weight:600;font-size:.85rem;margin-right:.4rem;margin-top:.3rem;transition:.15s}
+.pg-btn:hover{background:#059669}
+.pg-btn-sub{background:#64748b}
+.pg-btn-sub:hover{background:#475569}
+/* メール登録フォーム */
+.participate-email{background:linear-gradient(135deg,#eff6ff,#dbeafe);border-radius:14px;padding:1.8rem 2rem;margin-top:1.5rem;border:2px solid #93c5fd}
+.pe-icon{font-size:2.3rem;text-align:center;margin-bottom:.3rem}
+.participate-email h3{text-align:center;color:#1e40af;font-size:1.2rem;margin-bottom:.5rem}
+.participate-email>p{text-align:center;font-size:.88rem;color:#1e3a8a;margin-bottom:1.2rem;line-height:1.75}
+.pe-form{max-width:600px;margin:0 auto}
+.pe-input{width:100%;padding:.8rem 1rem;border:2px solid #93c5fd;border-radius:10px;font-size:.95rem;margin-bottom:1rem;background:#fff}
+.pe-input:focus{outline:none;border-color:#2563eb}
+.pe-interests{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.4rem;margin-bottom:1rem;background:#fff;padding:.8rem;border-radius:10px}
+.pe-interests label{display:flex;align-items:center;gap:.4rem;font-size:.85rem;color:#1e3a8a;cursor:pointer;padding:.3rem}
+.pe-interests input[type="checkbox"]{width:18px;height:18px;accent-color:#2563eb}
+.pe-actions{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap}
+.pe-btn{padding:.7rem 2rem;background:#2563eb;color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-size:.95rem;transition:.15s}
+.pe-btn:hover{background:#1d4ed8}
+.pe-btn-unsub{background:#94a3b8}
+.pe-btn-unsub:hover{background:#64748b}
+.pe-result{margin-top:1rem;padding:.7rem 1rem;border-radius:8px;font-size:.85rem;display:none;text-align:center}
+.pe-result.success{background:#dcfce7;color:#14532d;border:1px solid #86efac;display:block}
+.pe-result.error{background:#fee2e2;color:#7f1d1d;border:1px solid #fca5a5;display:block}
+.pe-note{font-size:.75rem;color:#475569;text-align:center;margin-top:1rem;line-height:1.6}
+
+.participate-closing{background:linear-gradient(135deg,#fef3c7,#fde68a);padding:1.5rem 2rem;border-radius:14px;text-align:center;margin-top:2rem}
+.participate-closing h3{color:#78350f;margin-bottom:.6rem;font-size:1.15rem}
+.participate-closing p{color:#451a03;line-height:1.8;font-size:.9rem;max-width:720px;margin:0 auto}
+@media(max-width:640px){.participate-hero{padding:1.3rem 1rem}.participate-hero h1{font-size:1.3rem}.pg-card{padding:1.2rem}}
+
+/* テーマ横断ビュータブ */
+.themes-hero{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;border-radius:16px;padding:1.5rem 2rem;margin-bottom:1.5rem;text-align:center}
+.themes-hero h1{font-size:1.4rem;margin-bottom:.5rem}
+.themes-hero p{font-size:.88rem;opacity:.95}
+.themes-picker{margin-bottom:1.5rem}
+.themes-buttons{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.6rem;margin-bottom:1rem}
+.theme-big-btn{padding:1rem 1.2rem;border:2px solid #c7d2fe;background:#fff;border-radius:12px;font-size:.92rem;font-weight:700;cursor:pointer;transition:.15s;color:#3730a3;text-align:left}
+.theme-big-btn:hover{background:#eef2ff;border-color:#6366f1;transform:translateY(-1px)}
+.theme-big-btn.active{background:#6366f1;color:#fff;border-color:#6366f1}
+.themes-search-row{display:flex;gap:.5rem;margin-top:.8rem}
+.themes-custom-input{flex:1;padding:.7rem 1rem;border:2px solid #c7d2fe;border-radius:10px;font-size:.9rem}
+.themes-custom-btn{padding:.7rem 1.5rem;background:#6366f1;color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer}
+.themes-custom-btn:hover{background:#4f46e5}
+.themes-result{display:flex;flex-direction:column;gap:1rem}
+.theme-qa-card{background:#fff;border-radius:12px;padding:1rem 1.2rem;box-shadow:0 2px 6px rgba(0,0,0,.05);border-left:4px solid #6366f1;transition:.15s}
+.theme-qa-card:hover{box-shadow:0 4px 12px rgba(0,0,0,.08)}
+.theme-qa-head{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;margin-bottom:.5rem;font-size:.8rem}
+.theme-qa-member{font-weight:700;color:#3730a3;cursor:pointer;text-decoration:underline}
+.theme-qa-member:hover{color:#1e1b4b}
+.theme-qa-date{color:#64748b;font-size:.75rem}
+.theme-qa-type{padding:.1rem .45rem;border-radius:8px;color:#fff;font-size:.7rem;font-weight:600}
+.theme-qa-topic{font-size:.92rem;font-weight:600;color:#0f172a;line-height:1.6}
+.theme-empty{text-align:center;padding:2rem;color:#64748b;font-size:.95rem}
 
 /* 議員本人コメント欄 */
 .member-voice{margin:1.5rem 0;padding:1.2rem 1.4rem;border-radius:14px;border:2px solid #cbd5e1}
@@ -1687,7 +1818,9 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
 </div>
 <header>
   <div class="a11y-bar">
-    <button class="a11y-btn" onclick="toggleFontSize()" aria-label="文字サイズ切り替え">文字 大⇔標準</button>
+    <button class="a11y-btn" onclick="toggleFontSize()" aria-label="文字サイズ切り替え">🔤 文字大小</button>
+    <button class="a11y-btn" onclick="toggleHighContrast()" aria-label="高コントラストモード" title="高コントラスト">◐ 色反転</button>
+    <button class="a11y-btn" onclick="speakSelection()" aria-label="選択した文を読み上げる" title="選択文を読み上げ">🔊 読上げ</button>
   </div>
   <h1>みんなの伊東市</h1>
   <div class="header-sub">伊東市議会を、もっと身近に。</div>
@@ -1702,10 +1835,12 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
 </header>
 <nav role="tablist" aria-label="メインナビゲーション">
   <button class="active" role="tab" aria-selected="true" onclick="switchTab('members',this)">議員一覧</button>
+  <button role="tab" aria-selected="false" onclick="switchTab('themes',this)">🔍 テーマ横断</button>
   <button role="tab" aria-selected="false" onclick="switchTab('all',this)">動画・検索</button>
   <button role="tab" aria-selected="false" onclick="switchTab('plan',this)">総合計画</button>
   <button role="tab" aria-selected="false" onclick="switchTab('analysis',this)">🔎 伊東市分析</button>
   <button role="tab" aria-selected="false" onclick="switchTab('voice',this)">市民の声</button>
+  <button role="tab" aria-selected="false" onclick="switchTab('participate',this)">🗣️ 参加ガイド</button>
   <button role="tab" aria-selected="false" onclick="switchTab('stats',this)">議会全体の動き</button>
 </nav>
 <div class="container" id="main-content" role="main">
@@ -2287,6 +2422,167 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
     </div>
   </div>
 
+  <div id="tab-participate" class="tab-panel">
+    <div class="participate-hero">
+      <div class="participate-hero-badge">🗣️ 市民参加ガイド</div>
+      <h1>あなたの声を、市政に届けよう</h1>
+      <p>「みんなの伊東市」で見た議論に意見がある、気になる課題がある、直接議員・市役所に声を届けたい。そんな時に役立つ窓口・手続きをまとめました。</p>
+    </div>
+
+    <div class="participate-grid">
+      <div class="pg-card">
+        <div class="pg-icon">👂</div>
+        <h2>パブリックコメント</h2>
+        <p class="pg-desc">市が新しい計画や条例案を作る時、市民から意見を募集する制度。誰でも（市内外問わず）意見を提出できます。</p>
+        <div class="pg-steps">
+          <strong>手続き：</strong>
+          <ol>
+            <li>伊東市HPの募集ページで募集中の案件を確認</li>
+            <li>意見書を作成（住所・氏名・意見内容）</li>
+            <li>電子メール・郵送・FAX・窓口持参のいずれかで提出</li>
+          </ol>
+        </div>
+        <a href="https://www.city.ito.shizuoka.jp/jouhou_kanri/iken/" target="_blank" class="pg-btn">🔗 伊東市パブコメ募集案内</a>
+      </div>
+
+      <div class="pg-card">
+        <div class="pg-icon">🏛️</div>
+        <h2>議会を傍聴する</h2>
+        <p class="pg-desc">本会議は誰でも傍聴できます。議場に実際に足を運んで、議員の発言を直接聞けます。オンライン中継でも視聴可能。</p>
+        <div class="pg-steps">
+          <strong>方法：</strong>
+          <ol>
+            <li><strong>会場傍聴</strong>: 本会議場（市役所）で受付後、傍聴席へ。予約不要</li>
+            <li><strong>中継視聴</strong>: YouTube配信で自宅から</li>
+            <li><strong>定例会の時期</strong>: 3月（予算）・6月・9月（決算）・12月</li>
+          </ol>
+        </div>
+        <a href="https://www.youtube.com/channel/UC9FGDfo93b_dpu_7-AnN4wQ" target="_blank" class="pg-btn">📺 伊東市議会 YouTube</a>
+        <a href="https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/itoshigikai/index.html" target="_blank" class="pg-btn pg-btn-sub">📅 議会日程・中継情報</a>
+      </div>
+
+      <div class="pg-card">
+        <div class="pg-icon">📝</div>
+        <h2>陳情・請願</h2>
+        <p class="pg-desc">市政や議会に対して希望を伝える正式な方法。請願は議員の紹介が必要、陳情は紹介なしで誰でも提出可能。</p>
+        <div class="pg-steps">
+          <strong>違い：</strong>
+          <ul>
+            <li><strong>請願</strong>：紹介議員1名以上の署名が必要。議会本会議で採択可否が決まる</li>
+            <li><strong>陳情</strong>：紹介議員なしで提出可能。委員会で審査</li>
+          </ul>
+          <strong>提出先：</strong> 議会事務局（市役所内）
+        </div>
+        <a href="https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/itoshigikai/" target="_blank" class="pg-btn">🔗 議会事務局の案内</a>
+      </div>
+
+      <div class="pg-card">
+        <div class="pg-icon">💌</div>
+        <h2>議員に直接声を届ける</h2>
+        <p class="pg-desc">気になる議員のSNSや事務所に直接意見を伝えられます。応援メッセージも批判も、双方向の対話のきっかけに。</p>
+        <div class="pg-steps">
+          <strong>方法：</strong>
+          <ul>
+            <li>各議員のページから公式SNSへ（あれば）</li>
+            <li>議会事務局経由で議員に連絡を取り次いでもらう</li>
+            <li>市民の声タブから匿名投稿（議員が目を通します）</li>
+          </ul>
+        </div>
+        <a href="javascript:void(0)" onclick="switchTab('members',document.querySelector('nav button:nth-child(1)'))" class="pg-btn">👥 議員一覧へ</a>
+        <a href="javascript:void(0)" onclick="switchTab('voice',document.querySelector('nav button:nth-child(6)'))" class="pg-btn pg-btn-sub">💬 市民の声で投稿</a>
+      </div>
+
+      <div class="pg-card">
+        <div class="pg-icon">🗳️</div>
+        <h2>選挙で意思表示</h2>
+        <p class="pg-desc">最も強い市民参加の方法は、選挙で投票すること。市議会議員は4年に1度、市長は4年に1度の選挙です。</p>
+        <div class="pg-steps">
+          <strong>伊東市の選挙：</strong>
+          <ul>
+            <li>市議会議員選挙：現在の任期は令和7年10月〜令和11年10月</li>
+            <li>市長選挙：令和7年12月に杉本かずや氏が当選</li>
+            <li>投票所は住民登録地の最寄り施設</li>
+          </ul>
+        </div>
+        <a href="https://www.city.ito.shizuoka.jp/senkyo/" target="_blank" class="pg-btn">🔗 伊東市選挙管理委員会</a>
+      </div>
+
+      <div class="pg-card">
+        <div class="pg-icon">📞</div>
+        <h2>市役所に相談する</h2>
+        <p class="pg-desc">具体的な困りごと・要望は、市役所の担当部署に直接相談するのが一番早い場合もあります。</p>
+        <div class="pg-steps">
+          <strong>主な窓口：</strong>
+          <ul>
+            <li><strong>市民課</strong>：住民票・戸籍・パスポート</li>
+            <li><strong>福祉課</strong>：介護・障害・生活相談</li>
+            <li><strong>建設課</strong>：道路・公園・住宅</li>
+            <li><strong>観光課</strong>：観光振興・イベント</li>
+            <li><strong>総務課</strong>：全般的な相談窓口</li>
+          </ul>
+          <strong>電話：</strong> 0557-32-1111（代表）
+        </div>
+        <a href="https://www.city.ito.shizuoka.jp/" target="_blank" class="pg-btn">🔗 伊東市公式サイト</a>
+      </div>
+    </div>
+
+    <div class="participate-email">
+      <div class="pe-icon">📬</div>
+      <h3>新着議会情報をメールで受け取る</h3>
+      <p>新しい議会が開かれたら、議論の要点をメールでお知らせします（月1回程度）。関心のあるテーマを選んで登録してください。いつでも配信停止できます。</p>
+      <div class="pe-form">
+        <input type="email" id="sub-email" placeholder="メールアドレス（例：you@example.com）" class="pe-input" autocomplete="email">
+        <div class="pe-interests" id="pe-interests">
+          <label><input type="checkbox" value="子育て・教育"> 👨‍👩‍👧 子育て・教育</label>
+          <label><input type="checkbox" value="医療・福祉"> 🏥 医療・福祉</label>
+          <label><input type="checkbox" value="防災・安全"> 🛡️ 防災・安全</label>
+          <label><input type="checkbox" value="観光・経済"> 🏖️ 観光・経済</label>
+          <label><input type="checkbox" value="都市整備・交通"> 🚌 交通・道路</label>
+          <label><input type="checkbox" value="環境・衛生"> 🌳 環境・ごみ</label>
+          <label><input type="checkbox" value="行財政・議会"> 💰 行財政・議会</label>
+          <label><input type="checkbox" value="全般"> 📢 全般（全てのお知らせ）</label>
+        </div>
+        <div class="pe-actions">
+          <button class="pe-btn" onclick="submitSubscribe()">登録する</button>
+          <button class="pe-btn pe-btn-unsub" onclick="submitUnsubscribe()">配信停止</button>
+        </div>
+        <div id="pe-result" class="pe-result"></div>
+      </div>
+      <div class="pe-note">
+        ⚠️ 登録メールアドレスは配信以外の用途には使用しません。運営者は伊東市議会議員・大竹圭です。プライバシー保護に努めます。
+      </div>
+    </div>
+
+    <div class="participate-closing">
+      <h3>🌱 民主主義は、参加することで育ちます</h3>
+      <p>議員を「選ぶ」だけではなく、日々の政策議論に「参加する」。市民の一人ひとりが声を上げることで、伊東市はもっと良い街になります。「自分は何もできない」と思う必要はありません。このサイトで議論を知ること自体、立派な参加の第一歩です。</p>
+    </div>
+  </div>
+
+  <div id="tab-themes" class="tab-panel">
+    <div class="themes-hero">
+      <h1>🔍 テーマから議員の議論を見る</h1>
+      <p>気になる政策テーマを選ぶと、そのテーマについて質問した全議員と当局の答弁を時系列で表示します。</p>
+    </div>
+    <div class="themes-picker">
+      <div class="themes-buttons" id="themes-buttons">
+        <button class="theme-big-btn" data-theme="子育て・教育" onclick="renderThemeView(this)">👨‍👩‍👧 子育て・教育</button>
+        <button class="theme-big-btn" data-theme="医療・福祉" onclick="renderThemeView(this)">🏥 医療・福祉</button>
+        <button class="theme-big-btn" data-theme="防災・安全" onclick="renderThemeView(this)">🛡️ 防災・安全</button>
+        <button class="theme-big-btn" data-theme="観光・経済" onclick="renderThemeView(this)">🏖️ 観光・経済</button>
+        <button class="theme-big-btn" data-theme="都市整備・交通" onclick="renderThemeView(this)">🚌 交通・道路</button>
+        <button class="theme-big-btn" data-theme="環境・衛生" onclick="renderThemeView(this)">🌳 環境・ごみ</button>
+        <button class="theme-big-btn" data-theme="行財政・議会" onclick="renderThemeView(this)">💰 行財政・議会</button>
+        <button class="theme-big-btn" data-theme="農林水産" onclick="renderThemeView(this)">🐟 農林水産</button>
+      </div>
+      <div class="themes-search-row">
+        <input type="text" id="themes-custom-keyword" placeholder="他のキーワードで検索（例：温泉、空き家、DX）" class="themes-custom-input">
+        <button onclick="renderThemeViewByKeyword()" class="themes-custom-btn">検索</button>
+      </div>
+    </div>
+    <div id="themes-result" class="themes-result"></div>
+  </div>
+
   <div id="tab-stats" class="tab-panel">
     <div class="tab-notice">ℹ️ このページは<strong>議会全体の動き</strong>を俯瞰するものです。議員個人の数値化・ランキング表示は行いません。質問の数は議員の働きの一側面にすぎず、一つの深い質問が百の質問より重い場合もあります。</div>
     <!-- 議会カレンダー -->
@@ -2595,6 +2891,51 @@ function welcomeGo(target){
   }
 }
 
+// === メール購読登録 ===
+async function submitSubscribe(){ await submitSubscription('subscribe'); }
+async function submitUnsubscribe(){ await submitSubscription('unsubscribe'); }
+async function submitSubscription(action){
+  const emailInput = document.getElementById('sub-email');
+  const resultDiv = document.getElementById('pe-result');
+  const email = (emailInput.value || '').trim().toLowerCase();
+  if (!/^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$/.test(email)) {
+    resultDiv.className = 'pe-result error';
+    resultDiv.textContent = '⚠️ 有効なメールアドレスを入力してください。';
+    return;
+  }
+  const interests = [...document.querySelectorAll('#pe-interests input[type="checkbox"]:checked')].map(c => c.value);
+  if (action === 'subscribe' && interests.length === 0) {
+    resultDiv.className = 'pe-result error';
+    resultDiv.textContent = '⚠️ 少なくとも1つのテーマを選択してください。';
+    return;
+  }
+  resultDiv.className = 'pe-result';
+  resultDiv.textContent = '送信中...';
+  resultDiv.style.display = 'block';
+  try {
+    const resp = await fetch(VOICE_API + '/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, interests, action })
+    });
+    const data = await resp.json();
+    if (data.ok) {
+      resultDiv.className = 'pe-result success';
+      resultDiv.textContent = '✅ ' + (data.message || '処理しました。');
+      if (action === 'subscribe') {
+        emailInput.value = '';
+        document.querySelectorAll('#pe-interests input[type="checkbox"]:checked').forEach(c => c.checked = false);
+      }
+    } else {
+      resultDiv.className = 'pe-result error';
+      resultDiv.textContent = '⚠️ ' + (data.error || '登録に失敗しました。');
+    }
+  } catch (e) {
+    resultDiv.className = 'pe-result error';
+    resultDiv.textContent = '⚠️ 通信エラーが発生しました: ' + e.message;
+  }
+}
+
 // === このデータの限界モーダル ===
 function openLimitsModal(){
   document.getElementById('limits-overlay').classList.add('open');
@@ -2700,8 +3041,48 @@ function toggleFontSize(){
   document.body.classList.toggle('font-large');
   localStorage.setItem('ito_fontlarge', document.body.classList.contains('font-large')?'1':'0');
 }
+function toggleHighContrast(){
+  document.body.classList.toggle('high-contrast');
+  localStorage.setItem('ito_hicontrast', document.body.classList.contains('high-contrast')?'1':'0');
+}
+function speakSelection(){
+  if (!('speechSynthesis' in window)) {
+    alert('お使いのブラウザは読み上げ機能に対応していません。');
+    return;
+  }
+  const selection = window.getSelection().toString().trim();
+  let text = selection;
+  // 選択がなければ、現在表示中のタブから主要テキストを取得
+  if (!text) {
+    const activePanel = document.querySelector('.tab-panel.active');
+    if (activePanel) {
+      // 見出し＋主要段落を対象
+      const parts = [];
+      activePanel.querySelectorAll('h1, h2, h3, .qtl-topic-title, .qtl-question, .pg-desc').forEach(el => {
+        const t = el.innerText.trim();
+        if (t) parts.push(t);
+      });
+      text = parts.slice(0, 10).join('。 ');
+    }
+  }
+  if (!text) {
+    alert('読み上げたい箇所を先に選択してください。');
+    return;
+  }
+  // 既に読み上げ中ならキャンセル
+  if (window.speechSynthesis.speaking) {
+    window.speechSynthesis.cancel();
+    return;
+  }
+  const utter = new SpeechSynthesisUtterance(text.substring(0, 2000));
+  utter.lang = 'ja-JP';
+  utter.rate = 0.95;
+  utter.pitch = 1.0;
+  window.speechSynthesis.speak(utter);
+}
 (function(){
   if(localStorage.getItem('ito_fontlarge')==='1') document.body.classList.add('font-large');
+  if(localStorage.getItem('ito_hicontrast')==='1') document.body.classList.add('high-contrast');
 })();
 
 // === 議会カレンダー ===
@@ -2727,6 +3108,74 @@ function toggleFontSize(){
 })();
 
 // === パーソナライズ ===
+// === テーマ横断ビュー ===
+// 全議員のトピックを検索して、キーワードにマッチするQ&Aを時系列表示
+const THEME_KEYWORDS = {
+  '子育て・教育': ['子育て', '教育', '学校', '保育', '幼稚園', '児童', '学童', '不登校', '給食', '教員'],
+  '医療・福祉': ['医療', '福祉', '介護', '高齢', '病院', '障害', '生活保護', '健康'],
+  '防災・安全': ['防災', '災害', '避難', '地震', '津波', '火山', '消防', '救急'],
+  '観光・経済': ['観光', 'インバウンド', '温泉', 'イベント', '商店', '経済', '商工', '農業'],
+  '都市整備・交通': ['道路', '交通', 'バス', '駐車場', '鉄道', '歩道', '橋'],
+  '環境・衛生': ['環境', 'ごみ', 'ゴミ', 'メガソーラー', '太陽光', 'リサイクル', 'ゼロカーボン'],
+  '行財政・議会': ['財政', '予算', '決算', '行政', 'DX', '税'],
+  '農林水産': ['農業', '水産', '漁業', '林業'],
+};
+
+function renderThemeView(btn){
+  document.querySelectorAll('.theme-big-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const theme = btn.dataset.theme;
+  const keywords = THEME_KEYWORDS[theme] || [theme];
+  renderThemeResultsByKeywords(keywords, theme);
+}
+function renderThemeViewByKeyword(){
+  const input = document.getElementById('themes-custom-keyword');
+  const kw = (input.value || '').trim();
+  if (!kw) return;
+  document.querySelectorAll('.theme-big-btn').forEach(b => b.classList.remove('active'));
+  renderThemeResultsByKeywords([kw], kw);
+}
+function renderThemeResultsByKeywords(keywords, themeName){
+  const result = document.getElementById('themes-result');
+  if (!window.GIJIROKU_BY_MEMBER) {
+    result.innerHTML = '<div class="theme-empty">議事録データの準備ができていません。</div>';
+    return;
+  }
+  const allQAs = [];
+  for (const [name, data] of Object.entries(window.GIJIROKU_BY_MEMBER)) {
+    for (const q of (data.questions || [])) {
+      const topic = q.topic || '';
+      const qText = (q.question || '').substring(0, 200);
+      const combined = topic + ' ' + qText;
+      if (keywords.some(kw => combined.includes(kw))) {
+        allQAs.push({ name, q });
+      }
+    }
+  }
+  // 新しい順でソート
+  allQAs.sort((a, b) => (b.q.date || '').localeCompare(a.q.date || ''));
+
+  if (allQAs.length === 0) {
+    result.innerHTML = '<div class="theme-empty">「' + themeName + '」に関する質問は見つかりませんでした。</div>';
+    return;
+  }
+  const esc2 = (s) => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  const html = '<h2 style="margin-bottom:1rem;font-size:1.15rem;color:#3730a3">「' + esc2(themeName) + '」に関する議論 (' + allQAs.length + '件)</h2>' +
+    allQAs.map(item => {
+      const q = item.q;
+      const tc = q.sessionType === '一般質問' ? '#3498db' : q.sessionType === '大綱質疑' ? '#27ae60' : q.sessionType === '補正予算審議' ? '#e67e22' : '#95a5a6';
+      const topic = esc2(q.topic || (q.question||'').substring(0, 80));
+      const gijirokuBtn = q.gijirokuUrl ? '<a href="' + esc2(q.gijirokuUrl) + '" target="_blank" class="qtl-gijiroku-link">📘</a>' : '';
+      return '<div class="theme-qa-card"><div class="theme-qa-head">' +
+        '<span class="theme-qa-member" onclick="showDetail(\\''+esc2(item.name)+'\\')">'+esc2(item.name)+'</span>' +
+        '<span class="theme-qa-date">'+esc2(q.date||'')+'</span>' +
+        '<span class="theme-qa-type" style="background:'+tc+'">'+esc2(q.sessionType||'')+'</span>' +
+        gijirokuBtn +
+        '</div><div class="theme-qa-topic">'+topic+'</div></div>';
+    }).join('');
+  result.innerHTML = html;
+}
+
 // テーマタグをクリックしたら、そのテーマに関連する質問に絞り込んで「動画・検索」タブに切替
 function jumpToThemeQuestions(theme){
   const keywordMap={
@@ -2777,6 +3226,22 @@ function applyPersonalize(){
 }
 document.addEventListener('DOMContentLoaded',applyPersonalize);
 
+// === PWA Service Worker 登録 ===
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => console.log('[PWA] SW registered:', reg.scope))
+      .catch(err => console.warn('[PWA] SW registration failed:', err));
+  });
+}
+
+// iOS / Safari向け：ホーム画面追加のヒント（初回のみ）
+document.addEventListener('DOMContentLoaded', () => {
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  if (isStandalone) document.body.classList.add('standalone-mode');
+  // 「ホーム画面に追加」プロンプト（将来的にbeforeinstallpromptイベントで強化）
+});
+
 // === テーマで探す ===
 function themeSearch(keywords){
   document.querySelectorAll('.theme-btn').forEach(b=>b.classList.remove('active'));
@@ -2793,6 +3258,18 @@ const SEARCH_INDEX = ${JSON.stringify(searchIndex)};
 const CAT_COLORS = ${JSON.stringify(catColors)};
 const SUB_POLICIES = ${JSON.stringify(sougouPlan ? sougouPlan.sub_policies : [])};
 const MEMBER_POLICY_MAP = ${JSON.stringify(memberPolicyMap || null)};
+// テーマ横断ビュー用：議員ごとのQ&A軽量データ（topic + date + type + URL のみ）
+window.GIJIROKU_BY_MEMBER = ${gijirokuData && gijirokuData.memberData ? JSON.stringify(Object.fromEntries(Object.entries(gijirokuData.memberData).map(([name, data]) => [name, {
+  questions: (data.questions || []).map(q => ({
+    topic: q.topic,
+    question: (q.question || '').substring(0, 150),
+    date: q.date,
+    dateLabel: q.dateLabel,
+    sessionType: q.sessionType,
+    gijirokuUrl: q.gijirokuUrl,
+    youtubeVideo: q.youtubeVideo ? { videoId: q.youtubeVideo.videoId } : null,
+  }))
+}]))) : '{}'};
 function heatLevel(n){ if(!n)return 0; if(n===1)return 1; if(n===2)return 2; if(n<=4)return 3; if(n<=9)return 4; return 5; }
 function renderHeatmap(){
   if(!MEMBER_POLICY_MAP)return;

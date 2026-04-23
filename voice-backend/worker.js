@@ -956,6 +956,72 @@ export default {
       }
     }
 
+    // ====== POST /subscribe : 新着通知メール登録 ======
+    if (request.method === 'POST' && url.pathname === '/subscribe') {
+      try {
+        const country = request.cf?.country || '';
+        if (country && country !== 'JP') {
+          return jsonResp({ ok: false, error: '日本国内からのみ登録可能です' }, 403, env, origin);
+        }
+        const ip = request.headers.get('cf-connecting-ip') || 'unknown';
+        // レート制限（10分間に5回まで）
+        const rateKey = new Request('https://sublimit.local/' + ip, { method: 'GET' });
+        const rateCache = caches.default;
+        const prev = await rateCache.match(rateKey);
+        let count = 0;
+        if (prev) { try { count = parseInt(await prev.text()) || 0; } catch(e){} }
+        if (count >= 5) {
+          return jsonResp({ ok: false, error: '登録回数の上限に達しました。10分後にお試しください。' }, 429, env, origin);
+        }
+        ctx.waitUntil(rateCache.put(rateKey, new Response(String(count+1), { headers: { 'Cache-Control':'public, max-age=600' }})));
+
+        const body = await request.json();
+        const email = (body.email || '').toString().trim().toLowerCase();
+        const interests = Array.isArray(body.interests) ? body.interests.slice(0, 10) : [];
+        const action = (body.action || 'subscribe').toString();
+
+        // メールアドレス検証
+        if (!/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/.test(email)) {
+          return jsonResp({ ok: false, error: '有効なメールアドレスを入力してください' }, 400, env, origin);
+        }
+        if (email.length > 200) {
+          return jsonResp({ ok: false, error: 'メールアドレスが長すぎます' }, 400, env, origin);
+        }
+
+        // GAS経由で登録（既存の/submitと同じパターン）
+        if (!env.GAS_URL) {
+          return jsonResp({ ok: false, error: 'サーバー設定が不完全です' }, 500, env, origin);
+        }
+        const payload = {
+          type: 'email_subscription',
+          email,
+          interests,
+          action, // 'subscribe' or 'unsubscribe'
+          secret: env.SHARED_SECRET,
+          ip,
+          country,
+          timestamp: new Date().toISOString(),
+        };
+        const gasResp = await fetch(env.GAS_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const gasText = await gasResp.text();
+        let gasJson = {};
+        try { gasJson = JSON.parse(gasText); } catch(e){}
+        if (!gasResp.ok || gasJson.ok === false) {
+          return jsonResp({ ok: false, error: gasJson.error || 'サーバー側でエラーが発生しました' }, 502, env, origin);
+        }
+        return jsonResp({
+          ok: true,
+          message: action === 'subscribe' ? '登録ありがとうございます。新着議会情報をお届けします。' : '配信停止しました。',
+        }, 200, env, origin);
+      } catch (e) {
+        return jsonResp({ ok: false, error: e.message }, 500, env, origin);
+      }
+    }
+
     // ====== POST /topic : 議会質問のトピック生成（バッチ処理用） ======
     if (request.method === 'POST' && url.pathname === '/topic') {
       try {
