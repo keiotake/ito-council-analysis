@@ -766,10 +766,20 @@ const CHAT_SYSTEM = [
   '',
   '## 最重要ルール: 事実のみ回答する',
   '絶対に守ること:',
-  '- 下記「サイト情報」に明記されている事実だけを回答すること',
+  '- 下記「サイト情報」に明記されている事実だけを回答すること（ただし後述の【例外】に注意）',
   '- 書かれていないことは絶対に推測・創作しないこと。「その情報はサイトに掲載されていません」と正直に答えること',
   '- 会派名から所属政党を推測してはいけない。例:「政和会」は政和会であり、公明党系でも自民党系でもない。会派名はそのまま伝えること',
   '- 議員のプロフィール（期数、委員会、会派など）は、サイト情報に書かれた通りに正確に答えること',
+  '',
+  '## 【例外】 行政用語・議会用語・財政用語の解説',
+  '市民から「XXとは何？」「XXについて教えて」「XXの意味」のように、行政・議会・財政用語そのものの意味を尋ねられた場合は、サイト情報の有無に関わらず、一般的な定義を中学生にもわかるやさしい日本語で説明してください。',
+  'この例外が適用される用語の例：百条委員会、実質公債費比率、財政調整基金、経常収支比率、大綱質疑、一般質問、委員会付託、専決処分、指定管理者、補正予算、PFI、公共工事、補助金、交付税、条例、規則、要綱、可決、否決、継続審査、議会運営委員会、会期、閉会中審査 など行政・議会・財政に関するあらゆる一般用語。',
+  '解説の構成：',
+  '  (1) 一文でズバッと要点（例：「市の借金返済の重さを示す指標のひとつ」）',
+  '  (2) もう少し詳しく、身近な例えを交えて（例：「家計でいうと、年収に対する住宅ローン返済額の割合のような考え方」）',
+  '  (3) 伊東市議会のサイト情報にこの用語を使った議論があれば、どのタブで見られるかを一言だけ添える（例：「実際の議会での議論は『議員一覧』から各議員の質問をご覧ください」）',
+  '注意：政治的な意味合いや特定議員の評価は含めないこと。用語の一般的な意味のみ説明する。',
+  '',
   '- 質問内容を聞かれた場合の検索手順（必ず全ステップを実行すること）:',
   '  ステップ1: 「議員別 質問要約一覧」セクションからその議員の個人質問を検索する',
   '  ステップ2: その議員のプロフィールから所属会派を確認する',
@@ -940,6 +950,89 @@ export default {
           ok: true,
           answer: answer,
           usage: { input: usage.input_tokens, output: usage.output_tokens },
+        }, 200, env, origin);
+      } catch (e) {
+        return jsonResp({ ok: false, error: e.message }, 500, env, origin);
+      }
+    }
+
+    // ====== POST /topic : 議会質問のトピック生成（バッチ処理用） ======
+    if (request.method === 'POST' && url.pathname === '/topic') {
+      try {
+        if (!env.ANTHROPIC_API_KEY) {
+          return jsonResp({ ok: false, error: 'APIキーが設定されていません' }, 500, env, origin);
+        }
+        // バッチ生成用エンドポイント、管理者用シークレット認証
+        const authHeader = request.headers.get('X-Admin-Secret') || '';
+        if (!env.ADMIN_SECRET || authHeader !== env.ADMIN_SECRET) {
+          return jsonResp({ ok: false, error: 'Unauthorized' }, 401, env, origin);
+        }
+        const body = await request.json();
+        const questionText = (body.text || '').toString().trim();
+        const sessionType = (body.sessionType || '').toString().trim();
+        if (questionText.length < 10) {
+          return jsonResp({ ok: false, error: 'テキストが短すぎます' }, 400, env, origin);
+        }
+        // 最大2000文字まで
+        const text = questionText.substring(0, 2000);
+
+        const topicSystem = [
+          'あなたは「議会での質問や発言を一言で要約する編集者」です。',
+          '市民がパッと見てすぐ内容を把握できる、端的で具体的な見出しを作ります。',
+          '',
+          '## ルール',
+          '1. 見出しは15〜35文字の日本語。必ず「〜について」または名詞句で終わる',
+          '2. 具体的な対象物や事柄を必ず含める（例：「特別会計補正予算」「指定管理者の選定」「ポスター掲示場」など）',
+          '3. 冒頭の定型句・フィラーは無視する：',
+          '   - 「ただいま議題となっております」「ただいま議題となりました」',
+          '   - 「先ほどの答弁で」「今のお話ですと」「それで」',
+          '   - 「まず」「次に」「続いて」「以下」',
+          '4. 抽象的な言葉だけの見出しは禁止：',
+          '   NG：「この問題について」「提案理由について」「議題について」',
+          '   NG：「報告について」「審査について」「説明について」',
+          '5. 議案番号や会議報告は「内容の本質」を抽出：',
+          '   例：「議題となりました特別会計補正予算２件につきまして…審査の結果を報告」',
+          '     → 「特別会計補正予算２件（委員会審査報告）」',
+          '   例：「発議第６号 市長に対する不信任決議」→ 「市長に対する不信任決議について」',
+          '6. 再質問や続きの質問は、元の論点が何かを本文から読み取って見出しにする',
+          '   例：「先ほどの井戸議員への答弁で…管理栄養士…」→ 「管理栄養士の資格要件について」',
+          '7. 金額や数値は含めてよい（例：「３，７００万円の選挙費補正について」）',
+          '',
+          '## 出力フォーマット',
+          'トピックの見出しだけを1行で返してください。説明や引用符は不要です。',
+        ].join('\n');
+
+        const userMsg = `次の議会発言について、15〜35文字で具体的な見出しを作ってください。${sessionType ? `\n種別：${sessionType}` : ''}\n\n発言：\n${text}`;
+
+        const claudeResp = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': env.ANTHROPIC_API_KEY,
+            'anthropic-version': '2023-06-01',
+          },
+          body: JSON.stringify({
+            model: 'claude-haiku-4-5',
+            max_tokens: 100,
+            system: topicSystem,
+            messages: [{ role: 'user', content: userMsg }],
+          }),
+        });
+        if (!claudeResp.ok) {
+          const errText = await claudeResp.text();
+          return jsonResp({ ok: false, error: 'AI呼び出しエラー: ' + errText.substring(0,200) }, 502, env, origin);
+        }
+        const data = await claudeResp.json();
+        let topic = (data.content?.[0]?.text || '').trim();
+        // 先頭・末尾の引用符を除去
+        topic = topic.replace(/^["「『]+/, '').replace(/["」』]+$/, '').trim();
+        // 改行があれば最初の行だけ
+        topic = topic.split(/[\n\r]/)[0].trim();
+
+        return jsonResp({
+          ok: true,
+          topic,
+          usage: data.usage || {},
         }, 200, env, origin);
       } catch (e) {
         return jsonResp({ ok: false, error: e.message }, 500, env, origin);

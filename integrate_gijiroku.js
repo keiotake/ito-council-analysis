@@ -8,6 +8,14 @@ const fs = require('fs');
 const gijiroku = JSON.parse(fs.readFileSync('gijiroku_data.json', 'utf-8'));
 const analysis = JSON.parse(fs.readFileSync('analysis_data.json', 'utf-8'));
 const videoMetadata = JSON.parse(fs.readFileSync('video_metadata.json', 'utf-8'));
+// AI生成のトピックキャッシュ（高品質な見出し）
+let topicsCache = {};
+try { topicsCache = JSON.parse(fs.readFileSync('topics_cache.json', 'utf-8')); } catch(e) { console.warn('topics_cache.json not found, using regex-based topics'); }
+
+function makeKey(fino, qText) {
+  const prefix = (qText || '').substring(0, 50).replace(/[\s\n]/g,'');
+  return `${fino}|${prefix}`;
+}
 
 // Parse session date from sessionTitle + dateLabel
 // e.g., "令和 ７年１２月 定例会" + "11月21日-01号" → 2025-11-21
@@ -96,6 +104,9 @@ for (const meeting of gijiroku.meetings) {
         questions: []
       };
     }
+    // AI生成トピックがあれば優先、なければ正規表現ベースのtopic
+    const qText = qa.questionFull || qa.question || '';
+    const aiTopic = topicsCache[makeKey(meeting.fino, qText)];
     memberGijirokuData[name].questions.push({
       fino: meeting.fino,
       date: meeting.actualDate,
@@ -103,7 +114,7 @@ for (const meeting of gijiroku.meetings) {
       dateLabel: meeting.dateLabel,
       sessionType: inferSessionType(meeting.sessionTitle, qa.question),
       position: qa.questionerPosition,
-      topic: qa.topic,  // 「〇〇について」の端的トピック
+      topic: aiTopic || qa.topic,  // AI優先、フォールバックで正規表現
       question: qa.question,
       questionFull: qa.questionFull,
       followUpCount: qa.followUpCount,

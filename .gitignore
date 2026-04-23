@@ -12,3 +12,5 @@ voice-backend/DEPLOYED_URLS.txt
 scrape_tmp/
 gijiroku_data.json
 gijiroku_integrated.json
+topics_cache.json
+generate_topics.js
