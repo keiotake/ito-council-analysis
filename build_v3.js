@@ -490,15 +490,26 @@ function memberDetailHTML(m) {
             </div>
           `;
           }).join('');
+          // 答弁プレビュー（閉じた状態でも要点を表示）
+          const firstResp = (q.responses || [])[0];
+          let respPreview = '';
+          if (firstResp) {
+            const respRaw = firstResp.responseFull || firstResp.response || '';
+            const respShort = respRaw.length > 110 ? respRaw.substring(0, 107) + '…' : respRaw;
+            respPreview = `<div class="qtl-ans-preview"><span class="qtl-ans-label">📢 ${esc(firstResp.position || '当局')}：</span><span class="qtl-ans-text">${esc(respShort)}</span>${respCount > 1 ? `<span class="qtl-ans-more">ほか${respCount - 1}件の答弁</span>` : ''}</div>`;
+          } else {
+            respPreview = '<div class="qtl-ans-preview qtl-ans-none">📢 当局答弁なし（発言のみ）</div>';
+          }
           return `<details class="qtl-topic-card" data-date="${esc(q.date || '')}" data-type="${esc(q.sessionType || '')}">
             <summary class="qtl-topic-summary">
               <div class="qtl-topic-meta">
                 <span class="qtl-date">${esc(q.date || q.dateLabel || '')}</span>
                 <span class="qtl-type" style="background:${tc}">${esc(q.sessionType || '')}</span>
-                ${respCount > 0 ? `<span class="qtl-resp-mini">📢${respCount}</span>` : ''}
+                ${respCount > 0 ? `<span class="qtl-resp-mini">答弁${respCount}</span>` : ''}
                 ${q.followUpCount > 0 ? `<span class="qtl-fu-mini">💭${q.followUpCount}</span>` : ''}
               </div>
-              <div class="qtl-topic-title">${esc(topic)}</div>
+              <div class="qtl-topic-title">💬 ${esc(topic)}</div>
+              ${respPreview}
               <span class="qtl-expand-hint">▼ 詳細</span>
             </summary>
             <div class="qtl-expand-content">
@@ -1171,7 +1182,13 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
 .qtl-resp-mini,.qtl-fu-mini{padding:.05rem .4rem;border-radius:10px;font-weight:700;font-size:.65rem}
 .qtl-resp-mini{background:#e0f2fe;color:#0369a1}
 .qtl-fu-mini{background:#fef3c7;color:#92400e}
-.qtl-topic-title{font-size:.92rem;font-weight:700;color:#0f172a;line-height:1.5;padding-right:3.5rem;position:relative}
+.qtl-topic-title{font-size:.95rem;font-weight:700;color:#0f172a;line-height:1.5;padding-right:3.5rem;position:relative;margin-bottom:.4rem}
+/* 答弁プレビュー（閉じた状態で要点を見せる） */
+.qtl-ans-preview{font-size:.82rem;line-height:1.6;color:#334155;padding:.5rem .7rem;background:#f0f9ff;border-left:3px solid #0284c7;border-radius:0 6px 6px 0;margin-top:.3rem}
+.qtl-ans-label{font-weight:700;color:#075985;margin-right:.3rem}
+.qtl-ans-text{color:#1e293b}
+.qtl-ans-more{display:block;margin-top:.2rem;font-size:.7rem;color:#64748b;font-style:italic}
+.qtl-ans-none{color:#94a3b8;background:#f1f5f9;border-left-color:#94a3b8;font-size:.75rem;font-style:italic}
 .qtl-expand-hint{position:absolute;top:.7rem;right:.9rem;font-size:.7rem;color:#2563eb;font-weight:600}
 .qtl-topic-card[open] .qtl-expand-hint{color:#dc2626}
 .qtl-topic-card[open] .qtl-expand-hint::before{content:'▲ 閉じる'}
