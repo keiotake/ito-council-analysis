@@ -1161,6 +1161,8 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
 .explain-example{font-size:.88rem;line-height:1.75;color:#334155;padding:.8rem 1rem;background:#fffbeb;border-radius:8px;border-left:3px solid #f59e0b}
 .explain-example-label{color:#d97706}
 .explain-error{padding:1.5rem;text-align:center;color:#b91c1c;background:#fef2f2;border-radius:8px;font-size:.88rem;line-height:1.7}
+.explain-tip{margin-top:.8rem;padding:.8rem 1rem;background:#eff6ff;border-radius:8px;font-size:.82rem;color:#1e40af;line-height:1.7;text-align:left;border-left:3px solid #3b82f6}
+.explain-note{margin-top:.8rem;padding:.6rem .8rem;background:#fef3c7;border-radius:6px;font-size:.78rem;color:#78350f;line-height:1.6;border-left:3px solid #f59e0b}
 .explain-footer{padding:.7rem 1.5rem;background:#f8fafc;border-top:1px solid #e2e8f0;text-align:center}
 .explain-powered{font-size:.7rem;color:#94a3b8}
 @media(max-width:640px){.explain-box{max-width:95vw}.explain-term{font-size:1.1rem}.explain-header{padding:1rem}}
@@ -2862,7 +2864,11 @@ function openExplainModal(){
   .then(data => {
     const body = document.getElementById('explain-body');
     if (!data.ok) {
-      body.innerHTML = '<div class="explain-error">⚠️ ' + escapeHtml(data.error || '解説を取得できませんでした') + '</div>';
+      const msg = escapeHtml(data.error || '解説を取得できませんでした');
+      const tip = data.errorCode === 'api_limit'
+        ? '<div class="explain-tip">💡 よく使われる行政・議会用語については <a href="https://itoshigikai.gijiroku.com/voices/" target="_blank" style="color:#2563eb;text-decoration:underline">議事録検索システム</a> や <a href="https://www.city.ito.shizuoka.jp/" target="_blank" style="color:#2563eb;text-decoration:underline">伊東市公式サイト</a> でもお調べいただけます。</div>'
+        : '';
+      body.innerHTML = '<div class="explain-error">⚠️ ' + msg + '</div>' + tip;
       return;
     }
     let html = '';
@@ -2874,6 +2880,9 @@ function openExplainModal(){
     }
     if (data.example) {
       html += '<div class="explain-example"><div class="explain-example-label">💭 たとえば</div>' + escapeHtml(data.example) + '</div>';
+    }
+    if (data.note) {
+      html += '<div class="explain-note">' + escapeHtml(data.note) + '</div>';
     }
     body.innerHTML = html || '<div class="explain-error">解説を取得できませんでした</div>';
   })
@@ -3465,6 +3474,9 @@ async function conciergeSend(){
     if(!resp.ok || !data.ok){
       const msg=data && data.error ? data.error : ('エラー: '+resp.status);
       conciergeAppendMsg('❌ '+msg,'err');
+      if (data && data.errorCode === 'api_limit') {
+        conciergeAppendMsg('💡 よく使われる用語（百条委員会・実質公債費比率・大綱質疑など）については、文中の言葉を選択して「💡 この言葉を解説」ボタンで内蔵辞書から説明をご覧いただけます。','bot');
+      }
     } else {
       conciergeAppendMsg(data.answer || '(応答なし)','bot');
     }
