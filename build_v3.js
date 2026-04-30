@@ -389,11 +389,18 @@ function memberDetailHTML(m) {
   const cm = memberComments[m.name];
   const hasComment = cm && cm.comment && cm.comment.trim().length > 0;
 
-  // 活動サマリー（議事録ベース）
+  // 活動サマリー（議事録 + YouTube動画で補完）
   const gjMemberForSummary = gijirokuData && gijirokuData.memberData && gijirokuData.memberData[m.name];
   const summaryHTML = (() => {
-    if (!gjMemberForSummary || !gjMemberForSummary.questions?.length) return '';
-    const qs = gjMemberForSummary.questions;
+    const gjQs = (gjMemberForSummary && gjMemberForSummary.questions) ? gjMemberForSummary.questions.slice() : [];
+    const gjYMs = new Set(gjQs.map(q => (q.date || '').substring(0, 7)).filter(Boolean));
+    // YouTube動画で議事録未取得分を補完（カウントのみ）
+    const ytAdds = (m.videos || []).filter(v => v.date && !gjYMs.has(v.date.substring(0, 7))).map(v => ({
+      date: v.date + '-01',
+      sessionType: v.sessionType || ''
+    }));
+    const qs = gjQs.concat(ytAdds);
+    if (!qs.length) return '';
     const typeCount = {};
     qs.forEach(q => {
       const t = q.sessionType || 'その他';
@@ -457,11 +464,50 @@ function memberDetailHTML(m) {
       </div>`;
     })()}
     ${(() => {
-      // === 質問一覧タイムライン（議事録ベース） ===
-      // 議事録データ（gijiroku_integrated.json）を優先。なければ従来のYouTube字幕ベース。
+      // === 質問一覧タイムライン（議事録ベース＋YouTube動画で補完） ===
       const gjMember = gijirokuData && gijirokuData.memberData && gijirokuData.memberData[m.name];
-      if (gjMember && gjMember.questions && gjMember.questions.length > 0) {
-        const allQuestions = gjMember.questions;
+      const gjQuestions = (gjMember && gjMember.questions) ? gjMember.questions.slice() : [];
+
+      // YouTube動画で議事録未取得分を補完
+      // 議事録の actualYearMonth（YYYY-MM）と YouTube の date（YYYY-MM）でマッチング
+      const gjYearMonths = new Set(gjQuestions.map(q => (q.date || '').substring(0, 7)).filter(Boolean));
+      const ytSupplements = [];
+      for (const v of (m.videos || [])) {
+        if (!v.date) continue;
+        const ym = v.date.substring(0, 7);
+        if (gjYearMonths.has(ym)) continue; // 議事録に同月の発言があるならスキップ
+        // 議事録になし → YouTubeで補完（字幕由来の質問サマリーを活用）
+        const sums = (questionSummaries[v.videoId] || []).filter(s => s && s !== '質問内容');
+        const firstSum = sums[0] || '';
+        // タイトルから議題を抽出（補助）
+        const titleTopic = (v.title || '').replace(/伊東市議会|令和\s*\d+年|平成\s*\d+年|\d+月定例会|\d+月臨時会|議員|\(.*\)|（.*）|号|分析|分割|前半|後半|\s+/g, ' ').replace(/\s+/g, ' ').replace(esc(m.name), '').trim();
+        // トピック決定：最初の質問サマリーを優先、なければタイトル
+        const topic = firstSum && firstSum.length >= 8 && firstSum.length <= 60
+          ? firstSum.replace(/について.*$/, 'について').replace(/伺います.*$/, '').trim() || firstSum.substring(0, 50)
+          : titleTopic || (v.sessionType || '議会発言');
+        // 質問本文：全サマリーを箇条書きで結合
+        const qFullList = sums.length > 0
+          ? sums.slice(0, 8).map((s, i) => `${i+1}. ${s}`).join('\n')
+          : '（YouTube字幕からの自動抽出が利用できません。動画で直接ご確認ください）';
+        ytSupplements.push({
+          date: v.date + '-01',
+          dateLabel: v.date,
+          sessionType: v.sessionType || '',
+          topic: topic.substring(0, 60),
+          question: firstSum || titleTopic,
+          questionFull: qFullList,
+          responses: [],
+          followUpCount: Math.max(0, sums.length - 1),
+          exchangeCount: 0,
+          youtubeVideo: { videoId: v.videoId, title: v.title },
+          gijirokuUrl: '',
+          isYouTubeOnly: true,
+        });
+      }
+
+      const allQuestions = gjQuestions.concat(ytSupplements).sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+
+      if (allQuestions.length > 0) {
         const DISPLAY_LIMIT = 10;
         const questions = allQuestions.slice(0, DISPLAY_LIMIT);
         const hasMore = allQuestions.length > DISPLAY_LIMIT;
@@ -523,6 +569,8 @@ function memberDetailHTML(m) {
             const respRaw = firstResp.responseFull || firstResp.response || '';
             const respShort = respRaw.length > 130 ? respRaw.substring(0, 127) + '…' : respRaw;
             respPreview = `<div class="qtl-ans-preview"><span class="qtl-ans-label">${esc(firstResp.position || '当局')}：</span><span class="qtl-ans-text">${esc(respShort)}</span>${respCount > 1 ? `<span class="qtl-ans-more">ほか${respCount - 1}件の答弁</span>` : ''}</div>`;
+          } else if (q.isYouTubeOnly) {
+            respPreview = '<div class="qtl-ans-preview qtl-yt-only">📹 議事録未公開のため動画でご確認ください</div>';
           } else {
             respPreview = '<div class="qtl-ans-preview qtl-ans-none">当局答弁なし（討論・意見書等）</div>';
           }
@@ -588,75 +636,8 @@ function memberDetailHTML(m) {
         </div>`;
       }
 
-      // フォールバック: 議事録データがない期間の動画のみYouTube字幕ベースで表示
-      const allQuestions = [];
-      const sortedVids = [...m.videos].sort((a,b) => (b.date||'').localeCompare(a.date||''));
-      for (const v of sortedVids) {
-        if (!v.questions || v.questions.length === 0) continue;
-        const tc = v.sessionType === '一般質問' ? '#3498db' : v.sessionType === '大綱質疑' ? '#27ae60' : v.sessionType === '補正予算審議' ? '#e67e22' : '#95a5a6';
-        const sums = questionSummaries[v.videoId] || [];
-        const resps = responseMap[v.videoId] || [];
-        v.questions.forEach((q, qi) => {
-          let summary = sums[qi] || '';
-          if (!summary || summary === '質問内容') {
-            const cleaned = q.replace(/[\n\r]/g, '').replace(/^[^ぁ-んァ-ヶ\u4e00-\u9fff]*/,'')
-              .replace(/.{2,6}(君|くん)の一般質問を許します/g,'')
-              .replace(/委?\d+番?\d*/g,'').trim();
-            summary = cleaned.length > 80 ? cleaned.substring(0, 77) + '…' : cleaned;
-          }
-          if (summary.length > 80) summary = summary.substring(0, 77) + '…';
-          const resp = resps[qi];
-          const respText = resp && resp.response ? resp.response : '';
-          allQuestions.push({
-            date: v.date || '',
-            type: v.sessionType,
-            typeColor: tc,
-            summary: summary,
-            response: respText,
-            url: v.url,
-            videoId: v.videoId,
-          });
-        });
-      }
-      if (allQuestions.length === 0) return '';
-
-      const qRows = allQuestions.map((q, i) => {
-        const respShort = q.response ? (q.response.length > 150 ? q.response.substring(0, 147) + '…' : q.response) : '';
-        const respHTML = q.response
-          ? `<div class="qtl-resp">
-              <div class="qtl-resp-label">当局回答</div>
-              <div class="qtl-resp-short" id="qtl-rs-${esc(m.name)}-${i}">${esc(respShort)}</div>
-              ${q.response.length > 150 ? `<div class="qtl-resp-full" id="qtl-rf-${esc(m.name)}-${i}" style="display:none">${esc(q.response)}</div><button class="qtl-resp-toggle" onclick="toggleQtlResp('${esc(m.name)}',${i})">全文を表示</button>` : ''}
-            </div>`
-          : '<div class="qtl-no-resp">回答データなし</div>';
-
-        return `<div class="qtl-card">
-          <div class="qtl-header">
-            <span class="qtl-date">${esc(q.date)}</span>
-            <span class="qtl-type" style="background:${q.typeColor}">${esc(q.type)}</span>
-            <a href="${q.url}" target="_blank" class="qtl-video-link" title="動画を見る">▶ 動画</a>
-            <span class="qtl-source-badge-yt" title="YouTube字幕自動抽出">🎥 動画字幕</span>
-          </div>
-          <div class="qtl-question">${esc(q.summary)}</div>
-          ${respHTML}
-        </div>`;
-      }).join('');
-
-      return `<div class="qtl-section">
-        <h3 class="section-title">📋 質問一覧 (${allQuestions.length}件)</h3>
-        <p class="qtl-source-note qtl-source-yt">⚠️ この議員の議事録データは未取得。YouTube字幕からの自動抽出のため精度が低い場合があります。</p>
-        <div class="qtl-controls">
-          <input class="qtl-search" placeholder="質問をキーワードで絞り込み..." oninput="filterQtl(this,'${esc(m.name)}')">
-          <select class="qtl-filter" onchange="filterQtlType(this,'${esc(m.name)}')">
-            <option value="">全種別</option>
-            <option value="一般質問">一般質問</option>
-            <option value="大綱質疑">大綱質疑</option>
-            <option value="補正予算審議">補正予算審議</option>
-          </select>
-        </div>
-        <div class="qtl-list" id="qtl-${esc(m.name)}">${qRows}</div>
-        <div class="qtl-count" id="qtl-count-${esc(m.name)}">全${allQuestions.length}件を表示中</div>
-      </div>`;
+      // 議事録もYouTube動画もデータがない場合は何も表示しない
+      return '';
     })()}
   </div>`;
 }
@@ -1259,6 +1240,7 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
 .qtl-ans-text{color:#1e293b}
 .qtl-ans-more{display:block;margin-top:.2rem;font-size:.7rem;color:#64748b;font-style:italic}
 .qtl-ans-none{color:#94a3b8;background:#f1f5f9;border-left-color:#94a3b8;font-size:.75rem;font-style:italic}
+.qtl-yt-only{color:#92400e;background:#fef3c7;border-left-color:#f59e0b;font-size:.78rem}
 .qtl-expand-hint{position:absolute;top:.7rem;right:.9rem;font-size:.7rem;color:#2563eb;font-weight:600}
 .qtl-topic-card[open] .qtl-expand-hint{color:#dc2626}
 .qtl-topic-card[open] .qtl-expand-hint::before{content:'▲ 閉じる'}
