@@ -389,6 +389,43 @@ function memberDetailHTML(m) {
   const cm = memberComments[m.name];
   const hasComment = cm && cm.comment && cm.comment.trim().length > 0;
 
+  // 活動サマリー（議事録ベース）
+  const gjMemberForSummary = gijirokuData && gijirokuData.memberData && gijirokuData.memberData[m.name];
+  const summaryHTML = (() => {
+    if (!gjMemberForSummary || !gjMemberForSummary.questions?.length) return '';
+    const qs = gjMemberForSummary.questions;
+    const typeCount = {};
+    qs.forEach(q => {
+      const t = q.sessionType || 'その他';
+      typeCount[t] = (typeCount[t] || 0) + 1;
+    });
+    // 日付情報
+    const dates = qs.map(q => q.date).filter(Boolean).sort();
+    const latestDate = dates[dates.length - 1] || '';
+    const oldestDate = dates[0] || '';
+    const fmtJpDate = (d) => {
+      if (!d) return '';
+      const [y, mo, da] = d.split('-');
+      if (!y || !mo) return d;
+      return `${y}年${parseInt(mo)}月${da ? parseInt(da) + '日' : ''}`;
+    };
+    const typeOrder = ['一般質問', '大綱質疑', '補正予算審議', '討論', '委員会', '議案審議', 'その他'];
+    const typeBars = typeOrder.filter(t => typeCount[t]).map(t => {
+      const tc = t === '一般質問' ? '#3498db' : t === '大綱質疑' ? '#27ae60' : t === '補正予算審議' ? '#e67e22' : t === '討論' ? '#9b59b6' : '#95a5a6';
+      return `<span class="ds-pill" style="background:${tc}"><span class="ds-pill-label">${esc(t)}</span><span class="ds-pill-num">${typeCount[t]}</span></span>`;
+    }).join('');
+    return `<div class="detail-summary">
+      <div class="ds-stats">
+        <div class="ds-total-block">
+          <div class="ds-total-num">${qs.length}</div>
+          <div class="ds-total-label">議会発言</div>
+        </div>
+        <div class="ds-pills">${typeBars}</div>
+      </div>
+      ${latestDate ? `<div class="ds-period">📅 直近の発言：<strong>${fmtJpDate(latestDate)}</strong> ${oldestDate !== latestDate ? `（${fmtJpDate(oldestDate)}〜）` : ''}</div>` : ''}
+    </div>`;
+  })();
+
   return `<div class="detail-panel" id="dp-${esc(m.name)}" style="display:none">
     <button class="back-btn" onclick="hideDetail()">&#9664; 一覧に戻る</button>
     <div class="detail-compact-header">
@@ -402,6 +439,7 @@ function memberDetailHTML(m) {
         </div>
       </div>
     </div>
+    ${summaryHTML}
     ${hasComment ? `<div class="member-voice filled">
       <div class="mv-header">
         <span class="mv-icon">💬</span>
@@ -483,22 +521,29 @@ function memberDetailHTML(m) {
           let respPreview = '';
           if (firstResp) {
             const respRaw = firstResp.responseFull || firstResp.response || '';
-            const respShort = respRaw.length > 110 ? respRaw.substring(0, 107) + '…' : respRaw;
-            respPreview = `<div class="qtl-ans-preview"><span class="qtl-ans-label">📢 ${esc(firstResp.position || '当局')}：</span><span class="qtl-ans-text">${esc(respShort)}</span>${respCount > 1 ? `<span class="qtl-ans-more">ほか${respCount - 1}件の答弁</span>` : ''}</div>`;
+            const respShort = respRaw.length > 130 ? respRaw.substring(0, 127) + '…' : respRaw;
+            respPreview = `<div class="qtl-ans-preview"><span class="qtl-ans-label">${esc(firstResp.position || '当局')}：</span><span class="qtl-ans-text">${esc(respShort)}</span>${respCount > 1 ? `<span class="qtl-ans-more">ほか${respCount - 1}件の答弁</span>` : ''}</div>`;
           } else {
-            respPreview = '<div class="qtl-ans-preview qtl-ans-none">📢 当局答弁なし（発言のみ）</div>';
+            respPreview = '<div class="qtl-ans-preview qtl-ans-none">当局答弁なし（討論・意見書等）</div>';
           }
+          // 日付を日本語形式に
+          const fmtJpDateShort = (d) => {
+            if (!d) return q.dateLabel || '';
+            const [y, mo, da] = d.split('-');
+            if (!y || !mo || !da) return d;
+            return `${y}.${parseInt(mo)}.${parseInt(da)}`;
+          };
           return `<details class="qtl-topic-card" data-date="${esc(q.date || '')}" data-type="${esc(q.sessionType || '')}">
             <summary class="qtl-topic-summary">
               <div class="qtl-topic-meta">
-                <span class="qtl-date">${esc(q.date || q.dateLabel || '')}</span>
+                <span class="qtl-date">${esc(fmtJpDateShort(q.date))}</span>
                 <span class="qtl-type" style="background:${tc}">${esc(q.sessionType || '')}</span>
                 ${respCount > 0 ? `<span class="qtl-resp-mini">答弁${respCount}</span>` : ''}
-                ${q.followUpCount > 0 ? `<span class="qtl-fu-mini">💭${q.followUpCount}</span>` : ''}
+                ${q.followUpCount > 0 ? `<span class="qtl-fu-mini">再質問${q.followUpCount}</span>` : ''}
               </div>
-              <div class="qtl-topic-title">💬 ${esc(topic)}</div>
+              <div class="qtl-topic-title">${esc(topic)}</div>
               ${respPreview}
-              <span class="qtl-expand-hint">▼ 詳細</span>
+              <span class="qtl-expand-hint">タップで全文 ▼</span>
             </summary>
             <div class="qtl-expand-content">
               <div class="qe-question-label">💡 質問全文</div>
@@ -521,21 +566,25 @@ function memberDetailHTML(m) {
           </details>`;
         }).join('');
 
+        const showFilters = questions.length >= 5;
         return `<div class="qtl-section">
-          <h3 class="section-title">📋 質問・答弁一覧 (${allQuestions.length}件)</h3>
-          <p class="qtl-source-note">📘 出典: <a href="https://itoshigikai.gijiroku.com/voices/" target="_blank">伊東市議会議事録検索システム</a>（公式記録）</p>
-          <div class="qtl-controls">
-            <input class="qtl-search" placeholder="質問・答弁をキーワードで絞り込み..." oninput="filterQtl(this,'${esc(m.name)}')">
+          <div class="qtl-section-head">
+            <h3 class="section-title">📋 議会での質問と答弁 ${hasMore ? `（直近${questions.length}件 / 全${allQuestions.length}件）` : `（${allQuestions.length}件）`}</h3>
+            ${showFilters ? `<button class="qtl-filter-toggle" onclick="toggleQtlFilter('${esc(m.name)}')" aria-label="絞り込み">🔍 絞り込み</button>` : ''}
+          </div>
+          ${showFilters ? `<div class="qtl-controls" id="qtl-controls-${esc(m.name)}" style="display:none">
+            <input class="qtl-search" placeholder="キーワードで絞り込み..." oninput="filterQtl(this,'${esc(m.name)}')">
             <select class="qtl-filter" onchange="filterQtlType(this,'${esc(m.name)}')">
               <option value="">全種別</option>
               <option value="一般質問">一般質問</option>
               <option value="大綱質疑">大綱質疑</option>
               <option value="補正予算審議">補正予算審議</option>
+              <option value="討論">討論</option>
+              <option value="委員会">委員会</option>
             </select>
-          </div>
+          </div>` : ''}
           <div class="qtl-list" id="qtl-${esc(m.name)}">${qRows}</div>
-          ${hasMore ? `<div class="qtl-more-note">直近${DISPLAY_LIMIT}件を表示中（全${allQuestions.length}件）。古い質問・答弁は <a href="https://itoshigikai.gijiroku.com/voices/" target="_blank">議事録検索システム</a> でご確認ください。</div>` : ''}
-          <div class="qtl-count" id="qtl-count-${esc(m.name)}">${hasMore ? `直近${questions.length}件 / 全${allQuestions.length}件` : `全${questions.length}件を表示中`}</div>
+          ${hasMore ? `<div class="qtl-more-note">📘 古い発言は <a href="https://itoshigikai.gijiroku.com/voices/" target="_blank">議事録検索システム</a> でご確認いただけます。</div>` : ''}
         </div>`;
       }
 
@@ -1125,7 +1174,26 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
 .qtl-resp-body{font-size:.82rem;line-height:1.7;color:#1f2937;margin-top:.3rem;white-space:pre-wrap}
 
 /* 議員詳細のコンパクトヘッダー */
-.detail-compact-header{display:flex;gap:1rem;align-items:center;padding:1rem 1.2rem;background:linear-gradient(135deg,#f8fafc,#f1f5f9);border-radius:12px;margin-bottom:1rem;border:1px solid #e2e8f0}
+.detail-compact-header{display:flex;gap:1rem;align-items:center;padding:1rem 1.2rem;background:linear-gradient(135deg,#f8fafc,#f1f5f9);border-radius:12px;margin-bottom:.8rem;border:1px solid #e2e8f0}
+
+/* 活動サマリーパネル */
+.detail-summary{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:1rem 1.2rem;margin-bottom:1rem}
+.ds-stats{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:.5rem}
+.ds-total-block{display:flex;flex-direction:column;align-items:center;padding:.4rem .9rem;background:linear-gradient(135deg,#eff6ff,#dbeafe);border-radius:10px;border:1px solid #bfdbfe;flex-shrink:0}
+.ds-total-num{font-size:1.5rem;font-weight:800;color:#1e40af;line-height:1}
+.ds-total-label{font-size:.7rem;color:#1e3a8a;font-weight:600;margin-top:.15rem}
+.ds-pills{display:flex;gap:.4rem;flex-wrap:wrap;flex:1;align-items:center}
+.ds-pill{display:inline-flex;align-items:center;gap:.3rem;padding:.25rem .65rem;border-radius:14px;color:#fff;font-size:.78rem;font-weight:600}
+.ds-pill-num{background:rgba(255,255,255,.3);padding:0 .35rem;border-radius:8px;font-size:.7rem;font-weight:700}
+.ds-period{font-size:.78rem;color:#475569;padding-top:.5rem;border-top:1px dashed #e5e7eb}
+.ds-period strong{color:#1e293b}
+@media(max-width:640px){.detail-summary{padding:.8rem .9rem}.ds-stats{gap:.6rem}.ds-total-num{font-size:1.3rem}}
+
+/* セクションヘッダー（質問一覧） */
+.qtl-section-head{display:flex;align-items:center;justify-content:space-between;gap:.5rem;flex-wrap:wrap;margin-bottom:.6rem}
+.qtl-section-head .section-title{margin:0}
+.qtl-filter-toggle{padding:.35rem .7rem;background:#f1f5f9;color:#475569;border:1px solid #cbd5e1;border-radius:8px;font-size:.78rem;font-weight:600;cursor:pointer;transition:.15s}
+.qtl-filter-toggle:hover{background:#e2e8f0;color:#1e293b}
 .dch-avatar{flex-shrink:0}
 .dch-avatar .m-avatar,.dch-avatar .m-avatar-photo{width:64px;height:64px;margin:0}
 .dch-info{flex:1;min-width:0}
@@ -3042,26 +3110,25 @@ function toggleQtlResp(name, idx){
 }
 function filterQtl(input, name){
   var kw=input.value.toLowerCase();
-  var cards=document.querySelectorAll('#qtl-'+name+' .qtl-card');
-  var shown=0;
+  var cards=document.querySelectorAll('#qtl-'+name+' .qtl-topic-card');
   cards.forEach(function(c){
     var match=!kw||c.textContent.toLowerCase().indexOf(kw)>=0;
     c.classList.toggle('hidden',!match);
-    if(match) shown++;
   });
-  document.getElementById('qtl-count-'+name).textContent=shown+'件を表示中';
 }
 function filterQtlType(sel, name){
   var type=sel.value;
-  var cards=document.querySelectorAll('#qtl-'+name+' .qtl-card');
-  var shown=0;
+  var cards=document.querySelectorAll('#qtl-'+name+' .qtl-topic-card');
   cards.forEach(function(c){
-    var cardType=c.querySelector('.qtl-type').textContent;
+    var cardType=c.dataset.type||'';
     var match=!type||cardType===type;
     c.classList.toggle('hidden',!match);
-    if(match) shown++;
   });
-  document.getElementById('qtl-count-'+name).textContent=shown+'件を表示中';
+}
+function toggleQtlFilter(name){
+  var el=document.getElementById('qtl-controls-'+name);
+  if(!el)return;
+  el.style.display=el.style.display==='none'?'flex':'none';
 }
 
 // === アクセシビリティ ===
