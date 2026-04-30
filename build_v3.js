@@ -488,7 +488,7 @@ function memberDetailHTML(m) {
         // 質問本文：全サマリーを箇条書きで結合
         const qFullList = sums.length > 0
           ? sums.slice(0, 8).map((s, i) => `${i+1}. ${s}`).join('\n')
-          : '（YouTube字幕からの自動抽出が利用できません。動画で直接ご確認ください）';
+          : '（要約データが利用できません。動画で直接ご確認ください）';
         ytSupplements.push({
           date: v.date + '-01',
           dateLabel: v.date,
@@ -608,7 +608,7 @@ function memberDetailHTML(m) {
               })()}
               <div class="qe-actions">
                 ${videoUrl ? `<a href="${esc(videoUrl)}" target="_blank" class="qe-action-btn video-btn">▶ YouTubeで見る</a>` : ''}
-                ${gijirokuUrl ? `<a href="${esc(gijirokuUrl)}" target="_blank" class="qe-action-btn gijiroku-btn">📘 議事録で全文を見る</a>` : ''}
+                ${gijirokuUrl ? `<a href="${esc(gijirokuUrl)}" target="_blank" class="qe-action-btn gijiroku-btn">📘 公式記録で全文を見る</a>` : ''}
               </div>
             </div>
           </details>`;
@@ -632,7 +632,7 @@ function memberDetailHTML(m) {
             </select>
           </div>` : ''}
           <div class="qtl-list" id="qtl-${esc(m.name)}">${qRows}</div>
-          ${hasMore ? `<div class="qtl-more-note">📘 古い発言は <a href="https://itoshigikai.gijiroku.com/voices/" target="_blank">議事録検索システム</a> でご確認いただけます。</div>` : ''}
+          ${hasMore ? `<div class="qtl-more-note">📘 古い発言は <a href="https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/itoshigikai/index.html" target="_blank">伊東市議会公式</a> の会議録でご確認いただけます。</div>` : ''}
         </div>`;
       }
 
@@ -1241,11 +1241,11 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
 .qtl-ans-more{display:block;margin-top:.2rem;font-size:.7rem;color:#64748b;font-style:italic}
 .qtl-ans-none{color:#94a3b8;background:#f1f5f9;border-left-color:#94a3b8;font-size:.75rem;font-style:italic}
 .qtl-yt-only{color:#92400e;background:#fef3c7;border-left-color:#f59e0b;font-size:.78rem}
-.qtl-expand-hint{position:absolute;top:.7rem;right:.9rem;font-size:.7rem;color:#2563eb;font-weight:600}
-.qtl-topic-card[open] .qtl-expand-hint{color:#dc2626}
+.qtl-expand-hint{display:inline-block;margin-top:.5rem;font-size:.72rem;color:#64748b;font-weight:500;padding:.2rem .55rem;background:#f1f5f9;border-radius:6px}
+.qtl-topic-card[open] .qtl-expand-hint{color:#1e40af;background:#dbeafe}
 .qtl-topic-card[open] .qtl-expand-hint::before{content:'▲ 閉じる'}
 .qtl-topic-card[open] .qtl-expand-hint{font-size:0}
-.qtl-topic-card[open] .qtl-expand-hint::before{font-size:.7rem}
+.qtl-topic-card[open] .qtl-expand-hint::before{font-size:.72rem}
 .qtl-expand-content{padding:.8rem 1rem 1rem;border-top:1px solid #e5e7eb;background:#fff}
 .qe-question-label,.qe-resp-label{font-size:.8rem;font-weight:700;color:#1e40af;margin:.3rem 0 .4rem;padding-left:.5rem;border-left:3px solid #3b82f6}
 .qe-resp-label{color:#0c4a6e;border-left-color:#0284c7;margin-top:1rem}
@@ -1928,7 +1928,7 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
         <button class="manifesto-limit-btn" onclick="openLimitsModal()">📖 このデータの限界について詳しく読む</button>
       </div>
     </div>
-    <div class="tab-notice">ℹ️ 議員情報は伊東市公式サイトの公開資料に基づきます。質問内容は動画字幕の自動抽出であり、正確な内容は各動画・会議録でご確認ください。</div>
+    <div class="tab-notice">ℹ️ 議員情報は伊東市公式サイトの公開資料に基づきます。発言内容は要約であり、正確な内容は各動画・会議録でご確認ください。</div>
     <!-- 関心テーマから質問にジャンプ -->
     <div class="personalize-bar" id="personalize-bar">
       <h4>🔍 テーマをクリックすると、関連する議会質問が見られます</h4>
@@ -1954,7 +1954,7 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
     <div id="detail-area">${allMembers.map(m => memberDetailHTML(m)).join('')}</div>
   </div>
   <div id="tab-all" class="tab-panel">
-    <div class="tab-notice">ℹ️ 質問要約はYouTube自動字幕の機械抽出です。正確な内容は各動画または<a href="https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/itoshigikai/index.html" target="_blank">会議録</a>でご確認ください。</div>
+    <div class="tab-notice">ℹ️ 質問要約は概要です。正確な内容は各動画または<a href="https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/itoshigikai/index.html" target="_blank">会議録</a>でご確認ください。</div>
     <!-- テーマで探す -->
     <div class="theme-picker">
       <div class="theme-picker-label">🔍 テーマで探す</div>
@@ -2108,7 +2108,7 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
         <div class="plan-warn">
           <strong>⚠ この計画書について</strong><br>
           ${(p.meta.known_limitations||[]).map(l=>'・'+esc(l)).join('<br>')}<br>
-          ・データは計画書本体から機械抽出したもので、正式情報は<a href="https://www.city.ito.shizuoka.jp/" target="_blank">伊東市公式サイト</a>をご確認ください。
+          ・データは計画書本体から要約しています。正式情報は<a href="https://www.city.ito.shizuoka.jp/" target="_blank">伊東市公式サイト</a>をご確認ください。
         </div>
 
         <div class="plan-h3">🗺️ 伊東市が抱える9つのまちづくり課題<span class="plan-count">${p.machizukuri_kadai.length}</span></div>
@@ -2745,7 +2745,7 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
     <div class="concierge-disclaimer">
       <strong>⚠ ご利用にあたって</strong><br>
       ・本サイト掲載情報（議員・質問・総合計画）のみを根拠に回答します。<br>
-      ・質問要約は自動字幕の機械抽出、議員評価は行いません。<br>
+      ・質問要約は概要、議員評価は行いません。<br>
       ・正確な情報は<a href="https://www.city.ito.shizuoka.jp/" target="_blank">伊東市公式</a>・<a href="https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/itoshigikai/index.html" target="_blank">市議会公式</a>でご確認ください。
     </div>
     <div class="concierge-msg bot">こんにちは！「みんなの伊東市」AIコンシェルジュです 🏙️<br>議員の質問内容・会派・総合計画など、サイトに掲載された情報について日本語で質問してください。<br><small>※ 議員の優劣判定やランキング的な回答はいたしません。</small></div>
@@ -2770,13 +2770,13 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
 
 <div class="disclaimer">
   <div class="disc-summary">
-    <p>本サイトは伊東市議会の公開情報を市民にわかりやすく届ける<strong>非公式の情報サイト</strong>です。質問要約はYouTube自動字幕の機械抽出であり、正確性を保証しません。正確な情報は<a href="https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/itoshigikai/index.html" target="_blank">伊東市議会公式ページ</a>をご確認ください。</p>
+    <p>本サイトは伊東市議会の公開情報を市民にわかりやすく届ける<strong>非公式の情報サイト</strong>です。掲載内容は概要であり、正確性を保証しません。正確な情報は<a href="https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/itoshigikai/index.html" target="_blank">伊東市議会公式ページ</a>をご確認ください。</p>
     <button class="disc-toggle" onclick="this.parentElement.nextElementSibling.classList.toggle('open');this.textContent=this.textContent==='詳しく見る ▼'?'閉じる ▲':'詳しく見る ▼'">詳しく見る ▼</button>
   </div>
   <div class="disc-detail">
     <h4>1. 情報の正確性</h4>
     <ul>
-      <li>質問要約はYouTube自動字幕（音声認識）の機械抽出であり、誤変換・文脈欠落・情報損失を含む可能性があります。</li>
+      <li>質問要約は内容の概要を示すものであり、誤りや情報の欠落を含む可能性があります。</li>
       <li>分野分類はキーワードによる自動分類で、質問の趣旨を正確に反映しない場合があります。</li>
       <li>動画数・質問数等の数値はYouTube字幕解析に基づく推計値で、公式記録とは異なります。また、これらの数字は<strong>議員の活動の質や優劣を示すものではありません。</strong></li>
     </ul>
@@ -2916,7 +2916,7 @@ function openExplainModal(){
     if (!data.ok) {
       const msg = escapeHtml(data.error || '解説を取得できませんでした');
       const tip = data.errorCode === 'api_limit'
-        ? '<div class="explain-tip">💡 よく使われる行政・議会用語については <a href="https://itoshigikai.gijiroku.com/voices/" target="_blank" style="color:#2563eb;text-decoration:underline">議事録検索システム</a> や <a href="https://www.city.ito.shizuoka.jp/" target="_blank" style="color:#2563eb;text-decoration:underline">伊東市公式サイト</a> でもお調べいただけます。</div>'
+        ? '<div class="explain-tip">💡 行政・議会用語については <a href="https://www.city.ito.shizuoka.jp/" target="_blank" style="color:#2563eb;text-decoration:underline">伊東市公式サイト</a> でもお調べいただけます。</div>'
         : '';
       body.innerHTML = '<div class="explain-error">⚠️ ' + msg + '</div>' + tip;
       return;
