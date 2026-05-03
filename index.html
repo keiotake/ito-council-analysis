@@ -43,58 +43,76 @@ body.high-contrast button,body.high-contrast .pg-btn,body.high-contrast .qe-acti
 .a11y-btn:hover{background:rgba(255,255,255,.2)}
 body{font-family:var(--font-en),var(--font-jp);background:var(--bg);color:var(--text);line-height:1.75;-webkit-text-size-adjust:100%;letter-spacing:.01em;font-feature-settings:'palt' 1}
 h1,h2,h3{letter-spacing:-.01em;font-weight:800}
-/* シネマティックなヒーローヘッダー */
-.hero-header{position:relative;min-height:560px;background:#0a0a0a;color:#fff;overflow:hidden}
+/* シネマティックなヒーローヘッダー（伊東の海・ダイビング世界観） */
+.hero-header{position:relative;min-height:560px;background:#001a2e;color:#fff;overflow:hidden}
 .hero-bg{position:absolute;inset:0;z-index:0}
+/* 海の深さを感じさせる縦グラデーション（水面の明るい青→深海のネイビー） */
 .hero-bg-img{position:absolute;inset:0;background:
-  radial-gradient(ellipse at 20% 30%,rgba(59,130,246,.35),transparent 50%),
-  radial-gradient(ellipse at 80% 70%,rgba(124,58,237,.3),transparent 50%),
-  radial-gradient(ellipse at 50% 50%,rgba(236,72,153,.15),transparent 60%),
-  linear-gradient(180deg,#0a0a0a 0%,#1e1b4b 50%,#0a0a0a 100%);
-  animation:hero-bg-shift 30s ease-in-out infinite}
-@keyframes hero-bg-shift{0%,100%{filter:hue-rotate(0deg) brightness(1)}50%{filter:hue-rotate(20deg) brightness(1.1)}}
+  radial-gradient(ellipse at 50% -20%,rgba(120,220,255,.55),transparent 55%),
+  radial-gradient(ellipse at 20% 30%,rgba(56,189,248,.25),transparent 60%),
+  radial-gradient(ellipse at 80% 60%,rgba(20,184,166,.2),transparent 60%),
+  linear-gradient(180deg,#0e7490 0%,#075985 30%,#0c4a6e 60%,#082f49 85%,#001a2e 100%)}
+/* 水面のゆらぎ（コースティクス） */
 .hero-bg-overlay{position:absolute;inset:0;background:
-  linear-gradient(180deg,rgba(0,0,0,.2) 0%,rgba(0,0,0,0) 30%,rgba(0,0,0,.5) 100%),
-  repeating-linear-gradient(45deg,transparent,transparent 2px,rgba(255,255,255,.01) 2px,rgba(255,255,255,.01) 4px)}
+  radial-gradient(ellipse at 30% 10%,rgba(255,255,255,.18),transparent 40%),
+  radial-gradient(ellipse at 70% 5%,rgba(255,255,255,.12),transparent 35%),
+  repeating-linear-gradient(110deg,transparent,transparent 18px,rgba(255,255,255,.025) 19px,rgba(255,255,255,.025) 20px),
+  repeating-linear-gradient(70deg,transparent,transparent 28px,rgba(160,230,255,.025) 29px,rgba(160,230,255,.025) 30px);
+  animation:caustics-shift 12s ease-in-out infinite;mix-blend-mode:screen}
+@keyframes caustics-shift{0%,100%{transform:translateX(0) translateY(0)}50%{transform:translateX(-8px) translateY(4px)}}
+/* 上から差し込む光線（ゴッドレイ） */
+.hero-godray{position:absolute;inset:0;background:
+  conic-gradient(from 200deg at 30% -10%,transparent 0deg,rgba(255,255,255,.08) 8deg,transparent 16deg),
+  conic-gradient(from 190deg at 65% -10%,transparent 0deg,rgba(255,255,255,.06) 10deg,transparent 22deg),
+  conic-gradient(from 180deg at 85% -10%,transparent 0deg,rgba(255,255,255,.05) 6deg,transparent 14deg);
+  mix-blend-mode:screen;animation:godray-pulse 8s ease-in-out infinite;pointer-events:none}
+@keyframes godray-pulse{0%,100%{opacity:.7}50%{opacity:1}}
 
-/* パーティクルアニメーション */
+/* 泡（バブル）アニメーション */
 .hero-particles{position:absolute;inset:0;overflow:hidden;pointer-events:none}
-.particle{position:absolute;left:var(--x);bottom:-10px;width:var(--size);height:var(--size);background:rgba(255,255,255,.7);border-radius:50%;box-shadow:0 0 6px rgba(255,255,255,.5);animation:particle-float var(--d) linear infinite;animation-delay:var(--delay);opacity:0}
-@keyframes particle-float{0%{transform:translateY(0) translateX(0);opacity:0}10%{opacity:1}50%{transform:translateY(-50vh) translateX(20px)}90%{opacity:1}100%{transform:translateY(-110vh) translateX(-20px);opacity:0}}
+.particle{position:absolute;left:var(--x);bottom:-20px;width:var(--size);height:var(--size);background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.95),rgba(180,230,255,.4) 50%,rgba(120,180,220,.1) 80%);border-radius:50%;box-shadow:inset 0 0 4px rgba(255,255,255,.4),0 0 8px rgba(180,230,255,.3);animation:bubble-float var(--d) linear infinite;animation-delay:var(--delay);opacity:0}
+@keyframes bubble-float{0%{transform:translateY(0) translateX(0) scale(.7);opacity:0}10%{opacity:.9}30%{transform:translateY(-25vh) translateX(8px) scale(.95)}60%{transform:translateY(-60vh) translateX(-10px) scale(1)}90%{opacity:.6}100%{transform:translateY(-110vh) translateX(12px) scale(1.05);opacity:0}}
 
-/* 上部バー（ロゴ + 連絡先） */
-.hero-topbar{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:center;padding:1.2rem 2rem 0;flex-wrap:wrap;gap:1rem}
-.hero-logo{font-size:1.5rem;font-weight:900;color:#fff;letter-spacing:-.02em;text-shadow:0 2px 12px rgba(0,0,0,.4)}
-.hero-logo-accent{background:linear-gradient(135deg,#fbbf24,#f97316);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hero-contact-card{display:inline-block;background:rgba(255,255,255,.08);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.18);border-radius:14px;padding:.55rem 1rem;color:#fff;text-decoration:none;transition:.2s}
-.hero-contact-card:hover{background:rgba(255,255,255,.15);transform:translateY(-2px)}
-.hcc-label{font-size:.65rem;font-weight:600;color:rgba(255,255,255,.7);letter-spacing:.06em;margin-bottom:.15rem}
-.hcc-mail{font-size:.85rem;font-weight:700}
+/* 魚（SVG）が画面を泳ぐ */
+.hero-fish{position:absolute;top:var(--ty);left:-10vw;width:var(--fw);opacity:0;animation:fish-swim var(--fd) linear infinite;animation-delay:var(--fdelay);filter:drop-shadow(0 4px 8px rgba(0,0,0,.4))}
+.hero-fish.flip{animation-name:fish-swim-rev;left:auto;right:-10vw}
+@keyframes fish-swim{0%{transform:translateX(0) translateY(0);opacity:0}5%{opacity:.85}50%{transform:translateX(60vw) translateY(-18px)}95%{opacity:.85}100%{transform:translateX(120vw) translateY(0);opacity:0}}
+@keyframes fish-swim-rev{0%{transform:translateX(0) translateY(0) scaleX(-1);opacity:0}5%{opacity:.85}50%{transform:translateX(-60vw) translateY(14px) scaleX(-1)}95%{opacity:.85}100%{transform:translateX(-120vw) translateY(0) scaleX(-1);opacity:0}}
+.hero-fish svg{width:100%;height:auto;display:block}
+.hero-fish .fish-tail{transform-origin:left center;animation:fish-tail-wag .35s ease-in-out infinite}
+@keyframes fish-tail-wag{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
+
+/* 海藻シルエット（下部） */
+.hero-seaweed{position:absolute;bottom:0;left:0;right:0;height:90px;background:
+  radial-gradient(ellipse 220px 80px at 12% 100%,rgba(0,40,60,.7),transparent 70%),
+  radial-gradient(ellipse 180px 65px at 38% 100%,rgba(0,30,50,.55),transparent 70%),
+  radial-gradient(ellipse 260px 90px at 72% 100%,rgba(0,40,60,.65),transparent 70%),
+  radial-gradient(ellipse 200px 75px at 92% 100%,rgba(0,30,50,.6),transparent 70%);
+  pointer-events:none;z-index:1}
+
+/* 上部バー（ロゴのみ） */
+.hero-topbar{position:relative;z-index:2;display:flex;justify-content:flex-start;align-items:center;padding:1.2rem 2rem 0;flex-wrap:wrap;gap:1rem}
+.hero-logo{font-size:1.5rem;font-weight:900;color:#fff;letter-spacing:-.02em;text-shadow:0 2px 12px rgba(0,40,80,.6)}
+.hero-logo-accent{background:linear-gradient(135deg,#fde68a,#fbbf24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 
 /* ヒーロー中央コンテンツ */
-.hero-content{position:relative;z-index:1;text-align:center;padding:5rem 2rem 4rem;max-width:1100px;margin:0 auto}
-.hero-title-en{font-family:var(--font-en);font-size:clamp(3rem, 9vw, 7rem);font-weight:200;letter-spacing:-.03em;line-height:1;color:rgba(255,255,255,.95);text-shadow:0 4px 30px rgba(0,0,0,.5);margin-bottom:.3em;animation:hero-fade-in 1.2s ease-out}
-.hero-title-jp{font-size:clamp(2rem, 6vw, 4.5rem);font-weight:900;letter-spacing:-.02em;line-height:1.3;margin:0 0 1.5rem;color:#fff;text-shadow:0 4px 30px rgba(0,0,0,.5);animation:hero-fade-in 1.4s ease-out .2s both}
-.hero-sub{font-size:.95rem;color:rgba(255,255,255,.85);line-height:1.8;letter-spacing:.02em;animation:hero-fade-in 1.6s ease-out .4s both}
-.hero-stats-inline{display:inline-block;margin-top:.5rem;padding:.35rem 1rem;background:rgba(255,255,255,.1);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:999px;font-size:.78rem;font-weight:600}
+.hero-content{position:relative;z-index:2;text-align:center;padding:5rem 2rem 4.5rem;max-width:1100px;margin:0 auto}
+.hero-title-en{font-family:var(--font-en);font-size:clamp(3rem, 9vw, 7rem);font-weight:200;letter-spacing:-.03em;line-height:1;color:rgba(255,255,255,.97);text-shadow:0 4px 40px rgba(0,30,60,.6);margin-bottom:.3em;animation:hero-fade-in 1.2s ease-out}
+.hero-title-jp{font-size:clamp(2rem, 6vw, 4.5rem);font-weight:900;letter-spacing:-.02em;line-height:1.3;margin:0 0 1.5rem;color:#fff;text-shadow:0 4px 30px rgba(0,30,60,.7);animation:hero-fade-in 1.4s ease-out .2s both}
+.hero-sub{font-size:.95rem;color:rgba(240,250,255,.92);line-height:1.8;letter-spacing:.02em;text-shadow:0 2px 8px rgba(0,30,60,.5);animation:hero-fade-in 1.6s ease-out .4s both}
+.hero-stats-inline{display:inline-block;margin-top:.5rem;padding:.35rem 1rem;background:rgba(255,255,255,.14);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.18);border-radius:999px;font-size:.78rem;font-weight:600}
 @keyframes hero-fade-in{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 
-/* スクロール誘導 */
-.hero-scroll-cue{position:absolute;bottom:1.5rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.4rem;color:rgba(255,255,255,.6);font-size:.7rem;letter-spacing:.2em;font-weight:600;animation:hero-fade-in 2s ease-out .8s both}
-.hsc-line{width:1px;height:30px;background:linear-gradient(180deg,rgba(255,255,255,.6),transparent);animation:hsc-line-anim 2s ease-in-out infinite}
-@keyframes hsc-line-anim{0%,100%{transform:scaleY(.3);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}}
-
-.hero-header .header-visitors{position:absolute;bottom:.6rem;right:1.2rem;z-index:2;font-size:.7rem;color:rgba(255,255,255,.7)}
+.hero-header .header-visitors{position:absolute;bottom:.6rem;right:1.2rem;z-index:2;font-size:.7rem;color:rgba(255,255,255,.8)}
 .hero-header .header-visitors span{color:#fff;font-weight:700}
 
 @media(max-width:640px){
   .hero-header{min-height:480px}
   .hero-topbar{padding:1rem 1rem 0}
   .hero-logo{font-size:1.2rem}
-  .hero-contact-card{padding:.4rem .7rem}
-  .hcc-mail{font-size:.72rem}
   .hero-content{padding:3rem 1rem 3rem}
   .hero-sub{font-size:.85rem}
+  .hero-seaweed{height:60px}
 }
 .header-visitors{display:flex;justify-content:center;gap:.3rem;margin-top:.5rem;font-size:.72rem;color:var(--sub)}
 .header-visitors span{font-weight:700;color:var(--text)}
@@ -1459,18 +1477,78 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
   <div class="hero-bg">
     <div class="hero-bg-img"></div>
     <div class="hero-bg-overlay"></div>
+    <div class="hero-godray"></div>
     <div class="hero-particles">
-      <span class="particle" style="--i:0;--x:90.86765698319076%;--d:11.342231869321207s;--delay:1.6727998661485355s;--size:2.48625989470942px"></span><span class="particle" style="--i:1;--x:15.046573334727897%;--d:6.106362801747596s;--delay:2.4831583973808646s;--size:2.454756185977853px"></span><span class="particle" style="--i:2;--x:73.09188508035926%;--d:7.482720882818146s;--delay:3.0147912683974667s;--size:3.1776995989382253px"></span><span class="particle" style="--i:3;--x:89.34392664661202%;--d:10.536201403539735s;--delay:2.9973410370299245s;--size:2.1376243661684846px"></span><span class="particle" style="--i:4;--x:17.00384411427117%;--d:11.7283798376255s;--delay:4.575926117837912s;--size:2.655363448349564px"></span><span class="particle" style="--i:5;--x:17.73624766791534%;--d:9.216540481136782s;--delay:0.02296010649737945s;--size:1.1576979905965725px"></span><span class="particle" style="--i:6;--x:40.31031631925879%;--d:12.495074769753156s;--delay:1.054407202413647s;--size:3.6647275294395687px"></span><span class="particle" style="--i:7;--x:14.721214174703046%;--d:9.737803762081532s;--delay:0.6061313609399521s;--size:3.1446937018887793px"></span><span class="particle" style="--i:8;--x:22.451622106486134%;--d:11.297536164511534s;--delay:4.687382055003718s;--size:3.4521101591170478px"></span><span class="particle" style="--i:9;--x:67.73625107723804%;--d:6.398158374780929s;--delay:3.3976442650582763s;--size:2.307501768955113px"></span><span class="particle" style="--i:10;--x:57.09672348127416%;--d:11.729413192472055s;--delay:4.895800202718128s;--size:1.889257931321477px"></span><span class="particle" style="--i:11;--x:64.75445127820988%;--d:7.94099110451809s;--delay:3.6245478742984787s;--size:3.358899897111932px"></span><span class="particle" style="--i:12;--x:72.77774562080528%;--d:9.33394906546025s;--delay:3.4060720319770263s;--size:1.7020636039855233px"></span><span class="particle" style="--i:13;--x:83.77517778325036%;--d:6.897617165567219s;--delay:1.5455643225670106s;--size:1.599950880736423px"></span><span class="particle" style="--i:14;--x:0.8390843035138484%;--d:10.386715521223312s;--delay:1.0111502505521452s;--size:3.8446584080471045px"></span><span class="particle" style="--i:15;--x:17.44890128337937%;--d:12.534218963438455s;--delay:0.9805029246566738s;--size:3.7410320641501817px"></span><span class="particle" style="--i:16;--x:14.196624456235085%;--d:11.19706847740477s;--delay:4.920069635715118s;--size:3.2740894551248445px"></span><span class="particle" style="--i:17;--x:73.36735139623445%;--d:10.939567356558296s;--delay:3.127803592709208s;--size:2.5297448440556165px"></span><span class="particle" style="--i:18;--x:27.83983228300414%;--d:10.499752440276087s;--delay:1.8410305468779957s;--size:1.0137607835850964px"></span><span class="particle" style="--i:19;--x:75.88026063432807%;--d:10.320815478102734s;--delay:3.6988769969787825s;--size:2.810539562281502px"></span><span class="particle" style="--i:20;--x:24.36270831394094%;--d:6.481295150807917s;--delay:2.1767279465926244s;--size:2.8651494522176564px"></span><span class="particle" style="--i:21;--x:16.254506715441842%;--d:6.489326093761885s;--delay:2.439353155942548s;--size:1.858801162831617px"></span><span class="particle" style="--i:22;--x:75.38254211384861%;--d:5.464377907775328s;--delay:3.611403980190712s;--size:1.34499418823312px"></span><span class="particle" style="--i:23;--x:58.89694929665059%;--d:6.706515063265653s;--delay:3.8101484703043544s;--size:1.077681046702267px"></span><span class="particle" style="--i:24;--x:56.2198435117874%;--d:10.523630356606844s;--delay:0.21991741944671628s;--size:1.3720480113813642px"></span><span class="particle" style="--i:25;--x:40.48129857344217%;--d:5.951862716752967s;--delay:0.1789560564598297s;--size:2.8719421153130447px"></span><span class="particle" style="--i:26;--x:2.5504298543806203%;--d:11.10382972064861s;--delay:1.3967165405350201s;--size:3.5303399533610236px"></span><span class="particle" style="--i:27;--x:15.82448151564706%;--d:12.987207416356705s;--delay:0.29798379244651063s;--size:1.2635130528348117px"></span><span class="particle" style="--i:28;--x:47.433416560083785%;--d:6.696430539136495s;--delay:2.714695795102329s;--size:3.287659823205766px"></span><span class="particle" style="--i:29;--x:48.541417231264305%;--d:12.650323196278329s;--delay:1.494113665435501s;--size:2.9667194328095423px"></span>
+      <span class="particle" style="--i:0;--x:17.687785055646387%;--d:10.58512171159839s;--delay:4.372009436357125s;--size:8.211195226118363px"></span><span class="particle" style="--i:1;--x:16.67149469414071%;--d:12.518620248832885s;--delay:0.5932858796688395s;--size:3.313496862400833px"></span><span class="particle" style="--i:2;--x:53.76058426250959%;--d:6.018040240978372s;--delay:2.578485952707663s;--size:3.4800358854921027px"></span><span class="particle" style="--i:3;--x:12.996021339705399%;--d:12.375068629019655s;--delay:6.349479841541546s;--size:6.044581728892671px"></span><span class="particle" style="--i:4;--x:25.150421063434326%;--d:10.346185673413933s;--delay:1.5126072581411734s;--size:2.7250127029214526px"></span><span class="particle" style="--i:5;--x:51.851089738107014%;--d:12.154897419062234s;--delay:3.8334102133956414s;--size:7.1103828197561665px"></span><span class="particle" style="--i:6;--x:45.641043875899165%;--d:14.95834549888499s;--delay:0.07372042395362732s;--size:5.031388284268209px"></span><span class="particle" style="--i:7;--x:73.3646254867407%;--d:11.876687170601109s;--delay:2.246038813157984s;--size:6.601296371330777px"></span><span class="particle" style="--i:8;--x:42.372710542204615%;--d:10.037914088944014s;--delay:3.2077481688441543s;--size:6.61456212930233px"></span><span class="particle" style="--i:9;--x:18.99468811119983%;--d:10.787041493953378s;--delay:0.8123138568962517s;--size:8.576374145148947px"></span><span class="particle" style="--i:10;--x:16.31824695266223%;--d:12.733336402476285s;--delay:3.51862199629314s;--size:3.5166610752287744px"></span><span class="particle" style="--i:11;--x:90.99902357783618%;--d:7.937250039243115s;--delay:1.3136932324876296s;--size:8.042081595999061px"></span><span class="particle" style="--i:12;--x:45.834834578770554%;--d:7.519970845217797s;--delay:5.014156744101171s;--size:3.014348753899611px"></span><span class="particle" style="--i:13;--x:34.40894830584832%;--d:11.051674548881024s;--delay:2.5882906613010586s;--size:8.962813056124157px"></span><span class="particle" style="--i:14;--x:17.102593731307802%;--d:8.554539745597973s;--delay:2.4939758229607056s;--size:6.939560362402638px"></span><span class="particle" style="--i:15;--x:82.21931745864923%;--d:7.193936288596787s;--delay:4.968403329922906s;--size:5.366149252067265px"></span><span class="particle" style="--i:16;--x:8.975604206751042%;--d:12.12367700189891s;--delay:0.47116454202675595s;--size:3.801113482352043px"></span><span class="particle" style="--i:17;--x:43.60258874856462%;--d:8.976459660641146s;--delay:5.300665362027548s;--size:3.7749720621934904px"></span><span class="particle" style="--i:18;--x:86.80253471342525%;--d:12.42661266431326s;--delay:2.737531823246716s;--size:8.220387859154084px"></span><span class="particle" style="--i:19;--x:1.3246836149654717%;--d:7.935465760406707s;--delay:4.293963984422011s;--size:8.528299674915496px"></span><span class="particle" style="--i:20;--x:62.99012689698004%;--d:10.346017818613099s;--delay:1.8574453817533425s;--size:5.587908163139262px"></span><span class="particle" style="--i:21;--x:47.70456230128522%;--d:12.043329466729002s;--delay:5.792384750771241s;--size:4.223508135278934px"></span><span class="particle" style="--i:22;--x:10.310609307180263%;--d:7.2161794559849675s;--delay:5.113173193453989s;--size:4.500293175545238px"></span><span class="particle" style="--i:23;--x:56.045430105421126%;--d:10.304608241769209s;--delay:2.627251038240369s;--size:2.5874559180198755px"></span><span class="particle" style="--i:24;--x:16.08570051669974%;--d:10.133284401158255s;--delay:3.4934420550572525s;--size:2.926359795928064px"></span><span class="particle" style="--i:25;--x:53.42128085326766%;--d:6.251325859765862s;--delay:3.610635915563972s;--size:2.8676388599516995px"></span><span class="particle" style="--i:26;--x:94.57350269279212%;--d:8.347023745280048s;--delay:2.2422883752499945s;--size:6.067152097584421px"></span><span class="particle" style="--i:27;--x:36.08840233057471%;--d:12.386466790550177s;--delay:5.927584092776341s;--size:4.835907733046996px"></span><span class="particle" style="--i:28;--x:49.40969650857904%;--d:6.218779340167513s;--delay:2.4570606850863683s;--size:8.453766455523741px"></span><span class="particle" style="--i:29;--x:92.02825270082066%;--d:13.214835181812429s;--delay:6.305734068810627s;--size:4.931246372012214px"></span><span class="particle" style="--i:30;--x:11.624724437769574%;--d:6.206531649752691s;--delay:0.8411449417869815s;--size:6.823663197543307px"></span><span class="particle" style="--i:31;--x:15.105659142224104%;--d:6.457653102478125s;--delay:2.5753906027042293s;--size:5.518300507456145px"></span><span class="particle" style="--i:32;--x:78.96636850328066%;--d:6.113527695215095s;--delay:1.4432331253637183s;--size:8.926115458291221px"></span><span class="particle" style="--i:33;--x:22.02895814247189%;--d:10.34870704423372s;--delay:6.868371255143519s;--size:6.121748281135355px"></span><span class="particle" style="--i:34;--x:40.50926017358424%;--d:10.99741404905955s;--delay:6.552403827849122s;--size:6.424548656673471px"></span><span class="particle" style="--i:35;--x:53.08403715236594%;--d:9.76436480461815s;--delay:2.477992890817462s;--size:4.818638726211509px"></span>
     </div>
+    <div class="hero-fish" style="--ty:59%;--fw:64px;--fd:21.2s;--fdelay:-12.3s"><svg viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <g class="fish-tail"><polygon points="0,25 20,10 20,40" fill="#f59e0b" opacity=".95"/></g>
+        <ellipse cx="55" cy="25" rx="35" ry="14" fill="#fbbf24"/>
+        <path d="M25,25 Q55,8 90,25 Q55,42 25,25 Z" fill="#fbbf24" opacity=".85"/>
+        <path d="M40,25 Q55,18 70,25 Q55,32 40,25 Z" fill="#fb923c" opacity=".55"/>
+        <ellipse cx="55" cy="13" rx="8" ry="3" fill="#f59e0b" opacity=".8"/>
+        <ellipse cx="55" cy="37" rx="6" ry="2.5" fill="#f59e0b" opacity=".7"/>
+        <circle cx="80" cy="22" r="2.4" fill="#fff"/>
+        <circle cx="80.6" cy="22" r="1.4" fill="#0c1929"/>
+      </svg></div><div class="hero-fish flip" style="--ty:15%;--fw:51px;--fd:32.5s;--fdelay:-0.0s"><svg viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <g class="fish-tail"><polygon points="0,25 20,10 20,40" fill="#3b82f6" opacity=".95"/></g>
+        <ellipse cx="55" cy="25" rx="35" ry="14" fill="#60a5fa"/>
+        <path d="M25,25 Q55,8 90,25 Q55,42 25,25 Z" fill="#60a5fa" opacity=".85"/>
+        <path d="M40,25 Q55,18 70,25 Q55,32 40,25 Z" fill="#1e40af" opacity=".55"/>
+        <ellipse cx="55" cy="13" rx="8" ry="3" fill="#3b82f6" opacity=".8"/>
+        <ellipse cx="55" cy="37" rx="6" ry="2.5" fill="#3b82f6" opacity=".7"/>
+        <circle cx="80" cy="22" r="2.4" fill="#fff"/>
+        <circle cx="80.6" cy="22" r="1.4" fill="#0c1929"/>
+      </svg></div><div class="hero-fish" style="--ty:35%;--fw:76px;--fd:23.2s;--fdelay:-1.4s"><svg viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <g class="fish-tail"><polygon points="0,25 20,10 20,40" fill="#ec4899" opacity=".95"/></g>
+        <ellipse cx="55" cy="25" rx="35" ry="14" fill="#f472b6"/>
+        <path d="M25,25 Q55,8 90,25 Q55,42 25,25 Z" fill="#f472b6" opacity=".85"/>
+        <path d="M40,25 Q55,18 70,25 Q55,32 40,25 Z" fill="#be185d" opacity=".55"/>
+        <ellipse cx="55" cy="13" rx="8" ry="3" fill="#ec4899" opacity=".8"/>
+        <ellipse cx="55" cy="37" rx="6" ry="2.5" fill="#ec4899" opacity=".7"/>
+        <circle cx="80" cy="22" r="2.4" fill="#fff"/>
+        <circle cx="80.6" cy="22" r="1.4" fill="#0c1929"/>
+      </svg></div><div class="hero-fish flip" style="--ty:36%;--fw:87px;--fd:26.0s;--fdelay:-14.6s"><svg viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <g class="fish-tail"><polygon points="0,25 20,10 20,40" fill="#10b981" opacity=".95"/></g>
+        <ellipse cx="55" cy="25" rx="35" ry="14" fill="#34d399"/>
+        <path d="M25,25 Q55,8 90,25 Q55,42 25,25 Z" fill="#34d399" opacity=".85"/>
+        <path d="M40,25 Q55,18 70,25 Q55,32 40,25 Z" fill="#047857" opacity=".55"/>
+        <ellipse cx="55" cy="13" rx="8" ry="3" fill="#10b981" opacity=".8"/>
+        <ellipse cx="55" cy="37" rx="6" ry="2.5" fill="#10b981" opacity=".7"/>
+        <circle cx="80" cy="22" r="2.4" fill="#fff"/>
+        <circle cx="80.6" cy="22" r="1.4" fill="#0c1929"/>
+      </svg></div><div class="hero-fish" style="--ty:74%;--fw:87px;--fd:29.4s;--fdelay:-19.4s"><svg viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <g class="fish-tail"><polygon points="0,25 20,10 20,40" fill="#fbbf24" opacity=".95"/></g>
+        <ellipse cx="55" cy="25" rx="35" ry="14" fill="#fde68a"/>
+        <path d="M25,25 Q55,8 90,25 Q55,42 25,25 Z" fill="#fde68a" opacity=".85"/>
+        <path d="M40,25 Q55,18 70,25 Q55,32 40,25 Z" fill="#7c2d12" opacity=".55"/>
+        <ellipse cx="55" cy="13" rx="8" ry="3" fill="#fbbf24" opacity=".8"/>
+        <ellipse cx="55" cy="37" rx="6" ry="2.5" fill="#fbbf24" opacity=".7"/>
+        <circle cx="80" cy="22" r="2.4" fill="#fff"/>
+        <circle cx="80.6" cy="22" r="1.4" fill="#0c1929"/>
+      </svg></div><div class="hero-fish flip" style="--ty:62%;--fw:73px;--fd:23.3s;--fdelay:-19.3s"><svg viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <g class="fish-tail"><polygon points="0,25 20,10 20,40" fill="#06b6d4" opacity=".95"/></g>
+        <ellipse cx="55" cy="25" rx="35" ry="14" fill="#a5f3fc"/>
+        <path d="M25,25 Q55,8 90,25 Q55,42 25,25 Z" fill="#a5f3fc" opacity=".85"/>
+        <path d="M40,25 Q55,18 70,25 Q55,32 40,25 Z" fill="#0891b2" opacity=".55"/>
+        <ellipse cx="55" cy="13" rx="8" ry="3" fill="#06b6d4" opacity=".8"/>
+        <ellipse cx="55" cy="37" rx="6" ry="2.5" fill="#06b6d4" opacity=".7"/>
+        <circle cx="80" cy="22" r="2.4" fill="#fff"/>
+        <circle cx="80.6" cy="22" r="1.4" fill="#0c1929"/>
+      </svg></div><div class="hero-fish" style="--ty:34%;--fw:94px;--fd:20.3s;--fdelay:-2.7s"><svg viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <g class="fish-tail"><polygon points="0,25 20,10 20,40" fill="#f59e0b" opacity=".95"/></g>
+        <ellipse cx="55" cy="25" rx="35" ry="14" fill="#fbbf24"/>
+        <path d="M25,25 Q55,8 90,25 Q55,42 25,25 Z" fill="#fbbf24" opacity=".85"/>
+        <path d="M40,25 Q55,18 70,25 Q55,32 40,25 Z" fill="#fb923c" opacity=".55"/>
+        <ellipse cx="55" cy="13" rx="8" ry="3" fill="#f59e0b" opacity=".8"/>
+        <ellipse cx="55" cy="37" rx="6" ry="2.5" fill="#f59e0b" opacity=".7"/>
+        <circle cx="80" cy="22" r="2.4" fill="#fff"/>
+        <circle cx="80.6" cy="22" r="1.4" fill="#0c1929"/>
+      </svg></div>
+    <div class="hero-seaweed"></div>
   </div>
   <div class="hero-topbar">
-    <div class="hero-logo">みんなの<span class="hero-logo-accent">伊東</span></div>
-    <div class="hero-contact">
-      <a href="#tab-memberportal" onclick="document.querySelector('.nav-slate').click();return false;" class="hero-contact-card">
-        <div class="hcc-label">議員の方へ</div>
-        <div class="hcc-mail">📧 ka@oh-life.co.jp</div>
-      </a>
-    </div>
+    <div class="hero-logo">みんなの<span class="hero-logo-accent">伊東市</span></div>
   </div>
   <div class="hero-content">
     <div class="hero-title-en">VOICE OF</div>
@@ -1478,10 +1556,6 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
     <p class="hero-sub">市民と議会をつなぐ、街の対話プラットフォーム<br>
       <span class="hero-stats-inline">20名の議員 ｜ 679本の議会動画</span>
     </p>
-    <div class="hero-scroll-cue">
-      <span class="hsc-text">Scroll</span>
-      <span class="hsc-line"></span>
-    </div>
   </div>
   <div class="header-visitors" id="visitor-counter" style="display:none">
     <span id="vc-total">—</span> 人が訪問 ｜ 今日 <span id="vc-today">—</span> 人
