@@ -691,6 +691,9 @@ const html = `<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <meta name="description" content="伊東市議会の活動を市民にわかりやすく。議員プロフィール・議会動画・質問要約・市民の声を掲載。">
 <meta name="theme-color" content="#1e40af">
 <link rel="manifest" href="manifest.json">
@@ -749,16 +752,16 @@ h1,h2,h3{letter-spacing:-.01em;font-weight:800}
   z-index:1;pointer-events:none}
 @media(prefers-reduced-motion:reduce){.hero-video{display:none}}
 
-/* 上部バー（左：ロゴ＋非公式バッジ / 右：運営者） */
-.hero-topbar{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:flex-start;padding:1.2rem 2rem 0;flex-wrap:wrap;gap:1rem}
-.hero-logo-wrap{display:flex;align-items:center;gap:.6rem}
-.hero-logo{font-size:1.5rem;font-weight:900;color:#fff;letter-spacing:-.02em;text-shadow:0 2px 12px rgba(0,40,80,.6)}
-.hero-logo-accent{background:linear-gradient(135deg,#fde68a,#fbbf24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hero-unofficial{display:inline-block;padding:.18rem .55rem;background:rgba(251,191,36,.18);color:#fde68a;border:1px solid rgba(253,230,138,.45);border-radius:6px;font-size:.65rem;font-weight:700;letter-spacing:.08em;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
-.hero-operator{text-align:right;color:#fff;line-height:1.35;text-shadow:0 2px 10px rgba(0,40,80,.6)}
-.hop-label{font-size:.6rem;font-weight:600;letter-spacing:.18em;color:rgba(253,230,138,.85);margin-bottom:.15rem}
-.hop-name{font-size:.78rem;color:rgba(255,255,255,.92)}
-.hop-name strong{font-size:1rem;font-weight:800;color:#fff;letter-spacing:.02em}
+/* 上部バー（エディトリアル調のミニマルヘッダー） */
+.hero-topbar{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:center;padding:1.4rem 2.5rem;gap:2rem;border-bottom:1px solid rgba(255,255,255,.12)}
+.hero-brand{display:flex;align-items:baseline;gap:.85rem}
+.hero-brand-tag{font-family:var(--font-en);font-size:.62rem;font-weight:600;letter-spacing:.32em;color:rgba(255,255,255,.7);text-transform:uppercase;padding-right:.85rem;border-right:1px solid rgba(255,255,255,.25);line-height:1}
+.hero-logo{font-size:1.35rem;font-weight:800;color:#fff;letter-spacing:.02em;line-height:1;text-shadow:0 2px 14px rgba(0,30,60,.55)}
+.hero-logo-accent{font-weight:900;letter-spacing:.04em}
+.hero-meta{display:flex;align-items:center;gap:.85rem;color:#fff;line-height:1;text-shadow:0 2px 10px rgba(0,30,60,.55)}
+.hero-meta-label{font-family:var(--font-en);font-size:.6rem;font-weight:600;letter-spacing:.32em;color:rgba(255,255,255,.65);text-transform:uppercase;border-right:1px solid rgba(255,255,255,.25);padding-right:.85rem}
+.hero-meta-name{font-size:.82rem;font-weight:500;color:rgba(255,255,255,.85);letter-spacing:.02em}
+.hero-meta-name strong{font-weight:800;color:#fff;letter-spacing:.06em;margin-left:.25rem}
 
 /* ヒーロー中央コンテンツ */
 .hero-content{position:relative;z-index:2;text-align:center;padding:5rem 2rem 4.5rem;max-width:1100px;margin:0 auto}
@@ -773,14 +776,20 @@ h1,h2,h3{letter-spacing:-.01em;font-weight:800}
 
 @media(max-width:640px){
   .hero-header{min-height:480px}
-  .hero-topbar{padding:1rem 1rem 0;gap:.6rem}
-  .hero-logo{font-size:1.15rem}
-  .hero-unofficial{font-size:.58rem;padding:.15rem .4rem}
-  .hop-label{font-size:.55rem}
-  .hop-name{font-size:.7rem}
-  .hop-name strong{font-size:.88rem}
+  .hero-topbar{padding:.85rem 1rem;gap:.6rem;flex-wrap:wrap}
+  .hero-brand{gap:.55rem}
+  .hero-brand-tag{font-size:.55rem;letter-spacing:.24em;padding-right:.55rem}
+  .hero-logo{font-size:1rem}
+  .hero-meta{gap:.55rem}
+  .hero-meta-label{font-size:.52rem;letter-spacing:.22em;padding-right:.55rem}
+  .hero-meta-name{font-size:.7rem}
+  .hero-meta-name strong{font-size:.78rem}
   .hero-content{padding:3rem 1rem 3rem}
   .hero-sub{font-size:.85rem}
+}
+@media(max-width:420px){
+  .hero-meta-label,.hero-brand-tag{font-size:.5rem}
+  .hero-meta{flex-basis:100%;justify-content:flex-end}
 }
 .header-visitors{display:flex;justify-content:center;gap:.3rem;margin-top:.5rem;font-size:.72rem;color:var(--sub)}
 .header-visitors span{font-weight:700;color:var(--text)}
@@ -2145,23 +2154,22 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
   <div class="hero-bg">
     <div class="hero-bg-img"></div>
     <video class="hero-video" id="hero-video" autoplay muted loop playsinline preload="auto" aria-hidden="true">
-      <source src="hero-ocean.mp4" type="video/mp4">
+      <source src="hero-ocean.mp4?v=${Date.now()}" type="video/mp4">
     </video>
-    <script>(function(){var v=document.getElementById('hero-video');if(!v)return;var p=v.play();if(p&&p.catch)p.catch(function(){});})();</script>
+    <script>(function(){var v=document.getElementById('hero-video');if(!v)return;v.addEventListener('canplay',function(){v.classList.add('ready')});var p=v.play();if(p&&p.catch)p.catch(function(){v.muted=true;v.play().catch(function(){})});})();</script>
     <div class="hero-bg-overlay"></div>
   </div>
   <div class="hero-topbar">
-    <div class="hero-logo-wrap">
-      <span class="hero-unofficial">非公式</span>
+    <div class="hero-brand">
+      <span class="hero-brand-tag">Unofficial</span>
       <div class="hero-logo">みんなの<span class="hero-logo-accent">伊東市</span></div>
     </div>
-    <div class="hero-operator">
-      <div class="hop-label">運営</div>
-      <div class="hop-name">伊東市議会議員<br><strong>大竹 圭</strong></div>
+    <div class="hero-meta">
+      <span class="hero-meta-label">Operated by</span>
+      <span class="hero-meta-name">伊東市議会議員<strong>大竹 圭</strong></span>
     </div>
   </div>
   <div class="hero-content">
-    <div class="hero-title-en">VOICE OF</div>
     <h1 class="hero-title-jp">伊東を、<br>もっと身近に。</h1>
     <p class="hero-sub">市民と議会をつなぐ、街の対話プラットフォーム<br>
       <span class="hero-stats-inline">${currentMembersList.length}名の議員 ｜ ${videos.length}本の議会動画</span>
