@@ -2009,7 +2009,7 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
 <nav role="tablist" aria-label="メインナビゲーション">
   <button class="active nav-tab nav-blue" role="tab" aria-selected="true" onclick="switchTab('members',this)">👥 議員一覧</button>
   <button class="nav-tab nav-purple" role="tab" aria-selected="false" onclick="switchTab('themes',this)">🔍 テーマから探す</button>
-  <button class="nav-tab nav-green" role="tab" aria-selected="false" onclick="switchTab('voice',this)">💬 市民の声</button>
+  <button class="nav-tab nav-green" role="tab" aria-selected="false" onclick="switchTab('voice',this)">💬 市民の声を市政へ</button>
   <button class="nav-tab nav-orange" role="tab" aria-selected="false" onclick="switchTab('participate',this)">🗳️ 市政に参加する</button>
   <div class="nav-more-wrap">
     <button class="nav-more-btn" onclick="toggleNavMore(event)" aria-haspopup="true" aria-expanded="false">⋯ もっと見る</button>
@@ -2651,7 +2651,7 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
         悪質な投稿(名誉毀損・侮辱・脅迫・業務妨害等)については、本サイトに記録されたIPアドレス・接続情報・送信端末情報・タイムスタンプをもとに、<strong>伊東警察署および静岡県警サイバー犯罪対策課への被害届提出、プロバイダ責任制限法に基づく発信者情報開示請求</strong>を行います。
         各罪の刑罰：名誉毀損罪 = 3年以下の懲役/50万円以下の罰金、侮辱罪 = 1年以下の懲役/30万円以下の罰金、脅迫罪 = 2年以下の懲役/30万円以下の罰金。
         加えて、<strong>民事訴訟により10万〜1,000万円超の損害賠償</strong>を請求します（弁護士費用・裁判費用も投稿者負担）。
-        詳細は「市民の声」タブの<strong>🛡️ 投稿前ガイドライン</strong>をご確認ください。
+        詳細は「市民の声を市政へ」タブの<strong>🛡️ 投稿前ガイドライン</strong>をご確認ください。
       </div>
       <form id="voice-form" onsubmit="submitVoice(event)">
         <div class="modal-form-row">
@@ -2782,7 +2782,7 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
           <ul>
             <li>各議員のページから公式SNSへ（あれば）</li>
             <li>議会事務局経由で議員に連絡を取り次いでもらう</li>
-            <li>市民の声タブから匿名投稿（議員が目を通します）</li>
+            <li>「市民の声を市政へ」タブから匿名投稿（議員が目を通します）</li>
           </ul>
         </div>
         <a href="javascript:void(0)" onclick="switchTab('members',document.querySelector('nav button:nth-child(1)'))" class="pg-btn">👥 議員一覧へ</a>
