@@ -27,10 +27,17 @@ try {
 } catch(e) {}
 
 // 議員写真の位置調整（顔が見切れる場合、object-positionで補正）
-// 形式: { name: { objectPosition: 'center 20%' } }
-// デフォルトは 'center 30%'（顔が上部にある肖像写真を想定）
+// 形式: { name: { objectPosition: 'center 20%', scale: 1.2 } }
+// デフォルトは 'center 25%'（顔が上部にある肖像写真を想定）
 const photoAdjustments = {
-  // 必要に応じて個別調整を追加
+  // 顔が中途半端に見切れる議員（フィードバック対応）
+  '大川勝弘': { objectPosition: 'center 18%', scale: 1.15 },
+  '河島紀美恵': { objectPosition: 'center 18%', scale: 1.15 },
+  '重岡秀子': { objectPosition: 'center 18%', scale: 1.15 },
+  '片桐基至': { objectPosition: 'center 18%', scale: 1.15 },
+  '佐藤周': { objectPosition: 'center 18%', scale: 1.15 },
+  '中島弘道': { objectPosition: 'center 18%', scale: 1.15 },
+  '井戸清司': { objectPosition: 'center 18%', scale: 1.15 },
 };
 let responsesData = null;
 try { responsesData = JSON.parse(fs.readFileSync('analysis_with_responses.json', 'utf-8')); } catch(e) {}
@@ -309,7 +316,8 @@ function memberCardHTML(m) {
 
   const adj = photoAdjustments[m.name];
   const objPos = adj?.objectPosition || 'center 25%';
-  const imgStyle = `style="object-position:${objPos}"`;
+  const scaleStyle = adj?.scale ? `transform:scale(${adj.scale});` : '';
+  const imgStyle = `style="object-position:${objPos};${scaleStyle}"`;
   const avatarContent = m.photoUrl
     ? `<div class="m-avatar-photo" style="border-color:${fc}"><img src="${esc(m.photoUrl)}" alt="${esc(m.name)}" ${imgStyle} loading="lazy" onerror="this.parentElement.outerHTML='<div class=m-avatar style=&quot;background-color:${fc}&quot;>${initial}</div>'"></div>`
     : `<div class="m-avatar" style="background-color:${fc}">${initial}</div>`;
@@ -338,7 +346,8 @@ function memberDetailHTML(m) {
 
   const adj2 = photoAdjustments[m.name];
   const objPos2 = adj2?.objectPosition || 'center 25%';
-  const imgStyle2 = `style="object-position:${objPos2}"`;
+  const scaleStyle2 = adj2?.scale ? `transform:scale(${adj2.scale});` : '';
+  const imgStyle2 = `style="object-position:${objPos2};${scaleStyle2}"`;
   const avatarContent = m.photoUrl
     ? `<div class="detail-avatar-photo" style="border-color:${fc}"><img src="${esc(m.photoUrl)}" alt="${esc(m.name)}" ${imgStyle2} loading="lazy" onerror="this.parentElement.outerHTML='<div class=detail-avatar style=&quot;background-color:${fc}&quot;>${initial}</div>'"></div>`
     : `<div class="detail-avatar" style="background-color:${fc}">${initial}</div>`;
