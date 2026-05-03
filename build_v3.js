@@ -735,16 +735,16 @@ body.high-contrast button,body.high-contrast .pg-btn,body.high-contrast .qe-acti
 body{font-family:var(--font-en),var(--font-jp);background:var(--bg);color:var(--text);line-height:1.75;-webkit-text-size-adjust:100%;letter-spacing:.01em;font-feature-settings:'palt' 1}
 h1,h2,h3{letter-spacing:-.01em;font-weight:800}
 /* シネマティックなヒーローヘッダー（リアルな海中映像） */
-.hero-header{position:relative;min-height:560px;background:#001a2e;color:#fff;overflow:hidden}
+.hero-header{position:relative;min-height:clamp(420px,52vw,560px);background:#001a2e;color:#fff;overflow:hidden}
 .hero-bg{position:absolute;inset:0;z-index:0}
 /* 動画読み込み前のフォールバック（深海グラデーション） */
 .hero-bg-img{position:absolute;inset:0;background:
   radial-gradient(ellipse at 50% -20%,rgba(120,220,255,.55),transparent 55%),
   linear-gradient(180deg,#0e7490 0%,#075985 30%,#0c4a6e 60%,#082f49 85%,#001a2e 100%);
   z-index:0}
-/* 海中ビデオ（フルブリード／ループ／ミュート） */
-.hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;animation:hero-video-fade 1.6s ease-out}
-@keyframes hero-video-fade{from{opacity:0}to{opacity:1}}
+/* 海中ビデオ（フルブリード／ループ／ミュート）＋ポスターでも美しい */
+.hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;animation:hero-video-fade 1.6s ease-out;background:#001a2e url('hero-ocean-poster.jpg') center/cover no-repeat}
+@keyframes hero-video-fade{from{opacity:.6}to{opacity:1}}
 /* 文字を読みやすくするオーバーレイ（青みのある暗膜） */
 .hero-bg-overlay{position:absolute;inset:0;background:
   linear-gradient(180deg,rgba(2,30,55,.35) 0%,rgba(2,30,55,.15) 30%,rgba(2,30,55,.55) 100%),
@@ -753,43 +753,48 @@ h1,h2,h3{letter-spacing:-.01em;font-weight:800}
 @media(prefers-reduced-motion:reduce){.hero-video{display:none}}
 
 /* 上部バー（エディトリアル調のミニマルヘッダー） */
-.hero-topbar{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:center;padding:1.4rem 2.5rem;gap:2rem;border-bottom:1px solid rgba(255,255,255,.12)}
-.hero-brand{display:flex;align-items:baseline;gap:.85rem}
-.hero-brand-tag{font-family:var(--font-en);font-size:.62rem;font-weight:600;letter-spacing:.32em;color:rgba(255,255,255,.7);text-transform:uppercase;padding-right:.85rem;border-right:1px solid rgba(255,255,255,.25);line-height:1}
-.hero-logo{font-size:1.35rem;font-weight:800;color:#fff;letter-spacing:.02em;line-height:1;text-shadow:0 2px 14px rgba(0,30,60,.55)}
+.hero-topbar{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:center;padding:clamp(.8rem,2.5vw,1.4rem) clamp(1rem,4vw,2.5rem);gap:.5rem clamp(.8rem,3vw,2rem);flex-wrap:wrap;border-bottom:1px solid rgba(255,255,255,.12);min-width:0}
+.hero-brand{display:flex;align-items:baseline;gap:clamp(.45rem,1.5vw,.85rem);min-width:0}
+.hero-brand-tag{font-family:var(--font-en);font-size:clamp(.5rem,1.4vw,.62rem);font-weight:600;letter-spacing:.28em;color:rgba(255,255,255,.7);text-transform:uppercase;padding-right:clamp(.45rem,1.5vw,.85rem);border-right:1px solid rgba(255,255,255,.25);line-height:1;flex-shrink:0;white-space:nowrap}
+.hero-logo{font-size:clamp(.95rem,3vw,1.35rem);font-weight:800;color:#fff;letter-spacing:.02em;line-height:1;text-shadow:0 2px 14px rgba(0,30,60,.55);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 .hero-logo-accent{font-weight:900;letter-spacing:.04em}
-.hero-meta{display:flex;align-items:center;gap:.85rem;color:#fff;line-height:1;text-shadow:0 2px 10px rgba(0,30,60,.55)}
-.hero-meta-label{font-family:var(--font-en);font-size:.6rem;font-weight:600;letter-spacing:.32em;color:rgba(255,255,255,.65);text-transform:uppercase;border-right:1px solid rgba(255,255,255,.25);padding-right:.85rem}
-.hero-meta-name{font-size:.82rem;font-weight:500;color:rgba(255,255,255,.85);letter-spacing:.02em}
+.hero-meta{display:flex;align-items:center;gap:clamp(.45rem,1.5vw,.85rem);color:#fff;line-height:1;text-shadow:0 2px 10px rgba(0,30,60,.55);min-width:0}
+.hero-meta-label{font-family:var(--font-en);font-size:clamp(.48rem,1.3vw,.6rem);font-weight:600;letter-spacing:.28em;color:rgba(255,255,255,.65);text-transform:uppercase;border-right:1px solid rgba(255,255,255,.25);padding-right:clamp(.45rem,1.5vw,.85rem);flex-shrink:0;white-space:nowrap}
+.hero-meta-name{font-size:clamp(.7rem,2vw,.82rem);font-weight:500;color:rgba(255,255,255,.85);letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .hero-meta-name strong{font-weight:800;color:#fff;letter-spacing:.06em;margin-left:.25rem}
 
 /* ヒーロー中央コンテンツ */
-.hero-content{position:relative;z-index:2;text-align:center;padding:5rem 2rem 4.5rem;max-width:1100px;margin:0 auto}
-.hero-title-en{font-family:var(--font-en);font-size:clamp(3rem, 9vw, 7rem);font-weight:200;letter-spacing:-.03em;line-height:1;color:rgba(255,255,255,.97);text-shadow:0 4px 40px rgba(0,30,60,.6);margin-bottom:.3em;animation:hero-fade-in 1.2s ease-out}
-.hero-title-jp{font-size:clamp(2rem, 6vw, 4.5rem);font-weight:900;letter-spacing:-.02em;line-height:1.3;margin:0 0 1.5rem;color:#fff;text-shadow:0 4px 30px rgba(0,30,60,.7);animation:hero-fade-in 1.4s ease-out .2s both}
-.hero-sub{font-size:.95rem;color:rgba(240,250,255,.92);line-height:1.8;letter-spacing:.02em;text-shadow:0 2px 8px rgba(0,30,60,.5);animation:hero-fade-in 1.6s ease-out .4s both}
-.hero-stats-inline{display:inline-block;margin-top:.5rem;padding:.35rem 1rem;background:rgba(255,255,255,.14);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.18);border-radius:999px;font-size:.78rem;font-weight:600}
+.hero-content{position:relative;z-index:2;text-align:center;padding:clamp(2.5rem,8vw,5rem) clamp(1rem,4vw,2rem) clamp(2.5rem,7vw,4.5rem);max-width:1100px;margin:0 auto}
+.hero-title-jp{font-size:clamp(1.65rem,7vw,4.5rem);font-weight:900;letter-spacing:-.02em;line-height:1.25;margin:0 0 clamp(1rem,3vw,1.5rem);color:#fff;text-shadow:0 4px 30px rgba(0,30,60,.7);animation:hero-fade-in 1.4s ease-out .2s both}
+.hero-title-jp .l1,.hero-title-jp .l2{display:inline-block}
+.hero-sub{font-size:clamp(.78rem,2.2vw,.95rem);color:rgba(240,250,255,.92);line-height:1.7;letter-spacing:.02em;text-shadow:0 2px 8px rgba(0,30,60,.5);animation:hero-fade-in 1.6s ease-out .4s both;display:flex;flex-direction:column;align-items:center;gap:.6rem;margin:0 auto;max-width:42rem}
+.hero-stats-inline{display:inline-block;padding:.35rem 1rem;background:rgba(255,255,255,.14);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.18);border-radius:999px;font-size:clamp(.7rem,1.8vw,.78rem);font-weight:600;white-space:nowrap}
 @keyframes hero-fade-in{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 
 .hero-header .header-visitors{position:absolute;bottom:.6rem;right:1.2rem;z-index:2;font-size:.7rem;color:rgba(255,255,255,.8)}
 .hero-header .header-visitors span{color:#fff;font-weight:700}
 
-@media(max-width:640px){
-  .hero-header{min-height:480px}
-  .hero-topbar{padding:.85rem 1rem;gap:.6rem;flex-wrap:wrap}
+/* タブレット〜小さめデスクトップ */
+@media(max-width:768px){
+  .hero-topbar{padding:.8rem 1rem;gap:.4rem .8rem}
   .hero-brand{gap:.55rem}
-  .hero-brand-tag{font-size:.55rem;letter-spacing:.24em;padding-right:.55rem}
-  .hero-logo{font-size:1rem}
   .hero-meta{gap:.55rem}
-  .hero-meta-label{font-size:.52rem;letter-spacing:.22em;padding-right:.55rem}
-  .hero-meta-name{font-size:.7rem}
-  .hero-meta-name strong{font-size:.78rem}
-  .hero-content{padding:3rem 1rem 3rem}
-  .hero-sub{font-size:.85rem}
+  .hero-brand-tag,.hero-meta-label{padding-right:.5rem}
 }
-@media(max-width:420px){
-  .hero-meta-label,.hero-brand-tag{font-size:.5rem}
-  .hero-meta{flex-basis:100%;justify-content:flex-end}
+/* スマホ縦持ち（中） */
+@media(max-width:480px){
+  .hero-topbar{flex-direction:column;align-items:flex-start;gap:.45rem;padding:.85rem 1rem}
+  .hero-brand,.hero-meta{width:100%;justify-content:flex-start}
+  .hero-meta{padding-top:.45rem;border-top:1px solid rgba(255,255,255,.1)}
+  .hero-content{padding:2rem 1rem 2.5rem}
+  .hero-sub{gap:.5rem}
+  .hero-sub br{display:none}
+  .hero-title-jp .l2{margin-left:.1em}
+}
+/* 極小スマホ */
+@media(max-width:360px){
+  .hero-brand-tag,.hero-meta-label{letter-spacing:.18em;padding-right:.4rem}
+  .hero-meta-name strong{margin-left:.15rem}
 }
 .header-visitors{display:flex;justify-content:center;gap:.3rem;margin-top:.5rem;font-size:.72rem;color:var(--sub)}
 .header-visitors span{font-weight:700;color:var(--text)}
@@ -2153,10 +2158,19 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
   </div>
   <div class="hero-bg">
     <div class="hero-bg-img"></div>
-    <video class="hero-video" id="hero-video" autoplay muted loop playsinline preload="auto" aria-hidden="true">
-      <source src="hero-ocean.mp4?v=${Date.now()}" type="video/mp4">
+    <video class="hero-video" id="hero-video" autoplay muted loop playsinline preload="auto" poster="hero-ocean-poster.jpg?v=${Date.now()}" aria-hidden="true">
+      <source src="hero-ocean-v2.mp4?v=${Date.now()}" type="video/mp4">
     </video>
-    <script>(function(){var v=document.getElementById('hero-video');if(!v)return;v.addEventListener('canplay',function(){v.classList.add('ready')});var p=v.play();if(p&&p.catch)p.catch(function(){v.muted=true;v.play().catch(function(){})});})();</script>
+    <script>(function(){
+      var v=document.getElementById('hero-video');if(!v)return;
+      v.muted=true;v.defaultMuted=true;v.setAttribute('muted','');v.setAttribute('playsinline','');
+      var attempt=function(){var p=v.play();if(p&&p.catch)p.catch(function(){})};
+      if(v.readyState>=2){attempt()}else{v.addEventListener('loadeddata',attempt,{once:true})}
+      ['click','touchstart','scroll','keydown'].forEach(function(ev){
+        document.addEventListener(ev,function once(){attempt();document.removeEventListener(ev,once)},{passive:true,once:true})
+      });
+      setTimeout(attempt,500);setTimeout(attempt,1500);
+    })();</script>
     <div class="hero-bg-overlay"></div>
   </div>
   <div class="hero-topbar">
