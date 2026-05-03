@@ -86,6 +86,7 @@ nav button.active::after{display:none}
 .nav-more-menu button{display:block;width:100%;text-align:left;padding:.6rem 1rem;border:none;background:transparent;border-radius:6px;font-size:.85rem;font-weight:600;cursor:pointer;color:#1e293b;white-space:nowrap}
 .nav-more-menu button:hover{background:#f0f4f8;color:var(--accent)}
 .nav-more-menu button.sub-current{background:#eff6ff;color:var(--accent)}
+.nav-more-divider{height:1px;background:var(--border);margin:.4rem .2rem}
 @keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
 
 /* スクロール連動フェードイン（reveal-on-scroll） */
@@ -386,7 +387,16 @@ nav button.active::after{display:none}
 .bar-label{display:flex;justify-content:space-between;font-size:.85rem;margin-bottom:.2rem}
 .bar-bg{height:20px;background:#f0f4f8;border-radius:10px;overflow:hidden}
 .bar-fill{height:100%;border-radius:10px;transition:.5s}
-footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
+footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background:#0f172a;color:#cbd5e1;margin-top:3rem}
+.footer-grid{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid rgba(255,255,255,.1)}
+.footer-block{}
+.footer-title{font-size:.85rem;font-weight:700;color:#fff;margin-bottom:.6rem;letter-spacing:.02em}
+.footer-text{font-size:.78rem;line-height:1.7;color:#94a3b8}
+.footer-text small{font-size:.7rem;opacity:.85}
+.footer-link{color:#93c5fd;text-decoration:none;font-weight:600}
+.footer-link:hover{color:#fff;text-decoration:underline}
+.footer-credit-line{max-width:1100px;margin:1.2rem auto 0;text-align:center;font-size:.72rem;color:#64748b;padding-top:.8rem}
+@media(max-width:640px){footer{padding:2rem 1rem 1.2rem}.footer-grid{gap:1.2rem}.footer-credit-line{font-size:.65rem;line-height:1.6}}
 .disclaimer{max-width:900px;margin:2rem auto 0;padding:1.5rem 2rem;background:#fff;border-radius:var(--radius);box-shadow:0 2px 8px rgba(0,0,0,.06);text-align:left}
 .disc-summary{text-align:center}
 .disc-summary p{font-size:.82rem;color:#555;line-height:1.7;margin-bottom:.5rem}
@@ -495,6 +505,48 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
 .voice-type-good{background:#dcfce7;color:#15803d}
 .voice-type-improve{background:#fef3c7;color:#92400e}
 .voice-type-idea{background:#dbeafe;color:#1e40af}
+
+/* 議員の方へタブ */
+.mp-hero{background:linear-gradient(135deg,#1e293b 0%,#0f172a 50%,#1e3a8a 100%);color:#fff;border-radius:24px;padding:3rem 2rem;margin-bottom:2rem;text-align:center;position:relative;overflow:hidden}
+.mp-hero::before{content:'';position:absolute;top:-30%;right:-15%;width:500px;height:500px;background:radial-gradient(circle,rgba(99,102,241,.3),transparent 70%);pointer-events:none}
+.mp-hero-inner{position:relative;z-index:1;max-width:720px;margin:0 auto}
+.mp-hero-badge{display:inline-block;background:rgba(255,255,255,.18);padding:.35rem .9rem;border-radius:999px;font-size:.78rem;font-weight:700;letter-spacing:.04em;margin-bottom:1rem}
+.mp-hero h1{font-size:1.8rem;font-weight:800;letter-spacing:-.01em;margin-bottom:1rem}
+.mp-hero p{font-size:.95rem;opacity:.95;line-height:1.8;margin-bottom:1.5rem}
+.mp-cta-btn{display:inline-block;padding:.95rem 1.8rem;background:#fff;color:#0f172a;border-radius:999px;font-size:.95rem;font-weight:800;text-decoration:none;box-shadow:0 6px 20px rgba(0,0,0,.25);transition:.2s}
+.mp-cta-btn:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,0,0,.35)}
+
+.mp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:1.2rem;margin-bottom:2rem}
+.mp-card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:1.6rem 1.5rem;box-shadow:var(--shadow-sm);transition:all .25s}
+.mp-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.mp-card-add{border-top:4px solid #2563eb}
+.mp-card-photo{border-top:4px solid #7c3aed}
+.mp-card-delete{border-top:4px solid #dc2626}
+.mp-card-other{border-top:4px solid #10b981}
+.mp-icon{font-size:2rem;margin-bottom:.5rem}
+.mp-card h2{font-size:1.2rem;font-weight:800;color:#0a0a0a;margin-bottom:.6rem;letter-spacing:-.01em}
+.mp-card>p{font-size:.88rem;color:#475569;line-height:1.7;margin-bottom:.9rem}
+.mp-card>p strong{color:#dc2626;background:#fef2f2;padding:.05rem .3rem;border-radius:4px}
+.mp-list{padding-left:1.3rem;margin:.6rem 0 1.2rem}
+.mp-list li{font-size:.83rem;color:#374151;line-height:1.7;margin-bottom:.25rem}
+.mp-action-btn{display:block;text-align:center;padding:.75rem 1rem;border-radius:10px;font-size:.85rem;font-weight:700;text-decoration:none;transition:.15s}
+.mp-action-btn:hover{transform:translateY(-1px);box-shadow:var(--shadow-md)}
+.mp-btn-blue{background:#2563eb;color:#fff}
+.mp-btn-blue:hover{background:#1d4ed8}
+.mp-btn-purple{background:#7c3aed;color:#fff}
+.mp-btn-purple:hover{background:#6d28d9}
+.mp-btn-red{background:#dc2626;color:#fff}
+.mp-btn-red:hover{background:#b91c1c}
+.mp-btn-green{background:#10b981;color:#fff}
+.mp-btn-green:hover{background:#059669}
+
+.mp-policy{background:#f8fafc;border:1px solid var(--border);border-radius:14px;padding:1.4rem 1.6rem;margin-bottom:1rem}
+.mp-policy h3{font-size:1rem;font-weight:800;margin-bottom:.8rem;color:#0a0a0a}
+.mp-policy ul{padding-left:1.3rem;margin:0}
+.mp-policy li{font-size:.82rem;color:#374151;line-height:1.85;margin-bottom:.3rem}
+.mp-policy strong{color:#0f172a;font-weight:700}
+.mp-policy a{color:#2563eb;text-decoration:underline;font-weight:600}
+@media(max-width:640px){.mp-hero{padding:2rem 1.2rem}.mp-hero h1{font-size:1.4rem}.mp-cta-btn{font-size:.85rem;padding:.75rem 1.3rem}.mp-card{padding:1.3rem 1.1rem}}
 
 /* 安全ガイドライン */
 .safety-guide{background:#fff;border:2px solid #fbbf24;border-radius:16px;margin-bottom:1.5rem;overflow:hidden;box-shadow:var(--shadow-md)}
@@ -1372,6 +1424,8 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
       <button role="menuitem" onclick="switchTab('plan',this);closeNavMore()">📘 総合計画</button>
       <button role="menuitem" onclick="switchTab('analysis',this);closeNavMore()">🔎 伊東市徹底分析</button>
       <button role="menuitem" onclick="switchTab('stats',this);closeNavMore()">📊 議会全体の動き</button>
+      <div class="nav-more-divider"></div>
+      <button role="menuitem" onclick="switchTab('memberportal',this);closeNavMore()">💼 議員の方へ</button>
     </div>
   </div>
 </nav>
@@ -22077,6 +22131,85 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
       </div>
     </div>
   </div>
+
+  <!-- 議員の方へタブ（議員専用窓口） -->
+  <div id="tab-memberportal" class="tab-panel">
+    <div class="mp-hero">
+      <div class="mp-hero-inner">
+        <div class="mp-hero-badge">💼 議員専用窓口</div>
+        <h1>議員の皆さまへ</h1>
+        <p>本サイトに掲載されているご自身の情報について、修正・追加・削除のご依頼を承ります。<br>
+        運営者（伊東市議会議員 大竹圭）が直接対応いたしますので、お気軽にご連絡ください。</p>
+        <a href="mailto:ka@oh-life.co.jp?subject=【みんなの伊東市】議員からの連絡&body=お名前（議員名）：%0D%0A%0D%0Aご依頼内容（追加・修正・削除・写真提供など）：%0D%0A%0D%0A詳細：%0D%0A" class="mp-cta-btn">📧 ka@oh-life.co.jp にメールで連絡</a>
+      </div>
+    </div>
+
+    <div class="mp-grid">
+      <div class="mp-card mp-card-add">
+        <div class="mp-icon">➕</div>
+        <h2>情報の追加・修正</h2>
+        <p>プロフィール、所属委員会、政策、経歴などの追記・訂正をご依頼ください。</p>
+        <ul class="mp-list">
+          <li>正確なプロフィール情報の提供</li>
+          <li>議員からの一言コメント追加</li>
+          <li>政策・公約の掲載</li>
+          <li>経歴・実績の追記</li>
+        </ul>
+        <a href="mailto:ka@oh-life.co.jp?subject=【みんなの伊東市】情報の追加・修正依頼&body=議員名：%0D%0A%0D%0A追加・修正したい項目：%0D%0A%0D%0A具体的な内容：%0D%0A" class="mp-action-btn mp-btn-blue">📝 追加・修正を依頼する</a>
+      </div>
+
+      <div class="mp-card mp-card-photo">
+        <div class="mp-icon">📷</div>
+        <h2>顔写真の提供・差し替え</h2>
+        <p>ご自身でご用意された顔写真への差し替え・追加が可能です。提供いただいた写真は本サイトでのみ使用いたします。</p>
+        <ul class="mp-list">
+          <li>正面・上半身の写真を推奨</li>
+          <li>JPG / PNG 形式</li>
+          <li>500×500px 以上を推奨</li>
+          <li>他者の著作権を侵害しないもの</li>
+        </ul>
+        <a href="mailto:ka@oh-life.co.jp?subject=【みんなの伊東市】顔写真提供&body=議員名：%0D%0A%0D%0A※顔写真ファイルをこのメールに添付してお送りください。%0D%0A%0D%0A使用許諾：本サイト「みんなの伊東市」での掲載に同意します。%0D%0A" class="mp-action-btn mp-btn-purple">📎 写真をメールで送る</a>
+      </div>
+
+      <div class="mp-card mp-card-delete">
+        <div class="mp-icon">🗑️</div>
+        <h2>情報の削除依頼</h2>
+        <p>本サイト上のご自身に関する情報の削除をご希望の場合、すぐに対応いたします。<strong>原則24時間以内に対応</strong>します。</p>
+        <ul class="mp-list">
+          <li>事実に反する情報の削除</li>
+          <li>誤解を招く表現の修正</li>
+          <li>名誉に関わる内容の削除</li>
+          <li>その他削除を希望する情報</li>
+        </ul>
+        <a href="mailto:ka@oh-life.co.jp?subject=【みんなの伊東市】削除依頼（緊急）&body=議員名：%0D%0A%0D%0A削除を希望する情報：%0D%0A%0D%0A理由（任意）：%0D%0A" class="mp-action-btn mp-btn-red">🚨 削除を依頼する</a>
+      </div>
+
+      <div class="mp-card mp-card-other">
+        <div class="mp-icon">💬</div>
+        <h2>その他のご相談</h2>
+        <p>サイトの内容・運営に関するご意見、改善のご提案など、何でもお気軽にお寄せください。</p>
+        <ul class="mp-list">
+          <li>サイトの仕様についての質問</li>
+          <li>新機能・改善のご提案</li>
+          <li>連携・相互リンクのご相談</li>
+          <li>その他のお問い合わせ</li>
+        </ul>
+        <a href="mailto:ka@oh-life.co.jp?subject=【みんなの伊東市】お問い合わせ&body=お名前：%0D%0A%0D%0Aお問い合わせ内容：%0D%0A" class="mp-action-btn mp-btn-green">💌 メールで相談する</a>
+      </div>
+    </div>
+
+    <div class="mp-policy">
+      <h3>📋 取り扱いについて</h3>
+      <ul>
+        <li><strong>運営者</strong>：伊東市議会議員 大竹圭（みんなの伊東市・個人運営）</li>
+        <li><strong>対応窓口</strong>：<a href="mailto:ka@oh-life.co.jp">ka@oh-life.co.jp</a></li>
+        <li><strong>対応時間</strong>：原則24時間以内に初動対応（緊急の削除依頼は最優先）</li>
+        <li><strong>個人情報の取り扱い</strong>：いただいたメール・添付資料は、依頼内容の対応にのみ使用し、第三者には提供しません。</li>
+        <li><strong>提供写真の利用範囲</strong>：本サイト「みんなの伊東市」内でのみ使用。他用途への転用はいたしません。</li>
+        <li><strong>掲載情報の責任</strong>：誤った情報があれば速やかに訂正します。本サイトは公開情報のみを扱う非公式サイトです。</li>
+      </ul>
+    </div>
+  </div>
 </div>
 
 <!-- コンシェルジュチャットボット（全ページ共通・フロート型） -->
@@ -22157,11 +22290,37 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
   </div>
 </div>
 <footer>
-  <div>データ出典: <a href="https://www.youtube.com/channel/UC9FGDfo93b_dpu_7-AnN4wQ" target="_blank" style="color:var(--accent)">伊東市議会インターネット中継放送</a> | <a href="https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/itoshigikai/index.html" target="_blank" style="color:var(--accent)">伊東市議会HP</a></div>
-  <div style="margin-top:.3rem">
-    <a href="javascript:void(0)" onclick="openLimitsModal()" style="color:var(--accent);text-decoration:underline">📖 このデータの限界について</a>
+  <div class="footer-grid">
+    <div class="footer-block">
+      <div class="footer-title">📋 運営情報</div>
+      <div class="footer-text">
+        運営責任者：伊東市議会議員 大竹 圭<br>
+        非公式の市民向け情報サイト
+      </div>
+    </div>
+    <div class="footer-block">
+      <div class="footer-title">📧 お問い合わせ・削除依頼</div>
+      <div class="footer-text">
+        <a href="mailto:ka@oh-life.co.jp" class="footer-link">ka@oh-life.co.jp</a><br>
+        <small>議員ご本人からの追加・削除依頼は<br>原則24時間以内に対応します</small>
+      </div>
+    </div>
+    <div class="footer-block">
+      <div class="footer-title">📚 データ出典</div>
+      <div class="footer-text">
+        <a href="https://www.youtube.com/channel/UC9FGDfo93b_dpu_7-AnN4wQ" target="_blank" class="footer-link">伊東市議会YouTube</a><br>
+        <a href="https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/itoshigikai/index.html" target="_blank" class="footer-link">伊東市議会公式HP</a>
+      </div>
+    </div>
+    <div class="footer-block">
+      <div class="footer-title">⚠️ ご注意</div>
+      <div class="footer-text">
+        <a href="javascript:void(0)" onclick="openLimitsModal()" class="footer-link">📖 このデータの限界について</a><br>
+        <small>正確な内容は公式記録でご確認ください</small>
+      </div>
+    </div>
   </div>
-  <div style="margin-top:.3rem">制作・運営: 伊東市議会議員 大竹圭 ｜ 最終更新: 2026/5/3</div>
+  <div class="footer-credit-line">© 2026 みんなの伊東市 ｜ 制作・運営: 伊東市議会議員 大竹圭 ｜ 最終更新: 2026/5/3</div>
 </footer>
 <!-- 用語解説ボタン（テキスト選択時に表示） -->
 <button id="explain-btn" class="explain-btn" style="display:none" onclick="openExplainModal()">💡 この言葉を解説</button>
