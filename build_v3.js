@@ -770,6 +770,30 @@ nav button.active::after{display:none}
 .nav-more-menu button:hover{background:#f0f4f8;color:var(--accent)}
 .nav-more-menu button.sub-current{background:#eff6ff;color:var(--accent)}
 @keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+
+/* スクロール連動フェードイン（reveal-on-scroll） */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s cubic-bezier(.22,.61,.36,1),transform .7s cubic-bezier(.22,.61,.36,1);will-change:opacity,transform}
+.reveal.is-visible{opacity:1;transform:translateY(0)}
+/* スタガーディレイ（連続要素を順次表示） */
+.reveal-stagger>*{opacity:0;transform:translateY(28px);transition:opacity .65s cubic-bezier(.22,.61,.36,1),transform .65s cubic-bezier(.22,.61,.36,1)}
+.reveal-stagger.is-visible>*{opacity:1;transform:translateY(0)}
+.reveal-stagger.is-visible>*:nth-child(1){transition-delay:.05s}
+.reveal-stagger.is-visible>*:nth-child(2){transition-delay:.1s}
+.reveal-stagger.is-visible>*:nth-child(3){transition-delay:.15s}
+.reveal-stagger.is-visible>*:nth-child(4){transition-delay:.2s}
+.reveal-stagger.is-visible>*:nth-child(5){transition-delay:.25s}
+.reveal-stagger.is-visible>*:nth-child(6){transition-delay:.3s}
+.reveal-stagger.is-visible>*:nth-child(7){transition-delay:.35s}
+.reveal-stagger.is-visible>*:nth-child(8){transition-delay:.4s}
+.reveal-stagger.is-visible>*:nth-child(n+9){transition-delay:.45s}
+/* m-cardは個別にアニメーション（議員カード） */
+.m-grid .m-card{opacity:0;transform:translateY(24px);transition:opacity .55s cubic-bezier(.22,.61,.36,1),transform .55s cubic-bezier(.22,.61,.36,1),box-shadow .25s,border-color .25s}
+.m-grid .m-card.is-visible{opacity:1;transform:translateY(0)}
+.m-grid .m-card.is-visible:hover{transform:translateY(-3px)}
+/* ユーザーが reduced motion を選んでいる場合は無効化 */
+@media(prefers-reduced-motion:reduce){
+  .reveal,.reveal-stagger>*,.m-grid .m-card{opacity:1!important;transform:none!important;transition:none!important}
+}
 @media(max-width:640px){.nav-more-menu{min-width:180px;right:-1rem}}
 .tab-notice{font-size:.72rem;color:#6b7280;background:#f8fafc;border-left:3px solid #d1d5db;padding:.4rem .7rem;margin-bottom:.8rem;border-radius:0 6px 6px 0;line-height:1.5}
 .tab-notice a{color:var(--accent)}
@@ -779,8 +803,18 @@ nav button.active::after{display:none}
 .search-input:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(37,99,235,.15)}
 .filter-sel{padding:.8rem 1rem;border:2px solid #e5e7eb;border-radius:12px;font-size:.9rem;background:#fff;outline:none}
 
-.faction-section{margin-bottom:2rem}
+.faction-section{margin-bottom:2rem;opacity:0;transform:translateY(24px);transition:opacity .65s cubic-bezier(.22,.61,.36,1),transform .65s cubic-bezier(.22,.61,.36,1)}
+.faction-section.is-visible{opacity:1;transform:translateY(0)}
 .faction-header{padding:.8rem 1.2rem;background:#fff;border-radius:14px;margin-bottom:1rem;display:flex;align-items:center;gap:.8rem;border:1px solid var(--border);box-shadow:var(--shadow-sm)}
+/* faction-section内の m-card は親が visible になってから順次 */
+.faction-section.is-visible .m-card:nth-child(1){transition-delay:.05s}
+.faction-section.is-visible .m-card:nth-child(2){transition-delay:.1s}
+.faction-section.is-visible .m-card:nth-child(3){transition-delay:.15s}
+.faction-section.is-visible .m-card:nth-child(4){transition-delay:.2s}
+.faction-section.is-visible .m-card:nth-child(5){transition-delay:.25s}
+.faction-section.is-visible .m-card:nth-child(6){transition-delay:.3s}
+.faction-section.is-visible .m-card:nth-child(7){transition-delay:.35s}
+.faction-section.is-visible .m-card:nth-child(n+8){transition-delay:.4s}
 .faction-name{font-size:1.1rem;font-weight:700}
 .faction-count{font-size:.8rem;color:var(--sub);background:#f0f4f8;padding:.2rem .6rem;border-radius:8px}
 .faction-rep{font-size:.75rem;color:var(--sub);margin-left:auto}
@@ -990,7 +1024,8 @@ nav button.active::after{display:none}
 .cat-bar-bg{flex:1;height:18px;background:#f0f4f8;border-radius:9px;overflow:hidden}
 .cat-bar-fill{height:100%;border-radius:9px;transition:.5s}
 .cat-bar-pct{width:40px;font-size:.78rem;color:var(--sub);text-align:right;font-weight:600}
-.section-title{font-size:1.35rem;font-weight:800;margin:2rem 0 1rem;padding-left:.8rem;border-left:4px solid var(--accent);letter-spacing:-.01em}
+.section-title{font-size:1.35rem;font-weight:800;margin:2rem 0 1rem;padding-left:.8rem;border-left:4px solid var(--accent);letter-spacing:-.01em;opacity:0;transform:translateY(20px);transition:opacity .65s cubic-bezier(.22,.61,.36,1),transform .65s cubic-bezier(.22,.61,.36,1)}
+.section-title.is-visible{opacity:1;transform:translateY(0)}
 .v-list{display:flex;flex-direction:column;gap:.8rem}
 .v-item{display:flex;background:var(--card);border-radius:12px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06);transition:.2s}
 .v-item:hover{box-shadow:0 4px 15px rgba(0,0,0,.1)}
@@ -1320,8 +1355,9 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
 .qtl-followup-indicator{display:inline-block;padding:.2rem .5rem;background:#fef3c7;border:1px solid #fcd34d;border-radius:10px;font-size:.7rem;color:#78350f;font-weight:600}
 
 /* 端的トピックカード（クリックで全文展開） */
-.qtl-topic-card{background:#fff;border:1px solid var(--border);border-radius:16px;margin-bottom:.7rem;transition:all .2s;overflow:hidden;box-shadow:var(--shadow-sm)}
-.qtl-topic-card:hover{border-color:#94a3b8;box-shadow:var(--shadow-md);transform:translateY(-1px)}
+.qtl-topic-card{background:#fff;border:1px solid var(--border);border-radius:16px;margin-bottom:.7rem;overflow:hidden;box-shadow:var(--shadow-sm);opacity:0;transform:translateY(20px);transition:opacity .55s cubic-bezier(.22,.61,.36,1),transform .55s cubic-bezier(.22,.61,.36,1),box-shadow .2s,border-color .2s}
+.qtl-topic-card.is-visible{opacity:1;transform:translateY(0)}
+.qtl-topic-card.is-visible:hover{border-color:#94a3b8;box-shadow:var(--shadow-md);transform:translateY(-1px)}
 .qtl-topic-card[open]{border-color:#0f172a;box-shadow:var(--shadow-md);background:#fff;transform:none}
 .qtl-topic-summary{cursor:pointer;padding:1rem 1.2rem;list-style:none;display:block;user-select:none}
 .qtl-topic-summary::-webkit-details-marker{display:none}
@@ -1646,7 +1682,8 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
 .pql-btn{display:inline-block;padding:.55rem 1.1rem;background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:999px;font-size:.85rem;font-weight:700;text-decoration:none;transition:.15s;backdrop-filter:blur(8px)}
 .pql-btn:hover{background:rgba(255,255,255,.25);transform:translateY(-1px)}
 .participate-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1.2rem;margin-bottom:1.5rem}
-.pg-card{background:#fff;border-radius:14px;padding:1.5rem;box-shadow:0 2px 12px rgba(0,0,0,.06);border:1px solid #e2e8f0;transition:.2s}
+.pg-card{background:#fff;border-radius:14px;padding:1.5rem;box-shadow:0 2px 12px rgba(0,0,0,.06);border:1px solid #e2e8f0;opacity:0;transform:translateY(24px);transition:opacity .6s cubic-bezier(.22,.61,.36,1),transform .6s cubic-bezier(.22,.61,.36,1),box-shadow .2s}
+.pg-card.is-visible{opacity:1;transform:translateY(0)}
 .pg-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.1)}
 .pg-icon{font-size:2.3rem;margin-bottom:.5rem}
 .pg-card h2{font-size:1.2rem;color:#065f46;margin-bottom:.6rem;font-weight:800}
@@ -3526,6 +3563,53 @@ function applyPersonalize(){
   });
 }
 document.addEventListener('DOMContentLoaded',applyPersonalize);
+
+// === スクロール連動アニメーション（reveal-on-scroll） ===
+(function(){
+  if (!('IntersectionObserver' in window)) {
+    // 古いブラウザは即時表示
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.reveal,.reveal-stagger,.m-grid .m-card').forEach(el => el.classList.add('is-visible'));
+    });
+    return;
+  }
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, {
+    threshold: 0.08,
+    rootMargin: '0px 0px -40px 0px',
+  });
+
+  function observeAll() {
+    document.querySelectorAll('.reveal:not(.is-visible),.reveal-stagger:not(.is-visible)').forEach(el => observer.observe(el));
+    document.querySelectorAll('.m-grid .m-card:not(.is-visible)').forEach(el => observer.observe(el));
+    document.querySelectorAll('.section-title:not(.is-visible)').forEach(el => observer.observe(el));
+    document.querySelectorAll('.faction-section:not(.is-visible)').forEach(el => observer.observe(el));
+    document.querySelectorAll('.pg-card:not(.is-visible),.qtl-topic-card:not(.is-visible),.theme-qa-card:not(.is-visible)').forEach(el => observer.observe(el));
+  }
+
+  document.addEventListener('DOMContentLoaded', observeAll);
+  // タブ切替時にも再観察（DOMがshow/hideする構造のため）
+  const origSwitchTab = window.switchTab;
+  if (typeof origSwitchTab === 'function') {
+    window.switchTab = function(...args) {
+      const r = origSwitchTab.apply(this, args);
+      // タブ切替後、新たに見える要素を再リセット＆観察
+      setTimeout(() => {
+        document.querySelectorAll('.tab-panel.active .reveal,.tab-panel.active .reveal-stagger,.tab-panel.active .m-grid .m-card').forEach(el => {
+          // 再表示時のため、一旦リセットして observe
+          if (!el.classList.contains('is-visible')) observer.observe(el);
+        });
+      }, 50);
+      return r;
+    };
+  }
+})();
 
 // === ナビゲーション「もっと見る」サブメニュー ===
 function toggleNavMore(ev){
