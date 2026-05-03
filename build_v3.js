@@ -778,10 +778,16 @@ h1,h2,h3{letter-spacing:-.01em;font-weight:800}
   radial-gradient(ellipse 200px 75px at 92% 100%,rgba(0,30,50,.6),transparent 70%);
   pointer-events:none;z-index:1}
 
-/* 上部バー（ロゴのみ） */
-.hero-topbar{position:relative;z-index:2;display:flex;justify-content:flex-start;align-items:center;padding:1.2rem 2rem 0;flex-wrap:wrap;gap:1rem}
+/* 上部バー（左：ロゴ＋非公式バッジ / 右：運営者） */
+.hero-topbar{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:flex-start;padding:1.2rem 2rem 0;flex-wrap:wrap;gap:1rem}
+.hero-logo-wrap{display:flex;align-items:center;gap:.6rem}
 .hero-logo{font-size:1.5rem;font-weight:900;color:#fff;letter-spacing:-.02em;text-shadow:0 2px 12px rgba(0,40,80,.6)}
 .hero-logo-accent{background:linear-gradient(135deg,#fde68a,#fbbf24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-unofficial{display:inline-block;padding:.18rem .55rem;background:rgba(251,191,36,.18);color:#fde68a;border:1px solid rgba(253,230,138,.45);border-radius:6px;font-size:.65rem;font-weight:700;letter-spacing:.08em;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.hero-operator{text-align:right;color:#fff;line-height:1.35;text-shadow:0 2px 10px rgba(0,40,80,.6)}
+.hop-label{font-size:.6rem;font-weight:600;letter-spacing:.18em;color:rgba(253,230,138,.85);margin-bottom:.15rem}
+.hop-name{font-size:.78rem;color:rgba(255,255,255,.92)}
+.hop-name strong{font-size:1rem;font-weight:800;color:#fff;letter-spacing:.02em}
 
 /* ヒーロー中央コンテンツ */
 .hero-content{position:relative;z-index:2;text-align:center;padding:5rem 2rem 4.5rem;max-width:1100px;margin:0 auto}
@@ -796,8 +802,12 @@ h1,h2,h3{letter-spacing:-.01em;font-weight:800}
 
 @media(max-width:640px){
   .hero-header{min-height:480px}
-  .hero-topbar{padding:1rem 1rem 0}
-  .hero-logo{font-size:1.2rem}
+  .hero-topbar{padding:1rem 1rem 0;gap:.6rem}
+  .hero-logo{font-size:1.15rem}
+  .hero-unofficial{font-size:.58rem;padding:.15rem .4rem}
+  .hop-label{font-size:.55rem}
+  .hop-name{font-size:.7rem}
+  .hop-name strong{font-size:.88rem}
   .hero-content{padding:3rem 1rem 3rem}
   .hero-sub{font-size:.85rem}
   .hero-seaweed{height:60px}
@@ -2202,7 +2212,14 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
     <div class="hero-seaweed"></div>
   </div>
   <div class="hero-topbar">
-    <div class="hero-logo">みんなの<span class="hero-logo-accent">伊東市</span></div>
+    <div class="hero-logo-wrap">
+      <span class="hero-unofficial">非公式</span>
+      <div class="hero-logo">みんなの<span class="hero-logo-accent">伊東市</span></div>
+    </div>
+    <div class="hero-operator">
+      <div class="hop-label">運営</div>
+      <div class="hop-name">伊東市議会議員<br><strong>大竹 圭</strong></div>
+    </div>
   </div>
   <div class="hero-content">
     <div class="hero-title-en">VOICE OF</div>

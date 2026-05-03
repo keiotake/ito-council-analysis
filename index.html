@@ -90,10 +90,16 @@ h1,h2,h3{letter-spacing:-.01em;font-weight:800}
   radial-gradient(ellipse 200px 75px at 92% 100%,rgba(0,30,50,.6),transparent 70%);
   pointer-events:none;z-index:1}
 
-/* 上部バー（ロゴのみ） */
-.hero-topbar{position:relative;z-index:2;display:flex;justify-content:flex-start;align-items:center;padding:1.2rem 2rem 0;flex-wrap:wrap;gap:1rem}
+/* 上部バー（左：ロゴ＋非公式バッジ / 右：運営者） */
+.hero-topbar{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:flex-start;padding:1.2rem 2rem 0;flex-wrap:wrap;gap:1rem}
+.hero-logo-wrap{display:flex;align-items:center;gap:.6rem}
 .hero-logo{font-size:1.5rem;font-weight:900;color:#fff;letter-spacing:-.02em;text-shadow:0 2px 12px rgba(0,40,80,.6)}
 .hero-logo-accent{background:linear-gradient(135deg,#fde68a,#fbbf24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-unofficial{display:inline-block;padding:.18rem .55rem;background:rgba(251,191,36,.18);color:#fde68a;border:1px solid rgba(253,230,138,.45);border-radius:6px;font-size:.65rem;font-weight:700;letter-spacing:.08em;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.hero-operator{text-align:right;color:#fff;line-height:1.35;text-shadow:0 2px 10px rgba(0,40,80,.6)}
+.hop-label{font-size:.6rem;font-weight:600;letter-spacing:.18em;color:rgba(253,230,138,.85);margin-bottom:.15rem}
+.hop-name{font-size:.78rem;color:rgba(255,255,255,.92)}
+.hop-name strong{font-size:1rem;font-weight:800;color:#fff;letter-spacing:.02em}
 
 /* ヒーロー中央コンテンツ */
 .hero-content{position:relative;z-index:2;text-align:center;padding:5rem 2rem 4.5rem;max-width:1100px;margin:0 auto}
@@ -108,8 +114,12 @@ h1,h2,h3{letter-spacing:-.01em;font-weight:800}
 
 @media(max-width:640px){
   .hero-header{min-height:480px}
-  .hero-topbar{padding:1rem 1rem 0}
-  .hero-logo{font-size:1.2rem}
+  .hero-topbar{padding:1rem 1rem 0;gap:.6rem}
+  .hero-logo{font-size:1.15rem}
+  .hero-unofficial{font-size:.58rem;padding:.15rem .4rem}
+  .hop-label{font-size:.55rem}
+  .hop-name{font-size:.7rem}
+  .hop-name strong{font-size:.88rem}
   .hero-content{padding:3rem 1rem 3rem}
   .hero-sub{font-size:.85rem}
   .hero-seaweed{height:60px}
@@ -1479,9 +1489,9 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
     <div class="hero-bg-overlay"></div>
     <div class="hero-godray"></div>
     <div class="hero-particles">
-      <span class="particle" style="--i:0;--x:17.687785055646387%;--d:10.58512171159839s;--delay:4.372009436357125s;--size:8.211195226118363px"></span><span class="particle" style="--i:1;--x:16.67149469414071%;--d:12.518620248832885s;--delay:0.5932858796688395s;--size:3.313496862400833px"></span><span class="particle" style="--i:2;--x:53.76058426250959%;--d:6.018040240978372s;--delay:2.578485952707663s;--size:3.4800358854921027px"></span><span class="particle" style="--i:3;--x:12.996021339705399%;--d:12.375068629019655s;--delay:6.349479841541546s;--size:6.044581728892671px"></span><span class="particle" style="--i:4;--x:25.150421063434326%;--d:10.346185673413933s;--delay:1.5126072581411734s;--size:2.7250127029214526px"></span><span class="particle" style="--i:5;--x:51.851089738107014%;--d:12.154897419062234s;--delay:3.8334102133956414s;--size:7.1103828197561665px"></span><span class="particle" style="--i:6;--x:45.641043875899165%;--d:14.95834549888499s;--delay:0.07372042395362732s;--size:5.031388284268209px"></span><span class="particle" style="--i:7;--x:73.3646254867407%;--d:11.876687170601109s;--delay:2.246038813157984s;--size:6.601296371330777px"></span><span class="particle" style="--i:8;--x:42.372710542204615%;--d:10.037914088944014s;--delay:3.2077481688441543s;--size:6.61456212930233px"></span><span class="particle" style="--i:9;--x:18.99468811119983%;--d:10.787041493953378s;--delay:0.8123138568962517s;--size:8.576374145148947px"></span><span class="particle" style="--i:10;--x:16.31824695266223%;--d:12.733336402476285s;--delay:3.51862199629314s;--size:3.5166610752287744px"></span><span class="particle" style="--i:11;--x:90.99902357783618%;--d:7.937250039243115s;--delay:1.3136932324876296s;--size:8.042081595999061px"></span><span class="particle" style="--i:12;--x:45.834834578770554%;--d:7.519970845217797s;--delay:5.014156744101171s;--size:3.014348753899611px"></span><span class="particle" style="--i:13;--x:34.40894830584832%;--d:11.051674548881024s;--delay:2.5882906613010586s;--size:8.962813056124157px"></span><span class="particle" style="--i:14;--x:17.102593731307802%;--d:8.554539745597973s;--delay:2.4939758229607056s;--size:6.939560362402638px"></span><span class="particle" style="--i:15;--x:82.21931745864923%;--d:7.193936288596787s;--delay:4.968403329922906s;--size:5.366149252067265px"></span><span class="particle" style="--i:16;--x:8.975604206751042%;--d:12.12367700189891s;--delay:0.47116454202675595s;--size:3.801113482352043px"></span><span class="particle" style="--i:17;--x:43.60258874856462%;--d:8.976459660641146s;--delay:5.300665362027548s;--size:3.7749720621934904px"></span><span class="particle" style="--i:18;--x:86.80253471342525%;--d:12.42661266431326s;--delay:2.737531823246716s;--size:8.220387859154084px"></span><span class="particle" style="--i:19;--x:1.3246836149654717%;--d:7.935465760406707s;--delay:4.293963984422011s;--size:8.528299674915496px"></span><span class="particle" style="--i:20;--x:62.99012689698004%;--d:10.346017818613099s;--delay:1.8574453817533425s;--size:5.587908163139262px"></span><span class="particle" style="--i:21;--x:47.70456230128522%;--d:12.043329466729002s;--delay:5.792384750771241s;--size:4.223508135278934px"></span><span class="particle" style="--i:22;--x:10.310609307180263%;--d:7.2161794559849675s;--delay:5.113173193453989s;--size:4.500293175545238px"></span><span class="particle" style="--i:23;--x:56.045430105421126%;--d:10.304608241769209s;--delay:2.627251038240369s;--size:2.5874559180198755px"></span><span class="particle" style="--i:24;--x:16.08570051669974%;--d:10.133284401158255s;--delay:3.4934420550572525s;--size:2.926359795928064px"></span><span class="particle" style="--i:25;--x:53.42128085326766%;--d:6.251325859765862s;--delay:3.610635915563972s;--size:2.8676388599516995px"></span><span class="particle" style="--i:26;--x:94.57350269279212%;--d:8.347023745280048s;--delay:2.2422883752499945s;--size:6.067152097584421px"></span><span class="particle" style="--i:27;--x:36.08840233057471%;--d:12.386466790550177s;--delay:5.927584092776341s;--size:4.835907733046996px"></span><span class="particle" style="--i:28;--x:49.40969650857904%;--d:6.218779340167513s;--delay:2.4570606850863683s;--size:8.453766455523741px"></span><span class="particle" style="--i:29;--x:92.02825270082066%;--d:13.214835181812429s;--delay:6.305734068810627s;--size:4.931246372012214px"></span><span class="particle" style="--i:30;--x:11.624724437769574%;--d:6.206531649752691s;--delay:0.8411449417869815s;--size:6.823663197543307px"></span><span class="particle" style="--i:31;--x:15.105659142224104%;--d:6.457653102478125s;--delay:2.5753906027042293s;--size:5.518300507456145px"></span><span class="particle" style="--i:32;--x:78.96636850328066%;--d:6.113527695215095s;--delay:1.4432331253637183s;--size:8.926115458291221px"></span><span class="particle" style="--i:33;--x:22.02895814247189%;--d:10.34870704423372s;--delay:6.868371255143519s;--size:6.121748281135355px"></span><span class="particle" style="--i:34;--x:40.50926017358424%;--d:10.99741404905955s;--delay:6.552403827849122s;--size:6.424548656673471px"></span><span class="particle" style="--i:35;--x:53.08403715236594%;--d:9.76436480461815s;--delay:2.477992890817462s;--size:4.818638726211509px"></span>
+      <span class="particle" style="--i:0;--x:59.05816413645495%;--d:12.631261884451714s;--delay:3.672564596470724s;--size:5.258617893754121px"></span><span class="particle" style="--i:1;--x:98.25578978836195%;--d:14.720635545413375s;--delay:3.9908503299723677s;--size:5.949115732219157px"></span><span class="particle" style="--i:2;--x:2.4001840376912664%;--d:9.754554018674213s;--delay:3.470162092806718s;--size:6.854421559570484px"></span><span class="particle" style="--i:3;--x:98.89098640006223%;--d:13.110019532739532s;--delay:2.1189040359498463s;--size:4.144559919952889px"></span><span class="particle" style="--i:4;--x:60.718746128362824%;--d:12.260430767897965s;--delay:2.666221975436241s;--size:7.054816476599551px"></span><span class="particle" style="--i:5;--x:23.897896913803894%;--d:14.624641413689298s;--delay:5.036777862392288s;--size:5.580618342867162px"></span><span class="particle" style="--i:6;--x:90.99074388771669%;--d:8.471515245187234s;--delay:3.0820205298021435s;--size:8.48735964397129px"></span><span class="particle" style="--i:7;--x:73.08283033227988%;--d:6.369925291930488s;--delay:2.481401017986083s;--size:8.181719168612076px"></span><span class="particle" style="--i:8;--x:91.06825969914956%;--d:9.207744218661453s;--delay:2.25331582276847s;--size:8.885282711246628px"></span><span class="particle" style="--i:9;--x:24.28181877127563%;--d:11.444993059714156s;--delay:1.0920998559101194s;--size:8.605191480521992px"></span><span class="particle" style="--i:10;--x:73.34851537506798%;--d:12.899584173405351s;--delay:1.5794989969318822s;--size:4.587406213374597px"></span><span class="particle" style="--i:11;--x:0.6656575409100363%;--d:13.807958189925678s;--delay:1.5197968899791034s;--size:2.0299822521679585px"></span><span class="particle" style="--i:12;--x:33.7825581882168%;--d:10.479055333953738s;--delay:2.3962843973218986s;--size:3.1184518341657954px"></span><span class="particle" style="--i:13;--x:22.919920362077917%;--d:11.31126042461301s;--delay:3.1020126387644016s;--size:2.213927527804504px"></span><span class="particle" style="--i:14;--x:38.25482238564818%;--d:7.47266934014435s;--delay:3.4540128095658083s;--size:4.756498504635497px"></span><span class="particle" style="--i:15;--x:97.02174528473691%;--d:10.192808663151006s;--delay:2.3739527415680697s;--size:5.688040563903px"></span><span class="particle" style="--i:16;--x:54.92926460285646%;--d:6.38239733597144s;--delay:0.014242254611388283s;--size:5.475576426116903px"></span><span class="particle" style="--i:17;--x:17.584184679030955%;--d:9.426344133376237s;--delay:6.571964281273773s;--size:3.0616328753338413px"></span><span class="particle" style="--i:18;--x:33.32191127235998%;--d:7.954211639380382s;--delay:3.4214527457358037s;--size:7.956123951704738px"></span><span class="particle" style="--i:19;--x:20.4979487017528%;--d:11.91006653905729s;--delay:5.769975444205587s;--size:3.9721205704886167px"></span><span class="particle" style="--i:20;--x:35.42360969383714%;--d:13.679641611320754s;--delay:1.694020530327466s;--size:7.183663661796508px"></span><span class="particle" style="--i:21;--x:1.9573750621239894%;--d:10.644956484930702s;--delay:6.385081393818392s;--size:7.786337994971233px"></span><span class="particle" style="--i:22;--x:18.7608246736378%;--d:12.828518054770882s;--delay:2.062330015566106s;--size:7.803626126545696px"></span><span class="particle" style="--i:23;--x:98.32195513429454%;--d:9.119741104964096s;--delay:0.3857854285770831s;--size:3.0905560370892724px"></span><span class="particle" style="--i:24;--x:75.99705362021368%;--d:12.998474623281947s;--delay:5.930915839205808s;--size:3.3324605576295805px"></span><span class="particle" style="--i:25;--x:60.94410961235125%;--d:14.422961635716565s;--delay:4.455963817305272s;--size:3.5013314935916426px"></span><span class="particle" style="--i:26;--x:86.31196361471308%;--d:11.435814613915763s;--delay:6.833201079100283s;--size:2.98586224961204px"></span><span class="particle" style="--i:27;--x:45.61507297578967%;--d:13.661984899586674s;--delay:6.785907426756991s;--size:3.6299122235617px"></span><span class="particle" style="--i:28;--x:65.50571192085322%;--d:12.196374006453734s;--delay:2.2045825664074847s;--size:3.8077621997117985px"></span><span class="particle" style="--i:29;--x:57.766252820624395%;--d:6.607831212894325s;--delay:0.45395278901111646s;--size:4.804458716305089px"></span><span class="particle" style="--i:30;--x:69.03378696659776%;--d:13.287781941041263s;--delay:1.2440607854108499s;--size:7.38079500984546px"></span><span class="particle" style="--i:31;--x:50.08478655948836%;--d:10.828653005342403s;--delay:2.2748253907086697s;--size:3.029061435972619px"></span><span class="particle" style="--i:32;--x:71.50476592745058%;--d:14.913256323949417s;--delay:6.007421013190701s;--size:7.78094836568064px"></span><span class="particle" style="--i:33;--x:23.44650276285234%;--d:9.568691478267073s;--delay:0.2853656165977654s;--size:4.519630600922148px"></span><span class="particle" style="--i:34;--x:43.81097734111686%;--d:8.886976889796252s;--delay:3.3924486130064304s;--size:4.3554039342423865px"></span><span class="particle" style="--i:35;--x:67.37266212215353%;--d:12.27763003815107s;--delay:0.9715394592050838s;--size:5.5269040453519125px"></span>
     </div>
-    <div class="hero-fish" style="--ty:59%;--fw:64px;--fd:21.2s;--fdelay:-12.3s"><svg viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <div class="hero-fish" style="--ty:78%;--fw:90px;--fd:34.0s;--fdelay:-11.4s"><svg viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <g class="fish-tail"><polygon points="0,25 20,10 20,40" fill="#f59e0b" opacity=".95"/></g>
         <ellipse cx="55" cy="25" rx="35" ry="14" fill="#fbbf24"/>
         <path d="M25,25 Q55,8 90,25 Q55,42 25,25 Z" fill="#fbbf24" opacity=".85"/>
@@ -1490,7 +1500,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
         <ellipse cx="55" cy="37" rx="6" ry="2.5" fill="#f59e0b" opacity=".7"/>
         <circle cx="80" cy="22" r="2.4" fill="#fff"/>
         <circle cx="80.6" cy="22" r="1.4" fill="#0c1929"/>
-      </svg></div><div class="hero-fish flip" style="--ty:15%;--fw:51px;--fd:32.5s;--fdelay:-0.0s"><svg viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      </svg></div><div class="hero-fish flip" style="--ty:41%;--fw:56px;--fd:30.0s;--fdelay:-4.3s"><svg viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <g class="fish-tail"><polygon points="0,25 20,10 20,40" fill="#3b82f6" opacity=".95"/></g>
         <ellipse cx="55" cy="25" rx="35" ry="14" fill="#60a5fa"/>
         <path d="M25,25 Q55,8 90,25 Q55,42 25,25 Z" fill="#60a5fa" opacity=".85"/>
@@ -1499,7 +1509,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
         <ellipse cx="55" cy="37" rx="6" ry="2.5" fill="#3b82f6" opacity=".7"/>
         <circle cx="80" cy="22" r="2.4" fill="#fff"/>
         <circle cx="80.6" cy="22" r="1.4" fill="#0c1929"/>
-      </svg></div><div class="hero-fish" style="--ty:35%;--fw:76px;--fd:23.2s;--fdelay:-1.4s"><svg viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      </svg></div><div class="hero-fish" style="--ty:49%;--fw:71px;--fd:24.3s;--fdelay:-14.3s"><svg viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <g class="fish-tail"><polygon points="0,25 20,10 20,40" fill="#ec4899" opacity=".95"/></g>
         <ellipse cx="55" cy="25" rx="35" ry="14" fill="#f472b6"/>
         <path d="M25,25 Q55,8 90,25 Q55,42 25,25 Z" fill="#f472b6" opacity=".85"/>
@@ -1508,7 +1518,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
         <ellipse cx="55" cy="37" rx="6" ry="2.5" fill="#ec4899" opacity=".7"/>
         <circle cx="80" cy="22" r="2.4" fill="#fff"/>
         <circle cx="80.6" cy="22" r="1.4" fill="#0c1929"/>
-      </svg></div><div class="hero-fish flip" style="--ty:36%;--fw:87px;--fd:26.0s;--fdelay:-14.6s"><svg viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      </svg></div><div class="hero-fish flip" style="--ty:61%;--fw:53px;--fd:23.5s;--fdelay:-15.5s"><svg viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <g class="fish-tail"><polygon points="0,25 20,10 20,40" fill="#10b981" opacity=".95"/></g>
         <ellipse cx="55" cy="25" rx="35" ry="14" fill="#34d399"/>
         <path d="M25,25 Q55,8 90,25 Q55,42 25,25 Z" fill="#34d399" opacity=".85"/>
@@ -1517,7 +1527,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
         <ellipse cx="55" cy="37" rx="6" ry="2.5" fill="#10b981" opacity=".7"/>
         <circle cx="80" cy="22" r="2.4" fill="#fff"/>
         <circle cx="80.6" cy="22" r="1.4" fill="#0c1929"/>
-      </svg></div><div class="hero-fish" style="--ty:74%;--fw:87px;--fd:29.4s;--fdelay:-19.4s"><svg viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      </svg></div><div class="hero-fish" style="--ty:28%;--fw:78px;--fd:26.5s;--fdelay:-2.7s"><svg viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <g class="fish-tail"><polygon points="0,25 20,10 20,40" fill="#fbbf24" opacity=".95"/></g>
         <ellipse cx="55" cy="25" rx="35" ry="14" fill="#fde68a"/>
         <path d="M25,25 Q55,8 90,25 Q55,42 25,25 Z" fill="#fde68a" opacity=".85"/>
@@ -1526,7 +1536,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
         <ellipse cx="55" cy="37" rx="6" ry="2.5" fill="#fbbf24" opacity=".7"/>
         <circle cx="80" cy="22" r="2.4" fill="#fff"/>
         <circle cx="80.6" cy="22" r="1.4" fill="#0c1929"/>
-      </svg></div><div class="hero-fish flip" style="--ty:62%;--fw:73px;--fd:23.3s;--fdelay:-19.3s"><svg viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      </svg></div><div class="hero-fish flip" style="--ty:33%;--fw:67px;--fd:21.1s;--fdelay:-17.9s"><svg viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <g class="fish-tail"><polygon points="0,25 20,10 20,40" fill="#06b6d4" opacity=".95"/></g>
         <ellipse cx="55" cy="25" rx="35" ry="14" fill="#a5f3fc"/>
         <path d="M25,25 Q55,8 90,25 Q55,42 25,25 Z" fill="#a5f3fc" opacity=".85"/>
@@ -1535,7 +1545,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
         <ellipse cx="55" cy="37" rx="6" ry="2.5" fill="#06b6d4" opacity=".7"/>
         <circle cx="80" cy="22" r="2.4" fill="#fff"/>
         <circle cx="80.6" cy="22" r="1.4" fill="#0c1929"/>
-      </svg></div><div class="hero-fish" style="--ty:34%;--fw:94px;--fd:20.3s;--fdelay:-2.7s"><svg viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      </svg></div><div class="hero-fish" style="--ty:31%;--fw:91px;--fd:27.5s;--fdelay:-12.8s"><svg viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <g class="fish-tail"><polygon points="0,25 20,10 20,40" fill="#f59e0b" opacity=".95"/></g>
         <ellipse cx="55" cy="25" rx="35" ry="14" fill="#fbbf24"/>
         <path d="M25,25 Q55,8 90,25 Q55,42 25,25 Z" fill="#fbbf24" opacity=".85"/>
@@ -1548,7 +1558,14 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
     <div class="hero-seaweed"></div>
   </div>
   <div class="hero-topbar">
-    <div class="hero-logo">みんなの<span class="hero-logo-accent">伊東市</span></div>
+    <div class="hero-logo-wrap">
+      <span class="hero-unofficial">非公式</span>
+      <div class="hero-logo">みんなの<span class="hero-logo-accent">伊東市</span></div>
+    </div>
+    <div class="hero-operator">
+      <div class="hop-label">運営</div>
+      <div class="hop-name">伊東市議会議員<br><strong>大竹 圭</strong></div>
+    </div>
   </div>
   <div class="hero-content">
     <div class="hero-title-en">VOICE OF</div>
