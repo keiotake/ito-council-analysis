@@ -76,6 +76,10 @@ nav button.active::after{display:none}
 .nav-tab.nav-orange{color:#c2410c}
 .nav-tab.nav-orange:hover{background:#fed7aa;border-color:#fdba74;color:#9a3412}
 .nav-tab.nav-orange.active{background:#f97316;color:#fff;border-color:#f97316;box-shadow:0 4px 12px rgba(249,115,22,.3)}
+/* 議員の方へ = スレート系（落ち着いた専用窓口） */
+.nav-tab.nav-slate{color:#475569}
+.nav-tab.nav-slate:hover{background:#e2e8f0;border-color:#cbd5e1;color:#1e293b}
+.nav-tab.nav-slate.active{background:#334155;color:#fff;border-color:#334155;box-shadow:0 4px 12px rgba(51,65,85,.3)}
 /* サブメニュー（もっと見る） */
 .nav-more-wrap{position:relative;margin-left:auto;flex-shrink:0}
 .nav-more-btn{padding:.55rem 1.1rem;border:1px solid var(--border);border-radius:999px;font-size:.85rem;font-weight:600;cursor:pointer;background:#fff;color:#475569;transition:.15s}
@@ -1417,6 +1421,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
   <button class="nav-tab nav-purple" role="tab" aria-selected="false" onclick="switchTab('themes',this)">🔍 テーマから探す</button>
   <button class="nav-tab nav-green" role="tab" aria-selected="false" onclick="switchTab('voice',this)">💬 市民の声を市政へ</button>
   <button class="nav-tab nav-orange" role="tab" aria-selected="false" onclick="switchTab('participate',this)">🗳️ 市政に参加する</button>
+  <button class="nav-tab nav-slate" role="tab" aria-selected="false" onclick="switchTab('memberportal',this)">💼 議員の方へ</button>
   <div class="nav-more-wrap">
     <button class="nav-more-btn" onclick="toggleNavMore(event)" aria-haspopup="true" aria-expanded="false">⋯ もっと見る</button>
     <div class="nav-more-menu" id="nav-more-menu" role="menu">
@@ -1424,8 +1429,6 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
       <button role="menuitem" onclick="switchTab('plan',this);closeNavMore()">📘 総合計画</button>
       <button role="menuitem" onclick="switchTab('analysis',this);closeNavMore()">🔎 伊東市徹底分析</button>
       <button role="menuitem" onclick="switchTab('stats',this);closeNavMore()">📊 議会全体の動き</button>
-      <div class="nav-more-divider"></div>
-      <button role="menuitem" onclick="switchTab('memberportal',this);closeNavMore()">💼 議員の方へ</button>
     </div>
   </div>
 </nav>
@@ -1488,7 +1491,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
     <div class="m-top-cats"><span class="cat-pill" style="background:#f39c12">観光</span><span class="cat-pill" style="background:#34495e">行財政</span><span class="cat-pill" style="background:#9b59b6">教育</span></div>
   </div><div class="m-card" data-name="大川勝弘" data-faction="伊東未来" onclick="showDetail('大川勝弘')">
     
-    <div class="m-avatar" style="background-color:#2196F3">大</div>
+    <div class="m-avatar-photo" style="border-color:#2196F3"><img src="https://prod-cdn.go2senkyo.com/uploads/seijika/image_file_name/165140/thumb_999f06b5b66abc6f8da04c4cc45e65ae.png" alt="大川勝弘" style="object-position:center 25%;" loading="lazy" onerror="this.parentElement.outerHTML='<div class=m-avatar style=&quot;background-color:#2196F3&quot;>大</div>'"></div>
     <div class="m-name">大川勝弘</div>
     <div class="m-faction" style="color:#2196F3">伊東未来</div>
     
@@ -1510,7 +1513,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
     <div class="m-top-cats"><span class="cat-pill" style="background:#9b59b6">教育</span><span class="cat-pill" style="background:#34495e">行財政</span><span class="cat-pill" style="background:#e74c3c">防災</span></div>
   </div><div class="m-card" data-name="河島紀美恵" data-faction="伊東未来" onclick="showDetail('河島紀美恵')">
     
-    <div class="m-avatar" style="background-color:#2196F3">河</div>
+    <div class="m-avatar-photo" style="border-color:#2196F3"><img src="https://prod-cdn.go2senkyo.com/uploads/seijika/image_file_name/162090/thumb_a2c285f0576966537cef2d57fb09f54d.png" alt="河島紀美恵" style="object-position:center 25%;" loading="lazy" onerror="this.parentElement.outerHTML='<div class=m-avatar style=&quot;background-color:#2196F3&quot;>河</div>'"></div>
     <div class="m-name">河島紀美恵</div>
     <div class="m-faction" style="color:#2196F3">伊東未来</div>
     
@@ -1539,7 +1542,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
     <div class="m-top-cats"><span class="cat-pill" style="background:#9b59b6">教育</span><span class="cat-pill" style="background:#34495e">行財政</span><span class="cat-pill" style="background:#3498db">都市整備</span></div>
   </div><div class="m-card" data-name="鈴木絢子" data-faction="正風クラブ" onclick="showDetail('鈴木絢子')">
     
-    <div class="m-avatar-photo" style="border-color:#9C27B0"><img src="https://prod-cdn.go2senkyo.com/uploads/seijika/image_file_name/179247/thumb_ec5fe1cf36f1dbfa5304c24591d2b176.jpeg" alt="鈴木絢子" style="object-position:center 25%;" loading="lazy" onerror="this.parentElement.outerHTML='<div class=m-avatar style=&quot;background-color:#9C27B0&quot;>鈴</div>'"></div>
+    <div class="m-avatar" style="background-color:#9C27B0">鈴</div>
     <div class="m-name">鈴木絢子</div>
     <div class="m-faction" style="color:#9C27B0">正風クラブ</div>
     
@@ -1561,7 +1564,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
     <div class="m-top-cats"><span class="cat-pill" style="background:#34495e">行財政</span><span class="cat-pill" style="background:#f39c12">観光</span><span class="cat-pill" style="background:#e74c3c">防災</span></div>
   </div><div class="m-card" data-name="村上祥平" data-faction="正風クラブ" onclick="showDetail('村上祥平')">
     
-    <div class="m-avatar-photo" style="border-color:#9C27B0"><img src="https://prod-cdn.go2senkyo.com/uploads/seijika/image_file_name/192417/thumb_f1055bd40f642f136809abd60a83233f.jpg" alt="村上祥平" style="object-position:center 25%;" loading="lazy" onerror="this.parentElement.outerHTML='<div class=m-avatar style=&quot;background-color:#9C27B0&quot;>村</div>'"></div>
+    <div class="m-avatar" style="background-color:#9C27B0">村</div>
     <div class="m-name">村上祥平</div>
     <div class="m-faction" style="color:#9C27B0">正風クラブ</div>
     
@@ -1601,7 +1604,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
     <div class="m-top-cats"><span class="cat-pill" style="background:#34495e">行財政</span><span class="cat-pill" style="background:#f39c12">観光</span><span class="cat-pill" style="background:#9b59b6">教育</span></div>
   </div><div class="m-card" data-name="虫明弘雄" data-faction="自由民主伊東" onclick="showDetail('虫明弘雄')">
     
-    <div class="m-avatar-photo" style="border-color:#F44336"><img src="https://prod-cdn.go2senkyo.com/uploads/seijika/image_file_name/192612/thumb_51475ec42a049240e7acd5d3999a83fa.jpg" alt="虫明弘雄" style="object-position:center 25%;" loading="lazy" onerror="this.parentElement.outerHTML='<div class=m-avatar style=&quot;background-color:#F44336&quot;>虫</div>'"></div>
+    <div class="m-avatar" style="background-color:#F44336">虫</div>
     <div class="m-name">虫明弘雄</div>
     <div class="m-faction" style="color:#F44336">自由民主伊東</div>
     
@@ -1619,7 +1622,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
     </div>
     <div class="m-grid"><div class="m-card is-rep" data-name="四宮和彦" data-faction="政和会" onclick="showDetail('四宮和彦')">
     <div class="rep-badge">会派代表</div>
-    <div class="m-avatar-photo" style="border-color:#4CAF50"><img src="https://prod-cdn.go2senkyo.com/uploads/seijika/image_file_name/63555/thumb_d081247cfeb6b17031ef2a55e48fabaa.png" alt="四宮和彦" style="object-position:center 25%;" loading="lazy" onerror="this.parentElement.outerHTML='<div class=m-avatar style=&quot;background-color:#4CAF50&quot;>四</div>'"></div>
+    <div class="m-avatar" style="background-color:#4CAF50">四</div>
     <div class="m-name">四宮和彦</div>
     <div class="m-faction" style="color:#4CAF50">政和会</div>
     <span class="role-tag">政和会 代表</span>
@@ -1641,7 +1644,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
     <div class="m-top-cats"><span class="cat-pill" style="background:#9b59b6">教育</span><span class="cat-pill" style="background:#e74c3c">防災</span><span class="cat-pill" style="background:#e91e63">医療</span></div>
   </div><div class="m-card" data-name="犬飼このり" data-faction="政和会" onclick="showDetail('犬飼このり')">
     
-    <div class="m-avatar-photo" style="border-color:#4CAF50"><img src="https://prod-cdn.go2senkyo.com/uploads/seijika/image_file_name/162089/thumb_40ef6f46fb902654d7d666fbb9f3fee3.jpg" alt="犬飼このり" style="object-position:center 25%;" loading="lazy" onerror="this.parentElement.outerHTML='<div class=m-avatar style=&quot;background-color:#4CAF50&quot;>犬</div>'"></div>
+    <div class="m-avatar" style="background-color:#4CAF50">犬</div>
     <div class="m-name">犬飼このり</div>
     <div class="m-faction" style="color:#4CAF50">政和会</div>
     
@@ -1659,7 +1662,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
     </div>
     <div class="m-grid"><div class="m-card is-rep" data-name="長沢正" data-faction="公明党" onclick="showDetail('長沢正')">
     <div class="rep-badge">会派代表</div>
-    <div class="m-avatar-photo" style="border-color:#FF9800"><img src="https://prod-cdn.go2senkyo.com/uploads/seijika/image_file_name/160644/thumb_2c739551baf7124aef946bcfcb43087f.jpg" alt="長沢正" style="object-position:center 25%;" loading="lazy" onerror="this.parentElement.outerHTML='<div class=m-avatar style=&quot;background-color:#FF9800&quot;>長</div>'"></div>
+    <div class="m-avatar" style="background-color:#FF9800">長</div>
     <div class="m-name">長沢正</div>
     <div class="m-faction" style="color:#FF9800">公明党</div>
     <span class="role-tag">公明党 代表</span>
@@ -1670,7 +1673,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
     <div class="m-top-cats"><span class="cat-pill" style="background:#e74c3c">防災</span><span class="cat-pill" style="background:#9b59b6">教育</span><span class="cat-pill" style="background:#e91e63">医療</span></div>
   </div><div class="m-card" data-name="篠原峰子" data-faction="公明党" onclick="showDetail('篠原峰子')">
     
-    <div class="m-avatar-photo" style="border-color:#FF9800"><img src="https://prod-cdn.go2senkyo.com/uploads/seijika/image_file_name/162087/thumb_23260b1faffc9c8a9fc813034dc7fa96.jpg" alt="篠原峰子" style="object-position:center 25%;" loading="lazy" onerror="this.parentElement.outerHTML='<div class=m-avatar style=&quot;background-color:#FF9800&quot;>篠</div>'"></div>
+    <div class="m-avatar" style="background-color:#FF9800">篠</div>
     <div class="m-name">篠原峰子</div>
     <div class="m-faction" style="color:#FF9800">公明党</div>
     
@@ -1681,7 +1684,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
     <div class="m-top-cats"><span class="cat-pill" style="background:#9b59b6">教育</span><span class="cat-pill" style="background:#e91e63">医療</span><span class="cat-pill" style="background:#34495e">行財政</span></div>
   </div><div class="m-card" data-name="竹本力哉" data-faction="公明党" onclick="showDetail('竹本力哉')">
     
-    <div class="m-avatar-photo" style="border-color:#FF9800"><img src="https://prod-cdn.go2senkyo.com/uploads/seijika/image_file_name/192611/thumb_52dcbd99d756e18c7419190d6cf6b7e8.jpg" alt="竹本力哉" style="object-position:center 25%;" loading="lazy" onerror="this.parentElement.outerHTML='<div class=m-avatar style=&quot;background-color:#FF9800&quot;>竹</div>'"></div>
+    <div class="m-avatar" style="background-color:#FF9800">竹</div>
     <div class="m-name">竹本力哉</div>
     <div class="m-faction" style="color:#FF9800">公明党</div>
     
@@ -1725,7 +1728,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
       <h3 class="section-title-former">元議員 (12名)</h3>
       <div class="m-grid"><div class="m-card" data-name="杉本憲也" data-faction="" onclick="showDetail('杉本憲也')">
     
-    <div class="m-avatar-photo" style="border-color:#607D8B"><img src="https://prod-cdn.go2senkyo.com/uploads/cms/politician_profile/portrait/5446/bd9a89d2-6f2d-4eef-bc34-f70ca51fac26.jpg" alt="杉本憲也" style="object-position:center 25%;" loading="lazy" onerror="this.parentElement.outerHTML='<div class=m-avatar style=&quot;background-color:#607D8B&quot;>杉</div>'"></div>
+    <div class="m-avatar" style="background-color:#607D8B">杉</div>
     <div class="m-name">杉本憲也</div>
     <div class="m-faction" style="color:#607D8B"></div>
     
@@ -1769,7 +1772,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
     <div class="m-top-cats"><span class="cat-pill" style="background:#9b59b6">教育</span><span class="cat-pill" style="background:#34495e">行財政</span><span class="cat-pill" style="background:#e91e63">医療</span></div>
   </div><div class="m-card" data-name="田久保眞紀" data-faction="" onclick="showDetail('田久保眞紀')">
     
-    <div class="m-avatar-photo" style="border-color:#607D8B"><img src="https://prod-cdn.go2senkyo.com/uploads/seijika/image_file_name/179250/thumb_13dd86632a6bc7d50120567b2e14577f.jpg" alt="田久保眞紀" style="object-position:center 25%;" loading="lazy" onerror="this.parentElement.outerHTML='<div class=m-avatar style=&quot;background-color:#607D8B&quot;>田</div>'"></div>
+    <div class="m-avatar" style="background-color:#607D8B">田</div>
     <div class="m-name">田久保眞紀</div>
     <div class="m-faction" style="color:#607D8B"></div>
     
@@ -2674,7 +2677,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
   </div><div class="detail-panel" id="dp-大川勝弘" style="display:none">
     <button class="back-btn" onclick="hideDetail()">&#9664; 一覧に戻る</button>
     <div class="detail-compact-header">
-      <div class="dch-avatar"><div class="detail-avatar" style="background-color:#2196F3">大</div></div>
+      <div class="dch-avatar"><div class="detail-avatar-photo" style="border-color:#2196F3"><img src="https://prod-cdn.go2senkyo.com/uploads/seijika/image_file_name/165140/thumb_999f06b5b66abc6f8da04c4cc45e65ae.png" alt="大川勝弘" style="object-position:center 25%;" loading="lazy" onerror="this.parentElement.outerHTML='<div class=detail-avatar style=&quot;background-color:#2196F3&quot;>大</div>'"></div></div>
       <div class="dch-info">
         <h2 class="dch-name">大川勝弘</h2>
         <div class="dch-meta">
@@ -3351,7 +3354,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
   </div><div class="detail-panel" id="dp-河島紀美恵" style="display:none">
     <button class="back-btn" onclick="hideDetail()">&#9664; 一覧に戻る</button>
     <div class="detail-compact-header">
-      <div class="dch-avatar"><div class="detail-avatar" style="background-color:#2196F3">河</div></div>
+      <div class="dch-avatar"><div class="detail-avatar-photo" style="border-color:#2196F3"><img src="https://prod-cdn.go2senkyo.com/uploads/seijika/image_file_name/162090/thumb_a2c285f0576966537cef2d57fb09f54d.png" alt="河島紀美恵" style="object-position:center 25%;" loading="lazy" onerror="this.parentElement.outerHTML='<div class=detail-avatar style=&quot;background-color:#2196F3&quot;>河</div>'"></div></div>
       <div class="dch-info">
         <h2 class="dch-name">河島紀美恵</h2>
         <div class="dch-meta">
@@ -4320,7 +4323,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
   </div><div class="detail-panel" id="dp-鈴木絢子" style="display:none">
     <button class="back-btn" onclick="hideDetail()">&#9664; 一覧に戻る</button>
     <div class="detail-compact-header">
-      <div class="dch-avatar"><div class="detail-avatar-photo" style="border-color:#9C27B0"><img src="https://prod-cdn.go2senkyo.com/uploads/seijika/image_file_name/179247/thumb_ec5fe1cf36f1dbfa5304c24591d2b176.jpeg" alt="鈴木絢子" style="object-position:center 25%;" loading="lazy" onerror="this.parentElement.outerHTML='<div class=detail-avatar style=&quot;background-color:#9C27B0&quot;>鈴</div>'"></div></div>
+      <div class="dch-avatar"><div class="detail-avatar" style="background-color:#9C27B0">鈴</div></div>
       <div class="dch-info">
         <h2 class="dch-name">鈴木絢子</h2>
         <div class="dch-meta">
@@ -4980,7 +4983,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
   </div><div class="detail-panel" id="dp-村上祥平" style="display:none">
     <button class="back-btn" onclick="hideDetail()">&#9664; 一覧に戻る</button>
     <div class="detail-compact-header">
-      <div class="dch-avatar"><div class="detail-avatar-photo" style="border-color:#9C27B0"><img src="https://prod-cdn.go2senkyo.com/uploads/seijika/image_file_name/192417/thumb_f1055bd40f642f136809abd60a83233f.jpg" alt="村上祥平" style="object-position:center 25%;" loading="lazy" onerror="this.parentElement.outerHTML='<div class=detail-avatar style=&quot;background-color:#9C27B0&quot;>村</div>'"></div></div>
+      <div class="dch-avatar"><div class="detail-avatar" style="background-color:#9C27B0">村</div></div>
       <div class="dch-info">
         <h2 class="dch-name">村上祥平</h2>
         <div class="dch-meta">
@@ -6801,7 +6804,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
   </div><div class="detail-panel" id="dp-虫明弘雄" style="display:none">
     <button class="back-btn" onclick="hideDetail()">&#9664; 一覧に戻る</button>
     <div class="detail-compact-header">
-      <div class="dch-avatar"><div class="detail-avatar-photo" style="border-color:#F44336"><img src="https://prod-cdn.go2senkyo.com/uploads/seijika/image_file_name/192612/thumb_51475ec42a049240e7acd5d3999a83fa.jpg" alt="虫明弘雄" style="object-position:center 25%;" loading="lazy" onerror="this.parentElement.outerHTML='<div class=detail-avatar style=&quot;background-color:#F44336&quot;>虫</div>'"></div></div>
+      <div class="dch-avatar"><div class="detail-avatar" style="background-color:#F44336">虫</div></div>
       <div class="dch-info">
         <h2 class="dch-name">虫明弘雄</h2>
         <div class="dch-meta">
@@ -7528,7 +7531,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
   </div><div class="detail-panel" id="dp-四宮和彦" style="display:none">
     <button class="back-btn" onclick="hideDetail()">&#9664; 一覧に戻る</button>
     <div class="detail-compact-header">
-      <div class="dch-avatar"><div class="detail-avatar-photo" style="border-color:#4CAF50"><img src="https://prod-cdn.go2senkyo.com/uploads/seijika/image_file_name/63555/thumb_d081247cfeb6b17031ef2a55e48fabaa.png" alt="四宮和彦" style="object-position:center 25%;" loading="lazy" onerror="this.parentElement.outerHTML='<div class=detail-avatar style=&quot;background-color:#4CAF50&quot;>四</div>'"></div></div>
+      <div class="dch-avatar"><div class="detail-avatar" style="background-color:#4CAF50">四</div></div>
       <div class="dch-info">
         <h2 class="dch-name">四宮和彦</h2>
         <div class="dch-meta">
@@ -8776,7 +8779,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
   </div><div class="detail-panel" id="dp-犬飼このり" style="display:none">
     <button class="back-btn" onclick="hideDetail()">&#9664; 一覧に戻る</button>
     <div class="detail-compact-header">
-      <div class="dch-avatar"><div class="detail-avatar-photo" style="border-color:#4CAF50"><img src="https://prod-cdn.go2senkyo.com/uploads/seijika/image_file_name/162089/thumb_40ef6f46fb902654d7d666fbb9f3fee3.jpg" alt="犬飼このり" style="object-position:center 25%;" loading="lazy" onerror="this.parentElement.outerHTML='<div class=detail-avatar style=&quot;background-color:#4CAF50&quot;>犬</div>'"></div></div>
+      <div class="dch-avatar"><div class="detail-avatar" style="background-color:#4CAF50">犬</div></div>
       <div class="dch-info">
         <h2 class="dch-name">犬飼このり</h2>
         <div class="dch-meta">
@@ -9135,7 +9138,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
   </div><div class="detail-panel" id="dp-篠原峰子" style="display:none">
     <button class="back-btn" onclick="hideDetail()">&#9664; 一覧に戻る</button>
     <div class="detail-compact-header">
-      <div class="dch-avatar"><div class="detail-avatar-photo" style="border-color:#FF9800"><img src="https://prod-cdn.go2senkyo.com/uploads/seijika/image_file_name/162087/thumb_23260b1faffc9c8a9fc813034dc7fa96.jpg" alt="篠原峰子" style="object-position:center 25%;" loading="lazy" onerror="this.parentElement.outerHTML='<div class=detail-avatar style=&quot;background-color:#FF9800&quot;>篠</div>'"></div></div>
+      <div class="dch-avatar"><div class="detail-avatar" style="background-color:#FF9800">篠</div></div>
       <div class="dch-info">
         <h2 class="dch-name">篠原峰子</h2>
         <div class="dch-meta">
@@ -9631,7 +9634,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
   </div><div class="detail-panel" id="dp-長沢正" style="display:none">
     <button class="back-btn" onclick="hideDetail()">&#9664; 一覧に戻る</button>
     <div class="detail-compact-header">
-      <div class="dch-avatar"><div class="detail-avatar-photo" style="border-color:#FF9800"><img src="https://prod-cdn.go2senkyo.com/uploads/seijika/image_file_name/160644/thumb_2c739551baf7124aef946bcfcb43087f.jpg" alt="長沢正" style="object-position:center 25%;" loading="lazy" onerror="this.parentElement.outerHTML='<div class=detail-avatar style=&quot;background-color:#FF9800&quot;>長</div>'"></div></div>
+      <div class="dch-avatar"><div class="detail-avatar" style="background-color:#FF9800">長</div></div>
       <div class="dch-info">
         <h2 class="dch-name">長沢正</h2>
         <div class="dch-meta">
@@ -10073,7 +10076,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
   </div><div class="detail-panel" id="dp-竹本力哉" style="display:none">
     <button class="back-btn" onclick="hideDetail()">&#9664; 一覧に戻る</button>
     <div class="detail-compact-header">
-      <div class="dch-avatar"><div class="detail-avatar-photo" style="border-color:#FF9800"><img src="https://prod-cdn.go2senkyo.com/uploads/seijika/image_file_name/192611/thumb_52dcbd99d756e18c7419190d6cf6b7e8.jpg" alt="竹本力哉" style="object-position:center 25%;" loading="lazy" onerror="this.parentElement.outerHTML='<div class=detail-avatar style=&quot;background-color:#FF9800&quot;>竹</div>'"></div></div>
+      <div class="dch-avatar"><div class="detail-avatar" style="background-color:#FF9800">竹</div></div>
       <div class="dch-info">
         <h2 class="dch-name">竹本力哉</h2>
         <div class="dch-meta">
@@ -11210,7 +11213,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
   </div><div class="detail-panel" id="dp-杉本憲也" style="display:none">
     <button class="back-btn" onclick="hideDetail()">&#9664; 一覧に戻る</button>
     <div class="detail-compact-header">
-      <div class="dch-avatar"><div class="detail-avatar-photo" style="border-color:#607D8B"><img src="https://prod-cdn.go2senkyo.com/uploads/cms/politician_profile/portrait/5446/bd9a89d2-6f2d-4eef-bc34-f70ca51fac26.jpg" alt="杉本憲也" style="object-position:center 25%;" loading="lazy" onerror="this.parentElement.outerHTML='<div class=detail-avatar style=&quot;background-color:#607D8B&quot;>杉</div>'"></div></div>
+      <div class="dch-avatar"><div class="detail-avatar" style="background-color:#607D8B">杉</div></div>
       <div class="dch-info">
         <h2 class="dch-name">杉本憲也</h2>
         <div class="dch-meta">
@@ -12945,7 +12948,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
   </div><div class="detail-panel" id="dp-田久保眞紀" style="display:none">
     <button class="back-btn" onclick="hideDetail()">&#9664; 一覧に戻る</button>
     <div class="detail-compact-header">
-      <div class="dch-avatar"><div class="detail-avatar-photo" style="border-color:#607D8B"><img src="https://prod-cdn.go2senkyo.com/uploads/seijika/image_file_name/179250/thumb_13dd86632a6bc7d50120567b2e14577f.jpg" alt="田久保眞紀" style="object-position:center 25%;" loading="lazy" onerror="this.parentElement.outerHTML='<div class=detail-avatar style=&quot;background-color:#607D8B&quot;>田</div>'"></div></div>
+      <div class="dch-avatar"><div class="detail-avatar" style="background-color:#607D8B">田</div></div>
       <div class="dch-info">
         <h2 class="dch-name">田久保眞紀</h2>
         <div class="dch-meta">
@@ -22174,7 +22177,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
       <div class="mp-card mp-card-delete">
         <div class="mp-icon">🗑️</div>
         <h2>情報の削除依頼</h2>
-        <p>本サイト上のご自身に関する情報の削除をご希望の場合、すぐに対応いたします。<strong>原則24時間以内に対応</strong>します。</p>
+        <p>本サイト上のご自身に関する情報の削除をご希望の場合、すぐに対応いたします。<strong>原則48時間以内に対応</strong>します。</p>
         <ul class="mp-list">
           <li>事実に反する情報の削除</li>
           <li>誤解を招く表現の修正</li>
@@ -22203,7 +22206,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
       <ul>
         <li><strong>運営者</strong>：伊東市議会議員 大竹圭（みんなの伊東市・個人運営）</li>
         <li><strong>対応窓口</strong>：<a href="mailto:ka@oh-life.co.jp">ka@oh-life.co.jp</a></li>
-        <li><strong>対応時間</strong>：原則24時間以内に初動対応（緊急の削除依頼は最優先）</li>
+        <li><strong>対応時間</strong>：原則48時間以内に初動対応（緊急の削除依頼は最優先）</li>
         <li><strong>個人情報の取り扱い</strong>：いただいたメール・添付資料は、依頼内容の対応にのみ使用し、第三者には提供しません。</li>
         <li><strong>提供写真の利用範囲</strong>：本サイト「みんなの伊東市」内でのみ使用。他用途への転用はいたしません。</li>
         <li><strong>掲載情報の責任</strong>：誤った情報があれば速やかに訂正します。本サイトは公開情報のみを扱う非公式サイトです。</li>
@@ -22302,7 +22305,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
       <div class="footer-title">📧 お問い合わせ・削除依頼</div>
       <div class="footer-text">
         <a href="mailto:ka@oh-life.co.jp" class="footer-link">ka@oh-life.co.jp</a><br>
-        <small>議員ご本人からの追加・削除依頼は<br>原則24時間以内に対応します</small>
+        <small>議員ご本人からの追加・削除依頼は<br>原則48時間以内に対応します</small>
       </div>
     </div>
     <div class="footer-block">

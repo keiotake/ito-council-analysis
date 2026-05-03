@@ -16,14 +16,19 @@ try {
     // 大竹圭の photo_url は全身写真のため、election_photo_url（顔アップ）を使用
     '大竹圭': 'election_photo_url',
   };
-  // 写真が中途半端で見にくいため、苗字の頭文字表示に切り替える議員
-  const useFallbackAvatar = new Set([
-    '大川勝弘', '河島紀美恵', '重岡秀子', '片桐基至',
-    '佐藤周', '中島弘道', '井戸清司',
+  // 写真掲載を許可する議員のホワイトリスト（本人または会派内同意があるメンバーのみ）
+  // 法的リスク（肖像権・著作権）回避のため、明示的に許可された議員のみ写真を表示
+  // それ以外は苗字の頭文字（m-avatar）で統一表示
+  const allowedPhotoMembers = new Set([
+    '大竹圭',       // 運営者本人
+    '青木敬博',     // 伊東未来
+    '大川勝弘',     // 伊東未来
+    '河島紀美恵',   // 伊東未来
+    '杉本一彦',     // 伊東未来（会派代表）
   ]);
   for (const [name, data] of Object.entries(rawPhotos)) {
-    if (useFallbackAvatar.has(name)) {
-      photos[name] = '';  // 強制的にフォールバック（苗字頭文字）に
+    if (!allowedPhotoMembers.has(name)) {
+      photos[name] = '';  // 写真非掲載 → 苗字頭文字フォールバック
       continue;
     }
     const override = photoUrlOverrides[name];
@@ -759,6 +764,10 @@ nav button.active::after{display:none}
 .nav-tab.nav-orange{color:#c2410c}
 .nav-tab.nav-orange:hover{background:#fed7aa;border-color:#fdba74;color:#9a3412}
 .nav-tab.nav-orange.active{background:#f97316;color:#fff;border-color:#f97316;box-shadow:0 4px 12px rgba(249,115,22,.3)}
+/* 議員の方へ = スレート系（落ち着いた専用窓口） */
+.nav-tab.nav-slate{color:#475569}
+.nav-tab.nav-slate:hover{background:#e2e8f0;border-color:#cbd5e1;color:#1e293b}
+.nav-tab.nav-slate.active{background:#334155;color:#fff;border-color:#334155;box-shadow:0 4px 12px rgba(51,65,85,.3)}
 /* サブメニュー（もっと見る） */
 .nav-more-wrap{position:relative;margin-left:auto;flex-shrink:0}
 .nav-more-btn{padding:.55rem 1.1rem;border:1px solid var(--border);border-radius:999px;font-size:.85rem;font-weight:600;cursor:pointer;background:#fff;color:#475569;transition:.15s}
@@ -2100,6 +2109,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
   <button class="nav-tab nav-purple" role="tab" aria-selected="false" onclick="switchTab('themes',this)">🔍 テーマから探す</button>
   <button class="nav-tab nav-green" role="tab" aria-selected="false" onclick="switchTab('voice',this)">💬 市民の声を市政へ</button>
   <button class="nav-tab nav-orange" role="tab" aria-selected="false" onclick="switchTab('participate',this)">🗳️ 市政に参加する</button>
+  <button class="nav-tab nav-slate" role="tab" aria-selected="false" onclick="switchTab('memberportal',this)">💼 議員の方へ</button>
   <div class="nav-more-wrap">
     <button class="nav-more-btn" onclick="toggleNavMore(event)" aria-haspopup="true" aria-expanded="false">⋯ もっと見る</button>
     <div class="nav-more-menu" id="nav-more-menu" role="menu">
@@ -2107,8 +2117,6 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
       <button role="menuitem" onclick="switchTab('plan',this);closeNavMore()">📘 総合計画</button>
       <button role="menuitem" onclick="switchTab('analysis',this);closeNavMore()">🔎 伊東市徹底分析</button>
       <button role="menuitem" onclick="switchTab('stats',this);closeNavMore()">📊 議会全体の動き</button>
-      <div class="nav-more-divider"></div>
-      <button role="menuitem" onclick="switchTab('memberportal',this);closeNavMore()">💼 議員の方へ</button>
     </div>
   </div>
 </nav>
@@ -3083,7 +3091,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
       <div class="mp-card mp-card-delete">
         <div class="mp-icon">🗑️</div>
         <h2>情報の削除依頼</h2>
-        <p>本サイト上のご自身に関する情報の削除をご希望の場合、すぐに対応いたします。<strong>原則24時間以内に対応</strong>します。</p>
+        <p>本サイト上のご自身に関する情報の削除をご希望の場合、すぐに対応いたします。<strong>原則48時間以内に対応</strong>します。</p>
         <ul class="mp-list">
           <li>事実に反する情報の削除</li>
           <li>誤解を招く表現の修正</li>
@@ -3112,7 +3120,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
       <ul>
         <li><strong>運営者</strong>：伊東市議会議員 大竹圭（みんなの伊東市・個人運営）</li>
         <li><strong>対応窓口</strong>：<a href="mailto:ka@oh-life.co.jp">ka@oh-life.co.jp</a></li>
-        <li><strong>対応時間</strong>：原則24時間以内に初動対応（緊急の削除依頼は最優先）</li>
+        <li><strong>対応時間</strong>：原則48時間以内に初動対応（緊急の削除依頼は最優先）</li>
         <li><strong>個人情報の取り扱い</strong>：いただいたメール・添付資料は、依頼内容の対応にのみ使用し、第三者には提供しません。</li>
         <li><strong>提供写真の利用範囲</strong>：本サイト「みんなの伊東市」内でのみ使用。他用途への転用はいたしません。</li>
         <li><strong>掲載情報の責任</strong>：誤った情報があれば速やかに訂正します。本サイトは公開情報のみを扱う非公式サイトです。</li>
@@ -3211,7 +3219,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
       <div class="footer-title">📧 お問い合わせ・削除依頼</div>
       <div class="footer-text">
         <a href="mailto:ka@oh-life.co.jp" class="footer-link">ka@oh-life.co.jp</a><br>
-        <small>議員ご本人からの追加・削除依頼は<br>原則24時間以内に対応します</small>
+        <small>議員ご本人からの追加・削除依頼は<br>原則48時間以内に対応します</small>
       </div>
     </div>
     <div class="footer-block">
