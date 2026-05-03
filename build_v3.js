@@ -2144,10 +2144,10 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
   </div>
   <div class="hero-bg">
     <div class="hero-bg-img"></div>
-    <video class="hero-video" autoplay muted loop playsinline preload="auto" poster="" aria-hidden="true">
-      <source src="https://videos.pexels.com/video-files/3765078/3765078-hd_1920_1080_30fps.mp4" type="video/mp4" media="(min-width:641px)">
-      <source src="https://videos.pexels.com/video-files/3765078/3765078-sd_960_540_30fps.mp4" type="video/mp4">
+    <video class="hero-video" id="hero-video" autoplay muted loop playsinline preload="auto" aria-hidden="true">
+      <source src="https://videos.pexels.com/video-files/3765078/3765078-hd_1920_1080_30fps.mp4" type="video/mp4">
     </video>
+    <script>(function(){var v=document.getElementById('hero-video');if(!v)return;if(window.matchMedia('(max-width:640px)').matches){v.querySelector('source').src='https://videos.pexels.com/video-files/3765078/3765078-sd_960_540_30fps.mp4';v.load()}var p=v.play();if(p&&p.catch)p.catch(function(){});})();</script>
     <div class="hero-bg-overlay"></div>
   </div>
   <div class="hero-topbar">
