@@ -731,52 +731,23 @@ body.high-contrast button,body.high-contrast .pg-btn,body.high-contrast .qe-acti
 .a11y-btn:hover{background:rgba(255,255,255,.2)}
 body{font-family:var(--font-en),var(--font-jp);background:var(--bg);color:var(--text);line-height:1.75;-webkit-text-size-adjust:100%;letter-spacing:.01em;font-feature-settings:'palt' 1}
 h1,h2,h3{letter-spacing:-.01em;font-weight:800}
-/* シネマティックなヒーローヘッダー（伊東の海・ダイビング世界観） */
+/* シネマティックなヒーローヘッダー（リアルな海中映像） */
 .hero-header{position:relative;min-height:560px;background:#001a2e;color:#fff;overflow:hidden}
 .hero-bg{position:absolute;inset:0;z-index:0}
-/* 海の深さを感じさせる縦グラデーション（水面の明るい青→深海のネイビー） */
+/* 動画読み込み前のフォールバック（深海グラデーション） */
 .hero-bg-img{position:absolute;inset:0;background:
   radial-gradient(ellipse at 50% -20%,rgba(120,220,255,.55),transparent 55%),
-  radial-gradient(ellipse at 20% 30%,rgba(56,189,248,.25),transparent 60%),
-  radial-gradient(ellipse at 80% 60%,rgba(20,184,166,.2),transparent 60%),
-  linear-gradient(180deg,#0e7490 0%,#075985 30%,#0c4a6e 60%,#082f49 85%,#001a2e 100%)}
-/* 水面のゆらぎ（コースティクス） */
+  linear-gradient(180deg,#0e7490 0%,#075985 30%,#0c4a6e 60%,#082f49 85%,#001a2e 100%);
+  z-index:0}
+/* 海中ビデオ（フルブリード／ループ／ミュート） */
+.hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;animation:hero-video-fade 1.6s ease-out}
+@keyframes hero-video-fade{from{opacity:0}to{opacity:1}}
+/* 文字を読みやすくするオーバーレイ（青みのある暗膜） */
 .hero-bg-overlay{position:absolute;inset:0;background:
-  radial-gradient(ellipse at 30% 10%,rgba(255,255,255,.18),transparent 40%),
-  radial-gradient(ellipse at 70% 5%,rgba(255,255,255,.12),transparent 35%),
-  repeating-linear-gradient(110deg,transparent,transparent 18px,rgba(255,255,255,.025) 19px,rgba(255,255,255,.025) 20px),
-  repeating-linear-gradient(70deg,transparent,transparent 28px,rgba(160,230,255,.025) 29px,rgba(160,230,255,.025) 30px);
-  animation:caustics-shift 12s ease-in-out infinite;mix-blend-mode:screen}
-@keyframes caustics-shift{0%,100%{transform:translateX(0) translateY(0)}50%{transform:translateX(-8px) translateY(4px)}}
-/* 上から差し込む光線（ゴッドレイ） */
-.hero-godray{position:absolute;inset:0;background:
-  conic-gradient(from 200deg at 30% -10%,transparent 0deg,rgba(255,255,255,.08) 8deg,transparent 16deg),
-  conic-gradient(from 190deg at 65% -10%,transparent 0deg,rgba(255,255,255,.06) 10deg,transparent 22deg),
-  conic-gradient(from 180deg at 85% -10%,transparent 0deg,rgba(255,255,255,.05) 6deg,transparent 14deg);
-  mix-blend-mode:screen;animation:godray-pulse 8s ease-in-out infinite;pointer-events:none}
-@keyframes godray-pulse{0%,100%{opacity:.7}50%{opacity:1}}
-
-/* 泡（バブル）アニメーション */
-.hero-particles{position:absolute;inset:0;overflow:hidden;pointer-events:none}
-.particle{position:absolute;left:var(--x);bottom:-20px;width:var(--size);height:var(--size);background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.95),rgba(180,230,255,.4) 50%,rgba(120,180,220,.1) 80%);border-radius:50%;box-shadow:inset 0 0 4px rgba(255,255,255,.4),0 0 8px rgba(180,230,255,.3);animation:bubble-float var(--d) linear infinite;animation-delay:var(--delay);opacity:0}
-@keyframes bubble-float{0%{transform:translateY(0) translateX(0) scale(.7);opacity:0}10%{opacity:.9}30%{transform:translateY(-25vh) translateX(8px) scale(.95)}60%{transform:translateY(-60vh) translateX(-10px) scale(1)}90%{opacity:.6}100%{transform:translateY(-110vh) translateX(12px) scale(1.05);opacity:0}}
-
-/* 魚（SVG）が画面を泳ぐ */
-.hero-fish{position:absolute;top:var(--ty);left:-10vw;width:var(--fw);opacity:0;animation:fish-swim var(--fd) linear infinite;animation-delay:var(--fdelay);filter:drop-shadow(0 4px 8px rgba(0,0,0,.4))}
-.hero-fish.flip{animation-name:fish-swim-rev;left:auto;right:-10vw}
-@keyframes fish-swim{0%{transform:translateX(0) translateY(0);opacity:0}5%{opacity:.85}50%{transform:translateX(60vw) translateY(-18px)}95%{opacity:.85}100%{transform:translateX(120vw) translateY(0);opacity:0}}
-@keyframes fish-swim-rev{0%{transform:translateX(0) translateY(0) scaleX(-1);opacity:0}5%{opacity:.85}50%{transform:translateX(-60vw) translateY(14px) scaleX(-1)}95%{opacity:.85}100%{transform:translateX(-120vw) translateY(0) scaleX(-1);opacity:0}}
-.hero-fish svg{width:100%;height:auto;display:block}
-.hero-fish .fish-tail{transform-origin:left center;animation:fish-tail-wag .35s ease-in-out infinite}
-@keyframes fish-tail-wag{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
-
-/* 海藻シルエット（下部） */
-.hero-seaweed{position:absolute;bottom:0;left:0;right:0;height:90px;background:
-  radial-gradient(ellipse 220px 80px at 12% 100%,rgba(0,40,60,.7),transparent 70%),
-  radial-gradient(ellipse 180px 65px at 38% 100%,rgba(0,30,50,.55),transparent 70%),
-  radial-gradient(ellipse 260px 90px at 72% 100%,rgba(0,40,60,.65),transparent 70%),
-  radial-gradient(ellipse 200px 75px at 92% 100%,rgba(0,30,50,.6),transparent 70%);
-  pointer-events:none;z-index:1}
+  linear-gradient(180deg,rgba(2,30,55,.35) 0%,rgba(2,30,55,.15) 30%,rgba(2,30,55,.55) 100%),
+  radial-gradient(ellipse at 50% 60%,transparent 30%,rgba(0,20,40,.35) 100%);
+  z-index:1;pointer-events:none}
+@media(prefers-reduced-motion:reduce){.hero-video{display:none}}
 
 /* 上部バー（左：ロゴ＋非公式バッジ / 右：運営者） */
 .hero-topbar{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:flex-start;padding:1.2rem 2rem 0;flex-wrap:wrap;gap:1rem}
@@ -810,7 +781,6 @@ h1,h2,h3{letter-spacing:-.01em;font-weight:800}
   .hop-name strong{font-size:.88rem}
   .hero-content{padding:3rem 1rem 3rem}
   .hero-sub{font-size:.85rem}
-  .hero-seaweed{height:60px}
 }
 .header-visitors{display:flex;justify-content:center;gap:.3rem;margin-top:.5rem;font-size:.72rem;color:var(--sub)}
 .header-visitors span{font-weight:700;color:var(--text)}
@@ -2174,42 +2144,11 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
   </div>
   <div class="hero-bg">
     <div class="hero-bg-img"></div>
+    <video class="hero-video" autoplay muted loop playsinline preload="auto" poster="" aria-hidden="true">
+      <source src="https://videos.pexels.com/video-files/3765078/3765078-hd_1920_1080_30fps.mp4" type="video/mp4" media="(min-width:641px)">
+      <source src="https://videos.pexels.com/video-files/3765078/3765078-sd_960_540_30fps.mp4" type="video/mp4">
+    </video>
     <div class="hero-bg-overlay"></div>
-    <div class="hero-godray"></div>
-    <div class="hero-particles">
-      ${Array.from({length: 36}).map((_,i) => `<span class="particle" style="--i:${i};--x:${Math.random()*100}%;--d:${6+Math.random()*9}s;--delay:${Math.random()*7}s;--size:${2+Math.random()*7}px"></span>`).join('')}
-    </div>
-    ${(() => {
-      // 伊東の海でよく見られる魚たち（カラフルな熱帯〜温帯の魚）
-      const fishPalette = [
-        {body:'#fbbf24',stripe:'#fb923c',fin:'#f59e0b'}, // 黄＋オレンジ
-        {body:'#60a5fa',stripe:'#1e40af',fin:'#3b82f6'}, // 青系
-        {body:'#f472b6',stripe:'#be185d',fin:'#ec4899'}, // ピンク
-        {body:'#34d399',stripe:'#047857',fin:'#10b981'}, // 緑
-        {body:'#fde68a',stripe:'#7c2d12',fin:'#fbbf24'}, // 黄＋茶（カクレクマノミ風）
-        {body:'#a5f3fc',stripe:'#0891b2',fin:'#06b6d4'}, // ターコイズ
-      ];
-      const fishSvg = (c) => `<svg viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <g class="fish-tail"><polygon points="0,25 20,10 20,40" fill="${c.fin}" opacity=".95"/></g>
-        <ellipse cx="55" cy="25" rx="35" ry="14" fill="${c.body}"/>
-        <path d="M25,25 Q55,8 90,25 Q55,42 25,25 Z" fill="${c.body}" opacity=".85"/>
-        <path d="M40,25 Q55,18 70,25 Q55,32 40,25 Z" fill="${c.stripe}" opacity=".55"/>
-        <ellipse cx="55" cy="13" rx="8" ry="3" fill="${c.fin}" opacity=".8"/>
-        <ellipse cx="55" cy="37" rx="6" ry="2.5" fill="${c.fin}" opacity=".7"/>
-        <circle cx="80" cy="22" r="2.4" fill="#fff"/>
-        <circle cx="80.6" cy="22" r="1.4" fill="#0c1929"/>
-      </svg>`;
-      return Array.from({length: 7}).map((_,i) => {
-        const c = fishPalette[i % fishPalette.length];
-        const flip = i % 2 === 1 ? ' flip' : '';
-        const ty = 15 + Math.floor(Math.random()*65) + '%';
-        const fw = (40 + Math.random()*60).toFixed(0) + 'px';
-        const fd = (18 + Math.random()*16).toFixed(1) + 's';
-        const fdelay = (Math.random()*-20).toFixed(1) + 's';
-        return `<div class="hero-fish${flip}" style="--ty:${ty};--fw:${fw};--fd:${fd};--fdelay:${fdelay}">${fishSvg(c)}</div>`;
-      }).join('');
-    })()}
-    <div class="hero-seaweed"></div>
   </div>
   <div class="hero-topbar">
     <div class="hero-logo-wrap">
