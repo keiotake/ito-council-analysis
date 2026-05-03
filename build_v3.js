@@ -731,12 +731,59 @@ body.high-contrast button,body.high-contrast .pg-btn,body.high-contrast .qe-acti
 .a11y-btn:hover{background:rgba(255,255,255,.2)}
 body{font-family:var(--font-en),var(--font-jp);background:var(--bg);color:var(--text);line-height:1.75;-webkit-text-size-adjust:100%;letter-spacing:.01em;font-feature-settings:'palt' 1}
 h1,h2,h3{letter-spacing:-.01em;font-weight:800}
-header{background:#fff;color:var(--text);padding:2.2rem 1.5rem 1.6rem;text-align:center;position:relative;border-bottom:1px solid var(--border)}
-header::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#2563eb 0%,#7c3aed 50%,#ec4899 100%)}
-header h1{font-size:2.2rem;font-weight:900;letter-spacing:-.02em;line-height:1.2;background:linear-gradient(135deg,#0f172a 0%,#1e40af 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.header-sub{color:var(--sub);font-size:1rem;margin-top:.8rem;font-weight:500;letter-spacing:.02em}
-.header-stats{display:flex;justify-content:center;gap:.5rem;margin-top:1rem;flex-wrap:wrap;font-size:.78rem}
-.header-stats span{background:#f1f5f9;color:#475569;padding:.35rem .9rem;border-radius:20px;font-weight:600;border:1px solid var(--border)}
+/* シネマティックなヒーローヘッダー */
+.hero-header{position:relative;min-height:560px;background:#0a0a0a;color:#fff;overflow:hidden}
+.hero-bg{position:absolute;inset:0;z-index:0}
+.hero-bg-img{position:absolute;inset:0;background:
+  radial-gradient(ellipse at 20% 30%,rgba(59,130,246,.35),transparent 50%),
+  radial-gradient(ellipse at 80% 70%,rgba(124,58,237,.3),transparent 50%),
+  radial-gradient(ellipse at 50% 50%,rgba(236,72,153,.15),transparent 60%),
+  linear-gradient(180deg,#0a0a0a 0%,#1e1b4b 50%,#0a0a0a 100%);
+  animation:hero-bg-shift 30s ease-in-out infinite}
+@keyframes hero-bg-shift{0%,100%{filter:hue-rotate(0deg) brightness(1)}50%{filter:hue-rotate(20deg) brightness(1.1)}}
+.hero-bg-overlay{position:absolute;inset:0;background:
+  linear-gradient(180deg,rgba(0,0,0,.2) 0%,rgba(0,0,0,0) 30%,rgba(0,0,0,.5) 100%),
+  repeating-linear-gradient(45deg,transparent,transparent 2px,rgba(255,255,255,.01) 2px,rgba(255,255,255,.01) 4px)}
+
+/* パーティクルアニメーション */
+.hero-particles{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.particle{position:absolute;left:var(--x);bottom:-10px;width:var(--size);height:var(--size);background:rgba(255,255,255,.7);border-radius:50%;box-shadow:0 0 6px rgba(255,255,255,.5);animation:particle-float var(--d) linear infinite;animation-delay:var(--delay);opacity:0}
+@keyframes particle-float{0%{transform:translateY(0) translateX(0);opacity:0}10%{opacity:1}50%{transform:translateY(-50vh) translateX(20px)}90%{opacity:1}100%{transform:translateY(-110vh) translateX(-20px);opacity:0}}
+
+/* 上部バー（ロゴ + 連絡先） */
+.hero-topbar{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:center;padding:1.2rem 2rem 0;flex-wrap:wrap;gap:1rem}
+.hero-logo{font-size:1.5rem;font-weight:900;color:#fff;letter-spacing:-.02em;text-shadow:0 2px 12px rgba(0,0,0,.4)}
+.hero-logo-accent{background:linear-gradient(135deg,#fbbf24,#f97316);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-contact-card{display:inline-block;background:rgba(255,255,255,.08);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.18);border-radius:14px;padding:.55rem 1rem;color:#fff;text-decoration:none;transition:.2s}
+.hero-contact-card:hover{background:rgba(255,255,255,.15);transform:translateY(-2px)}
+.hcc-label{font-size:.65rem;font-weight:600;color:rgba(255,255,255,.7);letter-spacing:.06em;margin-bottom:.15rem}
+.hcc-mail{font-size:.85rem;font-weight:700}
+
+/* ヒーロー中央コンテンツ */
+.hero-content{position:relative;z-index:1;text-align:center;padding:5rem 2rem 4rem;max-width:1100px;margin:0 auto}
+.hero-title-en{font-family:var(--font-en);font-size:clamp(3rem, 9vw, 7rem);font-weight:200;letter-spacing:-.03em;line-height:1;color:rgba(255,255,255,.95);text-shadow:0 4px 30px rgba(0,0,0,.5);margin-bottom:.3em;animation:hero-fade-in 1.2s ease-out}
+.hero-title-jp{font-size:clamp(2rem, 6vw, 4.5rem);font-weight:900;letter-spacing:-.02em;line-height:1.3;margin:0 0 1.5rem;color:#fff;text-shadow:0 4px 30px rgba(0,0,0,.5);animation:hero-fade-in 1.4s ease-out .2s both}
+.hero-sub{font-size:.95rem;color:rgba(255,255,255,.85);line-height:1.8;letter-spacing:.02em;animation:hero-fade-in 1.6s ease-out .4s both}
+.hero-stats-inline{display:inline-block;margin-top:.5rem;padding:.35rem 1rem;background:rgba(255,255,255,.1);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:999px;font-size:.78rem;font-weight:600}
+@keyframes hero-fade-in{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* スクロール誘導 */
+.hero-scroll-cue{position:absolute;bottom:1.5rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.4rem;color:rgba(255,255,255,.6);font-size:.7rem;letter-spacing:.2em;font-weight:600;animation:hero-fade-in 2s ease-out .8s both}
+.hsc-line{width:1px;height:30px;background:linear-gradient(180deg,rgba(255,255,255,.6),transparent);animation:hsc-line-anim 2s ease-in-out infinite}
+@keyframes hsc-line-anim{0%,100%{transform:scaleY(.3);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}}
+
+.hero-header .header-visitors{position:absolute;bottom:.6rem;right:1.2rem;z-index:2;font-size:.7rem;color:rgba(255,255,255,.7)}
+.hero-header .header-visitors span{color:#fff;font-weight:700}
+
+@media(max-width:640px){
+  .hero-header{min-height:480px}
+  .hero-topbar{padding:1rem 1rem 0}
+  .hero-logo{font-size:1.2rem}
+  .hero-contact-card{padding:.4rem .7rem}
+  .hcc-mail{font-size:.72rem}
+  .hero-content{padding:3rem 1rem 3rem}
+  .hero-sub{font-size:.85rem}
+}
 .header-visitors{display:flex;justify-content:center;gap:.3rem;margin-top:.5rem;font-size:.72rem;color:var(--sub)}
 .header-visitors span{font-weight:700;color:var(--text)}
 .header-credit{color:var(--sub);font-size:.72rem;margin-top:.5rem}
@@ -2091,22 +2138,42 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
     <button class="welcome-close" onclick="closeWelcome(true)">サイトを見る</button>
   </div>
 </div>
-<header>
+<header class="hero-header">
   <div class="a11y-bar">
     <button class="a11y-btn" onclick="toggleFontSize()" aria-label="文字サイズ切り替え">🔤 文字大小</button>
     <button class="a11y-btn" onclick="toggleHighContrast()" aria-label="高コントラストモード" title="高コントラスト">◐ 色反転</button>
     <button class="a11y-btn" onclick="speakSelection()" aria-label="選択した文を読み上げる" title="選択文を読み上げ">🔊 読上げ</button>
   </div>
-  <h1>みんなの伊東市</h1>
-  <div class="header-sub">伊東市議会を、もっと身近に。</div>
-  <div class="header-stats">
-    <span>議員 ${currentMembersList.length}名</span>
-    <span>動画 ${videos.length}本</span>
+  <div class="hero-bg">
+    <div class="hero-bg-img"></div>
+    <div class="hero-bg-overlay"></div>
+    <div class="hero-particles">
+      ${Array.from({length: 30}).map((_,i) => `<span class="particle" style="--i:${i};--x:${Math.random()*100}%;--d:${5+Math.random()*8}s;--delay:${Math.random()*5}s;--size:${1+Math.random()*3}px"></span>`).join('')}
+    </div>
+  </div>
+  <div class="hero-topbar">
+    <div class="hero-logo">みんなの<span class="hero-logo-accent">伊東</span></div>
+    <div class="hero-contact">
+      <a href="#tab-memberportal" onclick="document.querySelector('.nav-slate').click();return false;" class="hero-contact-card">
+        <div class="hcc-label">議員の方へ</div>
+        <div class="hcc-mail">📧 ka@oh-life.co.jp</div>
+      </a>
+    </div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-title-en">VOICE OF</div>
+    <h1 class="hero-title-jp">伊東を、<br>もっと身近に。</h1>
+    <p class="hero-sub">市民と議会をつなぐ、街の対話プラットフォーム<br>
+      <span class="hero-stats-inline">${currentMembersList.length}名の議員 ｜ ${videos.length}本の議会動画</span>
+    </p>
+    <div class="hero-scroll-cue">
+      <span class="hsc-text">Scroll</span>
+      <span class="hsc-line"></span>
+    </div>
   </div>
   <div class="header-visitors" id="visitor-counter" style="display:none">
     <span id="vc-total">—</span> 人が訪問 ｜ 今日 <span id="vc-today">—</span> 人
   </div>
-  <div class="header-credit">制作・運営: <wbr>伊東市議会議員 大竹圭</div>
 </header>
 <nav role="tablist" aria-label="メインナビゲーション">
   <button class="active nav-tab nav-blue" role="tab" aria-selected="true" onclick="switchTab('members',this)">👥 議員一覧</button>
