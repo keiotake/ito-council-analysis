@@ -1125,6 +1125,38 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
 .voice-type-good{background:#dcfce7;color:#15803d}
 .voice-type-improve{background:#fef3c7;color:#92400e}
 .voice-type-idea{background:#dbeafe;color:#1e40af}
+
+/* 安全ガイドライン */
+.safety-guide{background:#fff;border:2px solid #fbbf24;border-radius:16px;margin-bottom:1.5rem;overflow:hidden;box-shadow:var(--shadow-md)}
+.safety-guide-summary{cursor:pointer;list-style:none;padding:1rem 1.4rem;display:flex;align-items:center;gap:.7rem;background:linear-gradient(135deg,#fef3c7,#fde68a);transition:.15s;font-weight:700;color:#78350f}
+.safety-guide-summary::-webkit-details-marker{display:none}
+.safety-guide-summary:hover{background:linear-gradient(135deg,#fde68a,#fcd34d)}
+.sg-icon{font-size:1.4rem;flex-shrink:0}
+.sg-title{flex:1;font-size:.95rem;line-height:1.4}
+.sg-arrow{transition:transform .2s;font-size:.8rem;color:#92400e}
+.safety-guide[open] .sg-arrow{transform:rotate(180deg)}
+.safety-guide-body{padding:1.5rem 1.6rem;border-top:1px solid #fbbf24}
+.sg-section{margin-bottom:1.6rem}
+.sg-section:last-child{margin-bottom:0}
+.sg-section h4{font-size:1rem;color:#0a0a0a;margin-bottom:.6rem;font-weight:700;letter-spacing:-.005em}
+.sg-section p{font-size:.85rem;color:#374151;line-height:1.75;margin-bottom:.5rem}
+.sg-section p:last-child{margin-bottom:0}
+.sg-section strong{color:#7c2d12;background:rgba(251,191,36,.2);padding:0 .2rem;border-radius:3px}
+.sg-list{padding-left:1.4rem;margin:0}
+.sg-list li{font-size:.85rem;color:#374151;line-height:1.7;margin-bottom:.4rem}
+.sg-list li strong{color:#7c2d12}
+.sg-table{width:100%;border-collapse:collapse;margin-top:.5rem;font-size:.82rem;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.sg-table thead{background:#1e293b;color:#fff}
+.sg-table th{padding:.6rem .8rem;text-align:left;font-weight:700;font-size:.78rem;letter-spacing:.02em}
+.sg-table td{padding:.6rem .8rem;border-top:1px solid #e5e5e5;vertical-align:top;line-height:1.5}
+.sg-table tr:nth-child(even){background:#fafafa}
+.sg-table small{color:#64748b;font-size:.72rem}
+.sg-warning{background:#fef2f2;border-left:4px solid #dc2626;padding:1rem 1.2rem;border-radius:0 8px 8px 0}
+.sg-warning h4{color:#991b1b}
+.sg-warning p{color:#7f1d1d}
+.sg-note{font-size:.78rem!important;color:#64748b!important;font-style:italic;background:#f9fafb;padding:.6rem .8rem;border-radius:6px;border-left:3px solid #94a3b8;margin-top:.6rem}
+.sg-footer{font-size:.85rem;color:#0f172a;text-align:center;margin-top:1rem;padding:.8rem;background:linear-gradient(135deg,#dcfce7,#bbf7d0);border-radius:8px;font-weight:600}
+@media(max-width:640px){.safety-guide-body{padding:1.2rem .9rem}.sg-table{font-size:.72rem}.sg-table th,.sg-table td{padding:.4rem .5rem}.sg-section h4{font-size:.92rem}}
 .voice-actions{display:flex;gap:.6rem;margin-bottom:1rem;flex-wrap:wrap;align-items:center}
 .voice-btn-post{padding:.7rem 1.5rem;border:none;border-radius:10px;background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;font-weight:700;cursor:pointer;font-size:.92rem;box-shadow:0 2px 8px rgba(37,99,235,.3)}
 .voice-btn-post:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(37,99,235,.4)}
@@ -2420,6 +2452,91 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
     `}
   </div>
   <div id="tab-voice" class="tab-panel">
+    <!-- 安全ガイドライン（最初に表示・折りたたみ式） -->
+    <details class="safety-guide" open>
+      <summary class="safety-guide-summary">
+        <span class="sg-icon">🛡️</span>
+        <span class="sg-title">安心して使える場にするために — 投稿前にお読みください</span>
+        <span class="sg-arrow">▼</span>
+      </summary>
+      <div class="safety-guide-body">
+        <div class="sg-section">
+          <h4>📌 このサイトは安全に運用されています</h4>
+          <p>「みんなの伊東市」は市民の建設的な対話の場です。すべての投稿は<strong>運営者(大竹圭)が確認した上で公開</strong>されます。誹謗中傷・差別・虚偽情報を含む投稿は<strong>公開されません</strong>。</p>
+        </div>
+
+        <div class="sg-section">
+          <h4>🔍 悪質な投稿への対応プロセス</h4>
+          <ol class="sg-list">
+            <li><strong>記録の保全</strong>：全投稿は<u>IPアドレス・接続情報・送信端末情報・タイムスタンプ</u>とともに自動保存されます（投稿者には公開されません）。</li>
+            <li><strong>運営による即時非公開</strong>：規約違反の疑いがある投稿は公開されず、証拠として保全します。</li>
+            <li><strong>警察への被害届</strong>：脅迫・名誉毀損等の重大なケースは、伊東警察署および<strong>静岡県警サイバー犯罪対策課</strong>に被害届を提出します。</li>
+            <li><strong>発信者情報開示請求</strong>：プロバイダ責任制限法に基づき、<strong>裁判所を通じて投稿者の氏名・住所を特定</strong>します。</li>
+            <li><strong>民事訴訟</strong>：特定された個人・法人に対し、損害賠償請求を行います。</li>
+          </ol>
+        </div>
+
+        <div class="sg-section">
+          <h4>⚖️ 違法な投稿に科される刑事罰</h4>
+          <table class="sg-table">
+            <thead><tr><th>罪名</th><th>刑罰の上限</th><th>該当する例</th></tr></thead>
+            <tbody>
+              <tr><td><strong>名誉毀損罪</strong>（刑法230条）</td><td>3年以下の懲役 または 50万円以下の罰金</td><td>事実を示して特定人物の社会的評価を下げる発言</td></tr>
+              <tr><td><strong>侮辱罪</strong>（刑法231条）</td><td>1年以下の懲役 または 30万円以下の罰金<br><small>※2022年改正で厳罰化</small></td><td>「バカ」「無能」など事実摘示なしの侮蔑的な発言</td></tr>
+              <tr><td><strong>脅迫罪</strong>（刑法222条）</td><td>2年以下の懲役 または 30万円以下の罰金</td><td>「危害を加える」「殺す」など害悪を告知する内容</td></tr>
+              <tr><td><strong>業務妨害罪</strong>（刑法233・234条）</td><td>3年以下の懲役 または 50万円以下の罰金</td><td>虚偽の風説を流して特定の店舗・行政の業務を妨げる</td></tr>
+              <tr><td><strong>信用毀損罪</strong>（刑法233条）</td><td>3年以下の懲役 または 50万円以下の罰金</td><td>虚偽の情報で個人・企業の経済的信用を傷つける</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="sg-section">
+          <h4>💰 民事賠償の相場（裁判例より）</h4>
+          <table class="sg-table">
+            <thead><tr><th>被害の種類</th><th>賠償額の目安</th></tr></thead>
+            <tbody>
+              <tr><td>一般人への名誉毀損</td><td>10万円〜100万円</td></tr>
+              <tr><td>公人・著名人への名誉毀損</td><td>50万円〜500万円</td></tr>
+              <tr><td>悪質・継続的な誹謗中傷</td><td>200万円〜1,000万円超</td></tr>
+              <tr><td>プライバシー侵害（住所・顔写真等の暴露）</td><td>30万円〜300万円</td></tr>
+              <tr><td>店舗・企業への業務妨害</td><td>100万円〜数千万円</td></tr>
+            </tbody>
+          </table>
+          <p class="sg-note">※ 上記に加えて、<strong>発信者情報開示請求の弁護士費用（50万〜150万円）・裁判費用</strong>も投稿者の負担になる場合が多くあります。<br>※ 重大な事件では、賠償額の<strong>10%相当を弁護士費用として上乗せ</strong>することが認められています。</p>
+        </div>
+
+        <div class="sg-section sg-warning">
+          <h4>🚨 「匿名だから安心」は通用しません</h4>
+          <p>VPN・公衆Wi-Fiを使っても、<strong>大半のケースで発信者は特定されています</strong>。Cloudflare経由の通信ログ、プロバイダのアクセスログ、端末固有情報（User Agent）の組み合わせで、ほぼ確実に追跡可能です。</p>
+          <p>2020年以降、有名人・一般人を問わず、<strong>SNSやサイトの匿名投稿による誹謗中傷で実際に逮捕・賠償命令が下る事例</strong>が急増しています。一時の感情で書き込んだ投稿が、人生を大きく狂わせる結果になりかねません。</p>
+        </div>
+
+        <div class="sg-section">
+          <h4>✅ 投稿が公開される基準</h4>
+          <ul class="sg-list">
+            <li>建設的な提案・意見・問題提起</li>
+            <li>具体的な事実に基づく感想・要望</li>
+            <li>街の良いところの紹介・共有</li>
+            <li>議員・行政の取り組みへの感謝・評価</li>
+          </ul>
+          <h4>❌ 公開されない投稿（即時削除・通報対象）</h4>
+          <ul class="sg-list">
+            <li>特定の個人・法人への誹謗中傷・侮辱</li>
+            <li>事実無根のデマ・噂話</li>
+            <li>個人情報（氏名・住所・電話番号・顔写真）の暴露</li>
+            <li>差別・ヘイトスピーチ</li>
+            <li>脅迫・恐喝・暴力的表現</li>
+            <li>わいせつ表現・性的コンテンツ</li>
+            <li>営業・宣伝・マルチ商法・詐欺</li>
+            <li>選挙運動・政党宣伝</li>
+            <li>著作権・肖像権の侵害</li>
+          </ul>
+        </div>
+
+        <p class="sg-footer">本ガイドラインは、市民が安心して声を届けられる場を守るために設けています。<strong>建設的な対話</strong>の場として、ご理解とご協力をお願いいたします。</p>
+      </div>
+    </details>
+
     <div class="voice-hero">
       <div class="voice-hero-inner">
         <h2 class="voice-hero-title">伊東市の <span class="voice-accent-good">好きなところ</span> も、<br><span class="voice-accent-bad">もっと良くなってほしいところ</span> も。</h2>
@@ -2499,14 +2616,19 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
         <strong>⚠ 投稿前に必ずお読みください</strong>
         以下の内容を含む投稿は<strong>削除・通報の対象</strong>となります：
         <ul>
-          <li>特定の個人(議員・市職員・市民)への誹謗中傷</li>
-          <li>個人情報(氏名・住所・電話番号など)の記載</li>
-          <li>差別的・侮蔑的な表現</li>
-          <li>虚偽の情報・デマ</li>
-          <li>営業・宣伝・スパム・選挙運動</li>
-          <li>わいせつな内容</li>
+          <li>特定の個人(議員・市職員・市民)への誹謗中傷・侮辱</li>
+          <li>事実無根のデマ・噂話・虚偽情報</li>
+          <li>個人情報(氏名・住所・電話番号・顔写真など)の暴露</li>
+          <li>差別・ヘイトスピーチ・侮蔑的表現</li>
+          <li>脅迫・恐喝・暴力的表現</li>
+          <li>わいせつ表現・性的コンテンツ</li>
+          <li>営業・宣伝・選挙運動・著作権侵害</li>
         </ul>
-        悪質な投稿(脅迫・名誉毀損等)については、IPアドレス・接続情報をもとに<strong>伊東警察署および静岡県警サイバー犯罪対策課への被害届提出、発信者情報開示請求</strong>を行う場合があります。
+        <strong>【法的責任について】</strong>
+        悪質な投稿(名誉毀損・侮辱・脅迫・業務妨害等)については、本サイトに記録されたIPアドレス・接続情報・送信端末情報・タイムスタンプをもとに、<strong>伊東警察署および静岡県警サイバー犯罪対策課への被害届提出、プロバイダ責任制限法に基づく発信者情報開示請求</strong>を行います。
+        各罪の刑罰：名誉毀損罪 = 3年以下の懲役/50万円以下の罰金、侮辱罪 = 1年以下の懲役/30万円以下の罰金、脅迫罪 = 2年以下の懲役/30万円以下の罰金。
+        加えて、<strong>民事訴訟により10万〜1,000万円超の損害賠償</strong>を請求します（弁護士費用・裁判費用も投稿者負担）。
+        詳細は「市民の声」タブの<strong>🛡️ 投稿前ガイドライン</strong>をご確認ください。
       </div>
       <form id="voice-form" onsubmit="submitVoice(event)">
         <div class="modal-form-row">
