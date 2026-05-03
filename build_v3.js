@@ -311,8 +311,8 @@ function memberCardHTML(m) {
   const objPos = adj?.objectPosition || 'center 25%';
   const imgStyle = `style="object-position:${objPos}"`;
   const avatarContent = m.photoUrl
-    ? `<div class="m-avatar-photo" style="border-color:${fc}"><img src="${esc(m.photoUrl)}" alt="${esc(m.name)}" ${imgStyle} onerror="this.parentElement.innerHTML='<div class=m-avatar-fb style=background:${fc}>${initial}</div>'"></div>`
-    : `<div class="m-avatar" style="background:${fc}">${initial}</div>`;
+    ? `<div class="m-avatar-photo" style="border-color:${fc}"><img src="${esc(m.photoUrl)}" alt="${esc(m.name)}" ${imgStyle} loading="lazy" onerror="this.parentElement.outerHTML='<div class=m-avatar style=&quot;background-color:${fc}&quot;>${initial}</div>'"></div>`
+    : `<div class="m-avatar" style="background-color:${fc}">${initial}</div>`;
 
   return `<div class="m-card${isRep ? ' is-rep' : ''}" data-name="${esc(m.name)}" data-faction="${esc(p.faction || '')}" onclick="showDetail('${esc(m.name)}')">
     ${isRep ? '<div class="rep-badge">会派代表</div>' : ''}
@@ -340,8 +340,8 @@ function memberDetailHTML(m) {
   const objPos2 = adj2?.objectPosition || 'center 25%';
   const imgStyle2 = `style="object-position:${objPos2}"`;
   const avatarContent = m.photoUrl
-    ? `<div class="detail-avatar-photo" style="border-color:${fc}"><img src="${esc(m.photoUrl)}" alt="${esc(m.name)}" ${imgStyle2} onerror="this.parentElement.innerHTML='<div class=detail-avatar style=background:${fc}>${initial}</div>'"></div>`
-    : `<div class="detail-avatar" style="background:${fc}">${initial}</div>`;
+    ? `<div class="detail-avatar-photo" style="border-color:${fc}"><img src="${esc(m.photoUrl)}" alt="${esc(m.name)}" ${imgStyle2} loading="lazy" onerror="this.parentElement.outerHTML='<div class=detail-avatar style=&quot;background-color:${fc}&quot;>${initial}</div>'"></div>`
+    : `<div class="detail-avatar" style="background-color:${fc}">${initial}</div>`;
 
   // 動画リスト（質問を箇条書きで常に表示）
   const videoItems = m.videos
@@ -1079,6 +1079,41 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
 .voice-intro{background:linear-gradient(135deg,#2563eb10,#1d4ed810);border-left:4px solid var(--accent);padding:1rem 1.2rem;border-radius:12px;margin-bottom:1rem}
 .voice-intro h3{font-size:1rem;color:var(--accent);margin-bottom:.5rem}
 .voice-intro p{font-size:.85rem;color:#444;line-height:1.6}
+
+/* 市民の声ヒーロー（街への投稿促進） */
+.voice-hero{background:linear-gradient(135deg,#0a0a0a 0%,#312e81 100%);color:#fff;border-radius:24px;padding:3rem 2rem;margin-bottom:1.5rem;text-align:center;position:relative;overflow:hidden}
+.voice-hero::before{content:'';position:absolute;top:-30%;right:-15%;width:500px;height:500px;background:radial-gradient(circle,rgba(34,197,94,.2),transparent 70%);pointer-events:none}
+.voice-hero::after{content:'';position:absolute;bottom:-30%;left:-15%;width:500px;height:500px;background:radial-gradient(circle,rgba(245,158,11,.18),transparent 70%);pointer-events:none}
+.voice-hero-inner{position:relative;z-index:1;max-width:720px;margin:0 auto}
+.voice-hero-title{font-size:1.7rem;font-weight:800;line-height:1.5;margin-bottom:1rem;letter-spacing:-.01em}
+.voice-accent-good{color:#86efac;text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:6px;text-decoration-color:rgba(134,239,172,.4)}
+.voice-accent-bad{color:#fbbf24;text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:6px;text-decoration-color:rgba(251,191,36,.4)}
+.voice-hero-sub{font-size:.95rem;color:rgba(255,255,255,.85);line-height:1.7;margin-bottom:1.8rem}
+.voice-cta-buttons{display:flex;gap:.7rem;justify-content:center;flex-wrap:wrap}
+.voice-cta-btn{padding:.85rem 1.5rem;border:none;border-radius:999px;font-size:.92rem;font-weight:700;cursor:pointer;transition:transform .15s,box-shadow .2s;box-shadow:0 4px 14px rgba(0,0,0,.2)}
+.voice-cta-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.3)}
+.voice-cta-good{background:#22c55e;color:#fff}
+.voice-cta-improve{background:#f59e0b;color:#fff}
+.voice-cta-idea{background:#3b82f6;color:#fff}
+@media(max-width:640px){.voice-hero{padding:2rem 1.2rem}.voice-hero-title{font-size:1.3rem}.voice-cta-btn{font-size:.82rem;padding:.7rem 1.2rem}}
+
+/* フィルター */
+.voice-filters{background:#fff;border:1px solid var(--border);border-radius:14px;padding:1rem 1.2rem;margin-bottom:1rem;box-shadow:var(--shadow-sm)}
+.voice-filter-row{display:flex;gap:.7rem;align-items:center;flex-wrap:wrap;margin-bottom:.7rem}
+.voice-filter-row:last-child{margin-bottom:0}
+.voice-filter-label{font-size:.78rem;font-weight:700;color:var(--sub);min-width:5rem}
+.voice-filter-pills{display:flex;gap:.4rem;flex-wrap:wrap}
+.voice-pill{padding:.4rem .85rem;border:1px solid var(--border);border-radius:999px;background:#fff;font-size:.78rem;font-weight:600;cursor:pointer;color:var(--sub);transition:.15s}
+.voice-pill:hover{border-color:#0f172a;color:var(--text)}
+.voice-pill.active{background:#0f172a;color:#fff;border-color:#0f172a}
+.voice-refresh-btn{padding:.5rem .9rem;border:1px solid var(--border);border-radius:8px;background:#fff;font-size:.8rem;font-weight:600;cursor:pointer}
+.voice-refresh-btn:hover{background:#f1f5f9}
+
+/* 投稿タイプバッジ */
+.voice-type-badge{display:inline-block;padding:.15rem .5rem;border-radius:999px;font-size:.7rem;font-weight:700;margin-right:.4rem}
+.voice-type-good{background:#dcfce7;color:#15803d}
+.voice-type-improve{background:#fef3c7;color:#92400e}
+.voice-type-idea{background:#dbeafe;color:#1e40af}
 .voice-actions{display:flex;gap:.6rem;margin-bottom:1rem;flex-wrap:wrap;align-items:center}
 .voice-btn-post{padding:.7rem 1.5rem;border:none;border-radius:10px;background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;font-weight:700;cursor:pointer;font-size:.92rem;box-shadow:0 2px 8px rgba(37,99,235,.3)}
 .voice-btn-post:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(37,99,235,.4)}
@@ -2374,33 +2409,55 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
     `}
   </div>
   <div id="tab-voice" class="tab-panel">
-    <div class="voice-intro">
-      <h3>💬 市民の声 — 伊東市政への提案・問題提起</h3>
-      <p>伊東市の道路・福祉・観光・教育・防災など、市政について感じていることを匿名で投稿できます。投稿は運営者(大竹圭)の確認後に公開されます。建設的な議論の場として、ぜひご活用ください。</p>
+    <div class="voice-hero">
+      <div class="voice-hero-inner">
+        <h2 class="voice-hero-title">伊東市の <span class="voice-accent-good">好きなところ</span> も、<br><span class="voice-accent-bad">もっと良くなってほしいところ</span> も。</h2>
+        <p class="voice-hero-sub">あなたの「街への思い」を、ここに残してください。<br>集まった声は、議会や行政に届ける材料として活用させていただきます。</p>
+        <div class="voice-cta-buttons">
+          <button class="voice-cta-btn voice-cta-good" onclick="openVoiceModal('good')">👍 街の良いところを投稿</button>
+          <button class="voice-cta-btn voice-cta-improve" onclick="openVoiceModal('improve')">💡 改善してほしいことを投稿</button>
+          <button class="voice-cta-btn voice-cta-idea" onclick="openVoiceModal('idea')">💭 アイデア・提案を投稿</button>
+        </div>
+      </div>
     </div>
-    <div class="voice-actions">
-      <button class="voice-btn-post" onclick="openVoiceModal()">＋ 新しい投稿</button>
-      <select class="voice-cat-filter" id="voice-cat" onchange="renderVoices()">
-        <option value="">全カテゴリ</option>
-        <option value="道路・交通">道路・交通</option>
-        <option value="福祉・医療">福祉・医療</option>
-        <option value="教育・子育て">教育・子育て</option>
-        <option value="観光・経済">観光・経済</option>
-        <option value="防災・安全">防災・安全</option>
-        <option value="環境・衛生">環境・衛生</option>
-        <option value="行政サービス">行政サービス</option>
-        <option value="その他">その他</option>
-      </select>
-      <button class="voice-cat-filter" onclick="loadVoices()">🔄 更新</button>
+
+    <div class="voice-filters">
+      <div class="voice-filter-row">
+        <label class="voice-filter-label">投稿タイプ</label>
+        <div class="voice-filter-pills" id="voice-type-pills">
+          <button class="voice-pill active" data-type="" onclick="filterVoiceType(this)">すべて</button>
+          <button class="voice-pill" data-type="good" onclick="filterVoiceType(this)">👍 良いところ</button>
+          <button class="voice-pill" data-type="improve" onclick="filterVoiceType(this)">💡 改善希望</button>
+          <button class="voice-pill" data-type="idea" onclick="filterVoiceType(this)">💭 アイデア</button>
+        </div>
+      </div>
+      <div class="voice-filter-row">
+        <label class="voice-filter-label">分野</label>
+        <select class="voice-cat-filter" id="voice-cat" onchange="renderVoices()">
+          <option value="">すべての分野</option>
+          <option value="道路・交通">🚗 道路・交通</option>
+          <option value="福祉・医療">🏥 福祉・医療</option>
+          <option value="教育・子育て">🧒 教育・子育て</option>
+          <option value="観光・経済">🏖️ 観光・経済</option>
+          <option value="防災・安全">🛡️ 防災・安全</option>
+          <option value="環境・衛生">🌳 環境・衛生</option>
+          <option value="行政サービス">🏛️ 行政サービス</option>
+          <option value="まちなみ・景観">🏘️ まちなみ・景観</option>
+          <option value="文化・スポーツ">🎨 文化・スポーツ</option>
+          <option value="その他">💬 その他</option>
+        </select>
+        <button class="voice-refresh-btn" onclick="loadVoices()">🔄 更新</button>
+      </div>
     </div>
+
     <div id="voice-list" class="voice-list">
       <div class="voice-loading">投稿を読み込み中...</div>
     </div>
 
-    <!-- サイト改善要望セクション -->
-    <div class="site-feedback-section">
-      <h3>💡 サイト改善要望</h3>
-      <p>「みんなの伊東市」をもっと使いやすくするためのご意見・ご要望をお寄せください。いただいたご意見は運営者が確認し、改善に活かしていきます。</p>
+    <!-- サイト改善要望（控えめに、下部へ） -->
+    <details class="site-feedback-section">
+      <summary>🛠️ このサイト自体への改善要望はこちら（クリックで開く）</summary>
+      <p>「みんなの伊東市」サイト自体への機能要望・不具合報告はこちらから（街への意見ではありません）。</p>
       <div class="site-feedback-form">
         <div class="modal-form-row">
           <label>カテゴリ</label>
@@ -2419,13 +2476,14 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
         <button class="voice-btn-post" onclick="submitSiteFeedback()" id="site-fb-btn" style="width:100%;margin-top:.5rem">送信する</button>
         <div id="site-fb-result" style="display:none;margin-top:.6rem;padding:.6rem .8rem;border-radius:8px;font-size:.82rem"></div>
       </div>
-    </div>
+    </details>
   </div>
 
   <!-- 投稿モーダル -->
   <div class="modal-overlay" id="voice-modal">
     <div class="modal-box">
-      <h2>市政への投稿</h2>
+      <h2 id="voice-modal-title">街への投稿</h2>
+      <input type="hidden" id="voice-post-type" form="voice-form" value="good">
       <div class="modal-rules">
         <strong>⚠ 投稿前に必ずお読みください</strong>
         以下の内容を含む投稿は<strong>削除・通報の対象</strong>となります：
@@ -3631,30 +3689,58 @@ async function loadVoices(){
     list.innerHTML='<div class="voice-empty">投稿の読み込みに失敗しました。バックエンドが設定されていない可能性があります。<br><small>'+escHtml(e.message)+'</small></div>';
   }
 }
+let voiceTypeFilter='';
+function filterVoiceType(btn){
+  document.querySelectorAll('#voice-type-pills .voice-pill').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  voiceTypeFilter=btn.dataset.type||'';
+  renderVoices();
+}
 function renderVoices(){
   const list=document.getElementById('voice-list');
   const cat=document.getElementById('voice-cat').value;
-  const filtered=cat?voiceData.filter(v=>v.category===cat):voiceData;
+  let filtered=voiceData;
+  if(cat) filtered=filtered.filter(v=>v.category===cat);
+  if(voiceTypeFilter) filtered=filtered.filter(v=>(v.postType||'')===voiceTypeFilter);
   if(filtered.length===0){
-    list.innerHTML='<div class="voice-empty">まだ投稿はありません。最初の投稿をしてみませんか？</div>';
+    list.innerHTML='<div class="voice-empty">まだ投稿はありません。<br>あなたの「街への思い」を最初に投稿してみませんか？</div>';
     return;
   }
   list.innerHTML=filtered.map(v=>{
     const col=VOICE_CAT_COLORS[v.category]||'#95a5a6';
+    const typeLabels={good:'👍 良いところ',improve:'💡 改善希望',idea:'💭 アイデア'};
+    const typeBadge=v.postType?'<span class="voice-type-badge voice-type-'+v.postType+'">'+typeLabels[v.postType]+'</span>':'';
     return '<div class="voice-item" style="border-left-color:'+col+'">'
-      +'<div class="voice-item-head"><span class="voice-cat-pill" style="background:'+col+'">'+escHtml(v.category)+'</span></div>'
+      +'<div class="voice-item-head">'+typeBadge+'<span class="voice-cat-pill" style="background:'+col+'">'+escHtml(v.category)+'</span></div>'
       +'<div class="voice-title">'+escHtml(v.title)+'</div>'
       +'<div class="voice-body">'+escHtml(v.body)+'</div>'
       +'<div class="voice-meta"><span>— '+escHtml(v.nickname||'匿名')+'さん</span>'+(v.area?'<span>'+escHtml(v.area)+'</span>':'')+'<span>'+escHtml(v.date)+'</span></div>'
       +'</div>';
   }).join('');
 }
-function openVoiceModal(){
+function openVoiceModal(postType){
   document.getElementById('voice-modal').classList.add('open');
   document.getElementById('voice-msg').innerHTML='';
   document.getElementById('voice-form').reset();
   document.getElementById('tc').textContent='0/50';
   document.getElementById('bc').textContent='0/500';
+  // 投稿タイプを反映（隠しフィールドにセット、見出しを変更）
+  const typeInput=document.getElementById('voice-post-type');
+  const titleEl=document.getElementById('voice-modal-title');
+  const placeholders={
+    good:'伊東市の好きなところ・自慢したいこと',
+    improve:'もっと良くしたいところ・困っていること',
+    idea:'こんな取り組みがあったら良いというアイデア',
+  };
+  const titles={
+    good:'👍 街の良いところを投稿',
+    improve:'💡 改善してほしいことを投稿',
+    idea:'💭 アイデア・提案を投稿',
+  };
+  if(typeInput) typeInput.value=postType||'good';
+  if(titleEl) titleEl.textContent=titles[postType]||'街への投稿';
+  const titleField=document.querySelector('#voice-form input[name=\"title\"]');
+  if(titleField) titleField.placeholder=placeholders[postType]||'タイトル';
 }
 function closeVoiceModal(){
   document.getElementById('voice-modal').classList.remove('open');
@@ -3671,6 +3757,7 @@ async function submitVoice(e){
   msg.innerHTML='<div class="modal-msg">送信中...</div>';
   const fd=new FormData(form);
   const payload={
+    postType:(document.getElementById('voice-post-type')||{}).value||'good',
     category:fd.get('category'),
     title:fd.get('title'),
     body:fd.get('body'),
