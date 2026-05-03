@@ -54,10 +54,28 @@ header h1{font-size:2.2rem;font-weight:900;letter-spacing:-.02em;line-height:1.2
 .header-credit{color:var(--sub);font-size:.72rem;margin-top:.5rem}
 nav{display:flex;justify-content:flex-start;gap:.4rem;padding:.7rem 1.2rem;background:rgba(255,255,255,.85);backdrop-filter:saturate(180%) blur(12px);-webkit-backdrop-filter:saturate(180%) blur(12px);position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 nav::-webkit-scrollbar{display:none}
-nav button{padding:.55rem 1.1rem;border:none;border-radius:999px;font-size:.85rem;font-weight:600;cursor:pointer;transition:.2s;background:transparent;color:var(--sub);white-space:nowrap;flex-shrink:0;position:relative}
+nav button{padding:.55rem 1.1rem;border:1.5px solid transparent;border-radius:999px;font-size:.85rem;font-weight:700;cursor:pointer;transition:all .2s;background:transparent;color:var(--sub);white-space:nowrap;flex-shrink:0;position:relative}
 nav button:hover{background:#f1f5f9;color:var(--text)}
 nav button.active{color:#fff;background:var(--accent)}
 nav button.active::after{display:none}
+
+/* タブごとの色分け（カラーコーディング） */
+/* 議員一覧 = 青系（信頼・人物） */
+.nav-tab.nav-blue{color:#1e40af}
+.nav-tab.nav-blue:hover{background:#dbeafe;border-color:#93c5fd;color:#1e3a8a}
+.nav-tab.nav-blue.active{background:#2563eb;color:#fff;border-color:#2563eb;box-shadow:0 4px 12px rgba(37,99,235,.3)}
+/* テーマから探す = 紫系（探索・発見） */
+.nav-tab.nav-purple{color:#6d28d9}
+.nav-tab.nav-purple:hover{background:#ede9fe;border-color:#c4b5fd;color:#5b21b6}
+.nav-tab.nav-purple.active{background:#7c3aed;color:#fff;border-color:#7c3aed;box-shadow:0 4px 12px rgba(124,58,237,.3)}
+/* 市民の声 = 緑系（コミュニティ） */
+.nav-tab.nav-green{color:#047857}
+.nav-tab.nav-green:hover{background:#d1fae5;border-color:#6ee7b7;color:#065f46}
+.nav-tab.nav-green.active{background:#10b981;color:#fff;border-color:#10b981;box-shadow:0 4px 12px rgba(16,185,129,.3)}
+/* 市政に参加する = オレンジ系（行動） */
+.nav-tab.nav-orange{color:#c2410c}
+.nav-tab.nav-orange:hover{background:#fed7aa;border-color:#fdba74;color:#9a3412}
+.nav-tab.nav-orange.active{background:#f97316;color:#fff;border-color:#f97316;box-shadow:0 4px 12px rgba(249,115,22,.3)}
 /* サブメニュー（もっと見る） */
 .nav-more-wrap{position:relative;margin-left:auto;flex-shrink:0}
 .nav-more-btn{padding:.55rem 1.1rem;border:1px solid var(--border);border-radius:999px;font-size:.85rem;font-weight:600;cursor:pointer;background:#fff;color:#475569;transition:.15s}
@@ -938,7 +956,12 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
 .participate-hero::before{content:'';position:absolute;top:-50%;right:-20%;width:600px;height:600px;background:radial-gradient(circle,rgba(16,185,129,.25),transparent 70%);pointer-events:none}
 .participate-hero-badge{display:inline-block;background:rgba(255,255,255,.2);padding:.3rem .8rem;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:.8rem}
 .participate-hero h1{font-size:1.6rem;margin-bottom:.6rem;font-weight:800}
-.participate-hero p{font-size:.95rem;opacity:.95;line-height:1.75;max-width:720px;margin:0 auto}
+.participate-hero p{font-size:.95rem;opacity:.95;line-height:1.75;max-width:720px;margin:0 auto 1.2rem}
+.participate-hero h1{position:relative;z-index:1}
+.participate-hero p{position:relative;z-index:1}
+.participate-quicklinks{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;position:relative;z-index:1;margin-top:1.2rem}
+.pql-btn{display:inline-block;padding:.55rem 1.1rem;background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:999px;font-size:.85rem;font-weight:700;text-decoration:none;transition:.15s;backdrop-filter:blur(8px)}
+.pql-btn:hover{background:rgba(255,255,255,.25);transform:translateY(-1px)}
 .participate-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1.2rem;margin-bottom:1.5rem}
 .pg-card{background:#fff;border-radius:14px;padding:1.5rem;box-shadow:0 2px 12px rgba(0,0,0,.06);border:1px solid #e2e8f0;transition:.2s}
 .pg-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.1)}
@@ -1301,10 +1324,10 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
   <div class="header-credit">制作・運営: <wbr>伊東市議会議員 大竹圭</div>
 </header>
 <nav role="tablist" aria-label="メインナビゲーション">
-  <button class="active" role="tab" aria-selected="true" onclick="switchTab('members',this)">👥 議員一覧</button>
-  <button role="tab" aria-selected="false" onclick="switchTab('themes',this)">🔍 テーマから探す</button>
-  <button role="tab" aria-selected="false" onclick="switchTab('voice',this)">💬 市民の声</button>
-  <button role="tab" aria-selected="false" onclick="switchTab('participate',this)">🗣️ 参加する</button>
+  <button class="active nav-tab nav-blue" role="tab" aria-selected="true" onclick="switchTab('members',this)">👥 議員一覧</button>
+  <button class="nav-tab nav-purple" role="tab" aria-selected="false" onclick="switchTab('themes',this)">🔍 テーマから探す</button>
+  <button class="nav-tab nav-green" role="tab" aria-selected="false" onclick="switchTab('voice',this)">💬 市民の声</button>
+  <button class="nav-tab nav-orange" role="tab" aria-selected="false" onclick="switchTab('participate',this)">🗳️ 市政に参加する</button>
   <div class="nav-more-wrap">
     <button class="nav-more-btn" onclick="toggleNavMore(event)" aria-haspopup="true" aria-expanded="false">⋯ もっと見る</button>
     <div class="nav-more-menu" id="nav-more-menu" role="menu">
@@ -21814,13 +21837,19 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
 
   <div id="tab-participate" class="tab-panel">
     <div class="participate-hero">
-      <div class="participate-hero-badge">🗣️ 市民参加ガイド</div>
-      <h1>あなたの声を、市政に届けよう</h1>
-      <p>「みんなの伊東市」で見た議論に意見がある、気になる課題がある、直接議員・市役所に声を届けたい。そんな時に役立つ窓口・手続きをまとめました。</p>
+      <div class="participate-hero-badge">🗳️ 市政への関わり方ガイド</div>
+      <h1>意見を届ける／傍聴する／投票する</h1>
+      <p>市民としてできる「市政への関わり方」をまとめました。<br>パブリックコメントの提出、議会の傍聴、陳情・請願の手続き、選挙情報など、<strong>具体的な参加方法</strong>を案内します。</p>
+      <div class="participate-quicklinks">
+        <a href="#pg-pubcom" class="pql-btn">👂 意見を出す</a>
+        <a href="#pg-bocho" class="pql-btn">🏛️ 傍聴する</a>
+        <a href="#pg-chinjo" class="pql-btn">📜 陳情・請願</a>
+        <a href="#pg-vote" class="pql-btn">🗳️ 選挙情報</a>
+      </div>
     </div>
 
     <div class="participate-grid">
-      <div class="pg-card">
+      <div class="pg-card" id="pg-pubcom">
         <div class="pg-icon">👂</div>
         <h2>パブリックコメント</h2>
         <p class="pg-desc">市が新しい計画や条例案を作る時、市民から意見を募集する制度。誰でも（市内外問わず）意見を提出できます。</p>
@@ -21835,7 +21864,7 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
         <a href="https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/publiccomment/index.html" target="_blank" class="pg-btn">🔗 伊東市パブコメ募集案内</a>
       </div>
 
-      <div class="pg-card">
+      <div class="pg-card" id="pg-bocho">
         <div class="pg-icon">🏛️</div>
         <h2>議会を傍聴する</h2>
         <p class="pg-desc">本会議は誰でも傍聴できます。議場に実際に足を運んで、議員の発言を直接聞けます。オンライン中継でも視聴可能。</p>
@@ -21851,7 +21880,7 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
         <a href="https://www.city.ito.shizuoka.jp/gyosei/shiseijoho/itoshigikai/index.html" target="_blank" class="pg-btn pg-btn-sub">📅 議会日程・中継情報</a>
       </div>
 
-      <div class="pg-card">
+      <div class="pg-card" id="pg-chinjo">
         <div class="pg-icon">📝</div>
         <h2>陳情・請願</h2>
         <p class="pg-desc">市政や議会に対して希望を伝える正式な方法。請願は議員の紹介が必要、陳情は紹介なしで誰でも提出可能。</p>
@@ -21882,7 +21911,7 @@ footer{text-align:center;padding:1.5rem 1rem;color:var(--sub);font-size:.82rem}
         <a href="javascript:void(0)" onclick="switchTab('voice',document.querySelector('nav button:nth-child(6)'))" class="pg-btn pg-btn-sub">💬 市民の声で投稿</a>
       </div>
 
-      <div class="pg-card">
+      <div class="pg-card" id="pg-vote">
         <div class="pg-icon">🗳️</div>
         <h2>選挙で意思表示</h2>
         <p class="pg-desc">最も強い市民参加の方法は、選挙で投票すること。市議会議員は4年に1度、市長は4年に1度の選挙です。</p>
