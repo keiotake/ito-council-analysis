@@ -16,7 +16,16 @@ try {
     // 大竹圭の photo_url は全身写真のため、election_photo_url（顔アップ）を使用
     '大竹圭': 'election_photo_url',
   };
+  // 写真が中途半端で見にくいため、苗字の頭文字表示に切り替える議員
+  const useFallbackAvatar = new Set([
+    '大川勝弘', '河島紀美恵', '重岡秀子', '片桐基至',
+    '佐藤周', '中島弘道', '井戸清司',
+  ]);
   for (const [name, data] of Object.entries(rawPhotos)) {
+    if (useFallbackAvatar.has(name)) {
+      photos[name] = '';  // 強制的にフォールバック（苗字頭文字）に
+      continue;
+    }
     const override = photoUrlOverrides[name];
     if (override && data[override]) {
       photos[name] = data[override];
@@ -30,14 +39,7 @@ try {
 // 形式: { name: { objectPosition: 'center 20%', scale: 1.2 } }
 // デフォルトは 'center 25%'（顔が上部にある肖像写真を想定）
 const photoAdjustments = {
-  // 顔が中途半端に見切れる議員（フィードバック対応）
-  '大川勝弘': { objectPosition: 'center 18%', scale: 1.15 },
-  '河島紀美恵': { objectPosition: 'center 18%', scale: 1.15 },
-  '重岡秀子': { objectPosition: 'center 18%', scale: 1.15 },
-  '片桐基至': { objectPosition: 'center 18%', scale: 1.15 },
-  '佐藤周': { objectPosition: 'center 18%', scale: 1.15 },
-  '中島弘道': { objectPosition: 'center 18%', scale: 1.15 },
-  '井戸清司': { objectPosition: 'center 18%', scale: 1.15 },
+  // 必要に応じて個別調整を追加
 };
 let responsesData = null;
 try { responsesData = JSON.parse(fs.readFileSync('analysis_with_responses.json', 'utf-8')); } catch(e) {}
