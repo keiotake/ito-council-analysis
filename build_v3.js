@@ -1205,7 +1205,8 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
 .voice-cta-good{background:#22c55e;color:#fff}
 .voice-cta-improve{background:#f59e0b;color:#fff}
 .voice-cta-idea{background:#3b82f6;color:#fff}
-@media(max-width:640px){.voice-hero{padding:2rem 1.2rem}.voice-hero-title{font-size:1.3rem}.voice-cta-btn{font-size:.82rem;padding:.7rem 1.2rem}}
+.voice-hero-note{margin-top:1.2rem;font-size:.78rem;color:rgba(255,255,255,.7);letter-spacing:.02em}
+@media(max-width:640px){.voice-hero{padding:2rem 1.2rem}.voice-hero-title{font-size:1.3rem}.voice-cta-btn{font-size:.82rem;padding:.7rem 1.2rem}.voice-hero-note{font-size:.72rem;margin-top:.9rem}}
 
 /* フィルター */
 .voice-filters{background:#fff;border:1px solid var(--border);border-radius:14px;padding:1rem 1.2rem;margin-bottom:1rem;box-shadow:var(--shadow-sm)}
@@ -2581,11 +2582,25 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
     `}
   </div>
   <div id="tab-voice" class="tab-panel">
-    <!-- 安全ガイドライン（最初に表示・折りたたみ式） -->
-    <details class="safety-guide" open>
+    <!-- 投稿フォームを先に表示してすぐコメントできるように -->
+    <div class="voice-hero">
+      <div class="voice-hero-inner">
+        <h2 class="voice-hero-title">伊東市の <span class="voice-accent-good">好きなところ</span> も、<wbr><span class="voice-accent-bad">もっと良くなってほしいところ</span> も。</h2>
+        <p class="voice-hero-sub">あなたの「街への思い」を、ここに残してください。<wbr>集まった声は、議会や行政に届ける材料として活用させていただきます。</p>
+        <div class="voice-cta-buttons">
+          <button class="voice-cta-btn voice-cta-good" onclick="openVoiceModal('good')">👍 街の良いところを投稿</button>
+          <button class="voice-cta-btn voice-cta-improve" onclick="openVoiceModal('improve')">💡 改善してほしいことを投稿</button>
+          <button class="voice-cta-btn voice-cta-idea" onclick="openVoiceModal('idea')">💭 アイデア・提案を投稿</button>
+        </div>
+        <p class="voice-hero-note">投稿はすべて運営者（大竹圭）が確認した上で公開されます</p>
+      </div>
+    </div>
+
+    <!-- 投稿前確認ガイドライン（折りたたみ式・初期は閉じている） -->
+    <details class="safety-guide">
       <summary class="safety-guide-summary">
-        <span class="sg-icon">🛡️</span>
-        <span class="sg-title">安心して使える場にするために — 投稿前にお読みください</span>
+        <span class="sg-icon">📋</span>
+        <span class="sg-title">投稿する前に必ずご確認ください<small style="display:block;font-size:.72rem;font-weight:500;color:#7a5a00;margin-top:.15rem">違法投稿への対応・刑事罰・賠償額・公開基準など</small></span>
         <span class="sg-arrow">▼</span>
       </summary>
       <div class="safety-guide-body">
@@ -2665,18 +2680,6 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
         <p class="sg-footer">本ガイドラインは、市民が安心して声を届けられる場を守るために設けています。<strong>建設的な対話</strong>の場として、ご理解とご協力をお願いいたします。</p>
       </div>
     </details>
-
-    <div class="voice-hero">
-      <div class="voice-hero-inner">
-        <h2 class="voice-hero-title">伊東市の <span class="voice-accent-good">好きなところ</span> も、<wbr><span class="voice-accent-bad">もっと良くなってほしいところ</span> も。</h2>
-        <p class="voice-hero-sub">あなたの「街への思い」を、ここに残してください。<wbr>集まった声は、議会や行政に届ける材料として活用させていただきます。</p>
-        <div class="voice-cta-buttons">
-          <button class="voice-cta-btn voice-cta-good" onclick="openVoiceModal('good')">👍 街の良いところを投稿</button>
-          <button class="voice-cta-btn voice-cta-improve" onclick="openVoiceModal('improve')">💡 改善してほしいことを投稿</button>
-          <button class="voice-cta-btn voice-cta-idea" onclick="openVoiceModal('idea')">💭 アイデア・提案を投稿</button>
-        </div>
-      </div>
-    </div>
 
     <div class="voice-filters">
       <div class="voice-filter-row">
