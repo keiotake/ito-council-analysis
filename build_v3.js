@@ -2123,7 +2123,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
 <div class="welcome-overlay" id="welcome-overlay" style="display:none">
   <div class="welcome-box">
     <h2>ようこそ「みんなの伊東市」へ</h2>
-    <p class="welcome-sub">伊東市議会の議論を、市民にわかりやすく。<br>気になるテーマや議員の発言を検索できます。</p>
+    <p class="welcome-sub">伊東市議会の議論を、市民にわかりやすく。<wbr>気になるテーマや議員の発言を検索できます。</p>
     <div class="welcome-cards">
       <div class="welcome-card" onclick="welcomeGo('members')">
         <div class="welcome-card-icon">👥</div>
@@ -2745,8 +2745,8 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
 
     <div class="voice-hero">
       <div class="voice-hero-inner">
-        <h2 class="voice-hero-title">伊東市の <span class="voice-accent-good">好きなところ</span> も、<br><span class="voice-accent-bad">もっと良くなってほしいところ</span> も。</h2>
-        <p class="voice-hero-sub">あなたの「街への思い」を、ここに残してください。<br>集まった声は、議会や行政に届ける材料として活用させていただきます。</p>
+        <h2 class="voice-hero-title">伊東市の <span class="voice-accent-good">好きなところ</span> も、<wbr><span class="voice-accent-bad">もっと良くなってほしいところ</span> も。</h2>
+        <p class="voice-hero-sub">あなたの「街への思い」を、ここに残してください。<wbr>集まった声は、議会や行政に届ける材料として活用させていただきます。</p>
         <div class="voice-cta-buttons">
           <button class="voice-cta-btn voice-cta-good" onclick="openVoiceModal('good')">👍 街の良いところを投稿</button>
           <button class="voice-cta-btn voice-cta-improve" onclick="openVoiceModal('improve')">💡 改善してほしいことを投稿</button>
@@ -2900,7 +2900,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
     <div class="participate-hero">
       <div class="participate-hero-badge">🗳️ 市政への関わり方ガイド</div>
       <h1>意見を届ける／傍聴する／投票する</h1>
-      <p>市民としてできる「市政への関わり方」をまとめました。<br>パブリックコメントの提出、議会の傍聴、陳情・請願の手続き、選挙情報など、<strong>具体的な参加方法</strong>を案内します。</p>
+      <p>市民としてできる「市政への関わり方」をまとめました。<wbr>パブリックコメントの提出、議会の傍聴、陳情・請願の手続き、選挙情報など、<strong>具体的な参加方法</strong>を案内します。</p>
       <div class="participate-quicklinks">
         <a href="#pg-pubcom" class="pql-btn">👂 意見を出す</a>
         <a href="#pg-bocho" class="pql-btn">🏛️ 傍聴する</a>
@@ -3139,8 +3139,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
       <div class="mp-hero-inner">
         <div class="mp-hero-badge">💼 議員専用窓口</div>
         <h1>議員の皆さまへ</h1>
-        <p>本サイトに掲載されているご自身の情報について、修正・追加・削除のご依頼を承ります。<br>
-        運営者（伊東市議会議員 大竹圭）が直接対応いたしますので、お気軽にご連絡ください。</p>
+        <p>本サイトに掲載されているご自身の情報について、修正・追加・削除のご依頼を承ります。<wbr>運営者（伊東市議会議員 大竹圭）が直接対応いたしますので、お気軽にご連絡ください。</p>
         <a href="mailto:ka@oh-life.co.jp?subject=【みんなの伊東市】議員からの連絡&body=お名前（議員名）：%0D%0A%0D%0Aご依頼内容（追加・修正・削除・写真提供など）：%0D%0A%0D%0A詳細：%0D%0A" class="mp-cta-btn">📧 ka@oh-life.co.jp にメールで連絡</a>
       </div>
     </div>
