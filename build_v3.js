@@ -734,23 +734,15 @@ body.high-contrast button,body.high-contrast .pg-btn,body.high-contrast .qe-acti
 .a11y-btn:hover{background:rgba(255,255,255,.2)}
 body{font-family:var(--font-en),var(--font-jp);background:var(--bg);color:var(--text);line-height:1.75;-webkit-text-size-adjust:100%;letter-spacing:.01em;font-feature-settings:'palt' 1}
 h1,h2,h3{letter-spacing:-.01em;font-weight:800}
-/* シネマティックなヒーローヘッダー（リアルな海中映像） */
-.hero-header{position:relative;min-height:clamp(420px,52vw,560px);background:#001a2e;color:#fff;overflow:hidden}
+/* シネマティックなヒーローヘッダー（伊東の山並み・自然風景） */
+.hero-header{position:relative;min-height:clamp(460px,58vw,620px);background:#3d5f4a;color:#fff;overflow:hidden}
 .hero-bg{position:absolute;inset:0;z-index:0}
-/* 動画読み込み前のフォールバック（深海グラデーション） */
-.hero-bg-img{position:absolute;inset:0;background:
-  radial-gradient(ellipse at 50% -20%,rgba(120,220,255,.55),transparent 55%),
-  linear-gradient(180deg,#0e7490 0%,#075985 30%,#0c4a6e 60%,#082f49 85%,#001a2e 100%);
-  z-index:0}
-/* 海中ビデオ（フルブリード／ループ／ミュート）＋ポスターでも美しい */
-.hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;animation:hero-video-fade 1.6s ease-out;background:#001a2e url('hero-ocean-poster.jpg') center/cover no-repeat}
-@keyframes hero-video-fade{from{opacity:.6}to{opacity:1}}
-/* 文字を読みやすくするオーバーレイ（青みのある暗膜） */
+/* 静止画背景（伊東の山並み） */
+.hero-bg-img{position:absolute;inset:0;background:url('hero-mountain.jpg') center/cover no-repeat,linear-gradient(180deg,#9bc7d8 0%,#8eb8a8 60%,#5a8062 100%);z-index:0}
+/* 文字を読みやすくするオーバーレイ（霞の質感を活かすため上下のみ暗く） */
 .hero-bg-overlay{position:absolute;inset:0;background:
-  linear-gradient(180deg,rgba(2,30,55,.35) 0%,rgba(2,30,55,.15) 30%,rgba(2,30,55,.55) 100%),
-  radial-gradient(ellipse at 50% 60%,transparent 30%,rgba(0,20,40,.35) 100%);
+  linear-gradient(180deg,rgba(8,30,20,.32) 0%,rgba(8,30,20,.08) 35%,rgba(8,30,20,.05) 60%,rgba(8,30,20,.45) 100%);
   z-index:1;pointer-events:none}
-@media(prefers-reduced-motion:reduce){.hero-video{display:none}}
 
 /* 上部バー（エディトリアル調のミニマルヘッダー） */
 .hero-topbar{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:center;padding:clamp(.8rem,2.5vw,1.4rem) clamp(1rem,4vw,2.5rem);gap:.5rem clamp(.8rem,3vw,2rem);flex-wrap:wrap;border-bottom:1px solid rgba(255,255,255,.12);min-width:0}
@@ -764,11 +756,12 @@ h1,h2,h3{letter-spacing:-.01em;font-weight:800}
 .hero-meta-name strong{font-weight:800;color:#fff;letter-spacing:.06em;margin-left:.25rem}
 
 /* ヒーロー中央コンテンツ */
-.hero-content{position:relative;z-index:2;text-align:center;padding:clamp(2.5rem,8vw,5rem) clamp(1rem,4vw,2rem) clamp(2.5rem,7vw,4.5rem);max-width:1100px;margin:0 auto}
-.hero-title-jp{font-size:clamp(1.65rem,7vw,4.5rem);font-weight:900;letter-spacing:-.02em;line-height:1.25;margin:0 0 clamp(1rem,3vw,1.5rem);color:#fff;text-shadow:0 4px 30px rgba(0,30,60,.7);animation:hero-fade-in 1.4s ease-out .2s both}
-.hero-title-jp .l1,.hero-title-jp .l2{display:inline-block}
-.hero-sub{font-size:clamp(.78rem,2.2vw,.95rem);color:rgba(240,250,255,.92);line-height:1.7;letter-spacing:.02em;text-shadow:0 2px 8px rgba(0,30,60,.5);animation:hero-fade-in 1.6s ease-out .4s both;display:flex;flex-direction:column;align-items:center;gap:.6rem;margin:0 auto;max-width:42rem}
-.hero-stats-inline{display:inline-block;padding:.35rem 1rem;background:rgba(255,255,255,.14);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.18);border-radius:999px;font-size:clamp(.7rem,1.8vw,.78rem);font-weight:600;white-space:nowrap}
+.hero-content{position:relative;z-index:2;text-align:center;padding:clamp(3.5rem,10vw,6.5rem) clamp(1rem,4vw,2rem) clamp(3rem,8vw,5rem);max-width:1100px;margin:0 auto}
+.hero-title-main{font-size:clamp(2.4rem,9.5vw,6.5rem);font-weight:900;letter-spacing:.04em;line-height:1.15;margin:0 0 clamp(.9rem,2.5vw,1.3rem);color:#fff;text-shadow:0 6px 40px rgba(0,30,15,.55),0 2px 14px rgba(0,30,15,.4);animation:hero-fade-in 1.4s ease-out .2s both}
+.hero-title-main .tm-prefix{display:block;font-size:.45em;font-weight:600;letter-spacing:.32em;opacity:.85;margin-bottom:.3em;text-shadow:0 2px 14px rgba(0,30,15,.5)}
+.hero-title-main .tm-jp{display:block}
+.hero-sub{font-size:clamp(.78rem,2.2vw,.95rem);color:rgba(245,255,250,.95);line-height:1.7;letter-spacing:.04em;text-shadow:0 2px 10px rgba(0,30,15,.6);animation:hero-fade-in 1.6s ease-out .4s both;display:flex;flex-direction:column;align-items:center;gap:.6rem;margin:0 auto;max-width:42rem}
+.hero-stats-inline{display:inline-block;padding:.4rem 1.1rem;background:rgba(255,255,255,.16);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.25);border-radius:999px;font-size:clamp(.7rem,1.8vw,.78rem);font-weight:600;white-space:nowrap}
 @keyframes hero-fade-in{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 
 .hero-header .header-visitors{position:absolute;bottom:.6rem;right:1.2rem;z-index:2;font-size:.7rem;color:rgba(255,255,255,.8)}
@@ -2080,25 +2073,11 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
   </div>
   <div class="hero-bg">
     <div class="hero-bg-img"></div>
-    <video class="hero-video" id="hero-video" autoplay muted loop playsinline preload="auto" poster="hero-ocean-poster.jpg?v=${Date.now()}" aria-hidden="true">
-      <source src="hero-ocean-v2.mp4?v=${Date.now()}" type="video/mp4">
-    </video>
-    <script>(function(){
-      var v=document.getElementById('hero-video');if(!v)return;
-      v.muted=true;v.defaultMuted=true;v.setAttribute('muted','');v.setAttribute('playsinline','');
-      var attempt=function(){var p=v.play();if(p&&p.catch)p.catch(function(){})};
-      if(v.readyState>=2){attempt()}else{v.addEventListener('loadeddata',attempt,{once:true})}
-      ['click','touchstart','scroll','keydown'].forEach(function(ev){
-        document.addEventListener(ev,function once(){attempt();document.removeEventListener(ev,once)},{passive:true,once:true})
-      });
-      setTimeout(attempt,500);setTimeout(attempt,1500);
-    })();</script>
     <div class="hero-bg-overlay"></div>
   </div>
   <div class="hero-topbar">
     <div class="hero-brand">
       <span class="hero-brand-tag">Unofficial</span>
-      <div class="hero-logo">みんなの<span class="hero-logo-accent">伊東市</span></div>
     </div>
     <div class="hero-meta">
       <span class="hero-meta-label">Operated by</span>
@@ -2106,9 +2085,12 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
     </div>
   </div>
   <div class="hero-content">
-    <h1 class="hero-title-jp">伊東を、<br>もっと身近に。</h1>
-    <p class="hero-sub">市民と議会をつなぐ、街の対話プラットフォーム<br>
-      <span class="hero-stats-inline">${currentMembersList.length}名の議員 ｜ ${videos.length}本の議会動画</span>
+    <h1 class="hero-title-main">
+      <span class="tm-prefix">MINNA NO ITO-SHI</span>
+      <span class="tm-jp">みんなの伊東市</span>
+    </h1>
+    <p class="hero-sub">議員活動報告 ／ 議会情報のまとめサイト
+      <span class="hero-stats-inline">在任議員${currentMembersList.length}名 ｜ 議会動画${videos.length}本</span>
     </p>
   </div>
   <div class="header-visitors" id="visitor-counter" style="display:none">
