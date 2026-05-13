@@ -1162,6 +1162,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
 .voice-accent-good{color:#86efac;text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:6px;text-decoration-color:rgba(134,239,172,.4)}
 .voice-accent-bad{color:#fbbf24;text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:6px;text-decoration-color:rgba(251,191,36,.4)}
 .voice-hero-sub{font-size:.95rem;color:rgba(255,255,255,.85);line-height:1.7;margin-bottom:1.8rem}
+.voice-hero-sub .vhs-line{display:block}
 .voice-cta-buttons{display:flex;gap:.7rem;justify-content:center;flex-wrap:wrap}
 .voice-cta-btn{padding:.85rem 1.5rem;border:none;border-radius:999px;font-size:.92rem;font-weight:700;cursor:pointer;transition:transform .15s,box-shadow .2s;box-shadow:0 4px 14px rgba(0,0,0,.2)}
 .voice-cta-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.3)}
@@ -2538,7 +2539,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
     <div class="voice-hero">
       <div class="voice-hero-inner">
         <h2 class="voice-hero-title">伊東市の <span class="voice-accent-good">好きなところ</span> も、<wbr><span class="voice-accent-bad">もっと良くなってほしいところ</span> も。</h2>
-        <p class="voice-hero-sub">あなたの「街への思い」を、ここに残してください。<wbr>集まった声は、議会や行政に届ける材料として活用させていただきます。</p>
+        <p class="voice-hero-sub"><span class="vhs-line">あなたの「街への思い」を、ここに残してください。</span><span class="vhs-line">集まった声は、議会や行政に届ける材料として活用させていただきます。</span></p>
         <div class="voice-cta-buttons">
           <button class="voice-cta-btn voice-cta-good" onclick="openVoiceModal('good')">👍 街の良いところを投稿</button>
           <button class="voice-cta-btn voice-cta-improve" onclick="openVoiceModal('improve')">💡 改善してほしいことを投稿</button>
