@@ -112,6 +112,31 @@ h1,h2,h3{letter-spacing:-.01em;font-weight:800}
   .hero-brand-tag,.hero-meta-label{letter-spacing:.18em;padding-right:.4rem}
   .hero-meta-name strong{margin-left:.15rem}
 }
+
+/* ビジョンセクション（ヒーロー直下） */
+.vision-section{background:linear-gradient(180deg,#fafafa 0%,#fff 100%);padding:clamp(3rem,7vw,5rem) clamp(1rem,4vw,2rem);border-bottom:1px solid var(--border)}
+.vision-inner{max-width:1100px;margin:0 auto}
+.vision-badge{display:inline-block;font-family:var(--font-en);font-size:.7rem;font-weight:700;letter-spacing:.36em;color:#2563eb;background:rgba(37,99,235,.08);border:1px solid rgba(37,99,235,.2);border-radius:999px;padding:.4rem 1rem;margin-bottom:1.2rem}
+.vision-title{font-size:clamp(1.2rem,3.3vw,1.85rem);font-weight:800;letter-spacing:-.01em;line-height:1.55;color:#0a0a0a;margin:0 0 clamp(2rem,5vw,3rem);max-width:48rem}
+.vision-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(.8rem,2vw,1.5rem)}
+.vision-card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:clamp(1.3rem,2.5vw,1.8rem);box-shadow:0 1px 3px rgba(0,0,0,.04);transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease;position:relative;overflow:hidden}
+.vision-card:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,0,0,.08);border-color:rgba(37,99,235,.3)}
+.vision-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#2563eb,#7c3aed)}
+.vision-card .vc-num{font-family:var(--font-en);font-size:2.2rem;font-weight:200;color:rgba(37,99,235,.25);letter-spacing:-.02em;line-height:1;margin-bottom:.5rem}
+.vision-card .vc-label{font-family:var(--font-en);font-size:.7rem;font-weight:700;letter-spacing:.3em;color:#2563eb;margin-bottom:.3rem}
+.vision-card .vc-title{font-size:clamp(1.05rem,2.2vw,1.2rem);font-weight:800;color:#0a0a0a;margin-bottom:.7rem;letter-spacing:-.005em}
+.vision-card .vc-desc{font-size:clamp(.78rem,1.6vw,.85rem);color:#475569;line-height:1.75;margin:0}
+.hide-on-mobile{display:initial}
+@media(max-width:900px){
+  .vision-cards{grid-template-columns:1fr;gap:.9rem}
+  .vision-card{padding:1.3rem 1.4rem}
+  .vision-card .vc-num{font-size:1.8rem}
+}
+@media(max-width:640px){
+  .vision-section{padding:2.5rem 1rem 3rem}
+  .vision-title{font-size:1.15rem;line-height:1.55}
+  .hide-on-mobile{display:none}
+}
 .header-visitors{display:flex;justify-content:center;gap:.3rem;margin-top:.5rem;font-size:.72rem;color:var(--sub)}
 .header-visitors span{font-weight:700;color:var(--text)}
 .header-credit{color:var(--sub);font-size:.72rem;margin-top:.5rem}
@@ -1421,6 +1446,35 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
     <span id="vc-total">—</span> 人が訪問 ｜ 今日 <span id="vc-today">—</span> 人
   </div>
 </header>
+
+<!-- ビジョンステートメント（ヒーロー直下） -->
+<section class="vision-section">
+  <div class="vision-inner">
+    <div class="vision-badge">OUR VISION</div>
+    <h2 class="vision-title">市民の声を集め、伊東市の現状を可視化し、<br class="hide-on-mobile">これからをみんなで考える「場」へ。</h2>
+    <div class="vision-cards">
+      <div class="vision-card">
+        <div class="vc-num">01</div>
+        <div class="vc-label">COLLECT</div>
+        <div class="vc-title">市民の声を集める</div>
+        <p class="vc-desc">街の良いところ・改善してほしいこと・アイデアを、市民の皆さまから自由に投稿いただけます。集まった声は議会や行政に届ける材料として活用します。</p>
+      </div>
+      <div class="vision-card">
+        <div class="vc-num">02</div>
+        <div class="vc-label">ANALYZE</div>
+        <div class="vc-title">現状を定量的に可視化する</div>
+        <p class="vc-desc">人口推計・財政・観光・産業など、公的データに基づく客観的な「街の今」をわかりやすく見える化します。議会で何が議論されているかも整理します。</p>
+      </div>
+      <div class="vision-card">
+        <div class="vc-num">03</div>
+        <div class="vc-label">DISCUSS</div>
+        <div class="vc-title">打開策をみんなで考える</div>
+        <p class="vc-desc">市民の声と定量データを突き合わせ、「次に伊東市はどう動くべきか」を市民・議員・行政が一緒に考える土台にしたい——そんな思いで運営しています。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <nav role="tablist" aria-label="メインナビゲーション">
   <button class="active nav-tab nav-blue" role="tab" aria-selected="true" onclick="switchTab('members',this)">👥 議員一覧</button>
   <button class="nav-tab nav-purple" role="tab" aria-selected="false" onclick="switchTab('themes',this)">🔍 テーマから探す</button>
@@ -22211,7 +22265,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
     </ul>
     <h4>7. お問い合わせ</h4>
     <p>誤り・修正・削除のご依頼: <a href="mailto:ka@oh-life.co.jp" style="color:var(--accent)">ka@oh-life.co.jp</a>（運営: 大竹圭 伊東市議会議員）</p>
-    <div class="disc-note">最終更新: 2026/5/14</div>
+    <div class="disc-note">最終更新: 2026/5/20</div>
   </div>
 </div>
 <footer>
@@ -22245,7 +22299,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
       </div>
     </div>
   </div>
-  <div class="footer-credit-line">© 2026 みんなの伊東市 ｜ 制作・運営: 伊東市議会議員 大竹圭 ｜ 最終更新: 2026/5/14</div>
+  <div class="footer-credit-line">© 2026 みんなの伊東市 ｜ 制作・運営: 伊東市議会議員 大竹圭 ｜ 最終更新: 2026/5/20</div>
 </footer>
 <!-- 用語解説ボタン（テキスト選択時に表示） -->
 <button id="explain-btn" class="explain-btn" style="display:none" onclick="openExplainModal()">💡 この言葉を解説</button>
