@@ -14,3 +14,7 @@ gijiroku_data.json
 gijiroku_integrated.json
 topics_cache.json
 generate_topics.js
+
+# 月次チェックのログ
+logs/
+.commit_msg.tmp
