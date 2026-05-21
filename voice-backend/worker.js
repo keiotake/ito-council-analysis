@@ -1009,6 +1009,11 @@ export default {
         pendingList.unshift(id);
         await env.POSTS_KV.put('index:pending', JSON.stringify(pendingList.slice(0, 500)));
 
+        // 運営者にメール通知（バックグラウンド・失敗してもユーザーには影響しない）
+        if (env.NOTIFY_GAS_URL && env.NOTIFY_GAS_SECRET) {
+          ctx.waitUntil(sendNotificationEmail(env, post).catch(e => console.error('Notification failed:', e)));
+        }
+
         return jsonResp({
           ok: true,
           message: '投稿を受け付けました。運営者の確認後に公開されます。',
@@ -1602,7 +1607,7 @@ function corsHeaders(env, origin) {
   return {
     'Access-Control-Allow-Origin': allowed,
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     'Access-Control-Max-Age': '86400',
   };
 }
@@ -1612,4 +1617,22 @@ function jsonResp(obj, status, env, origin) {
     status: status,
     headers: { 'Content-Type': 'application/json', ...corsHeaders(env, origin) },
   });
+}
+
+// 運営者へのメール通知（Google Apps Script経由でGmailから送信）
+async function sendNotificationEmail(env, post) {
+  if (!env.NOTIFY_GAS_URL || !env.NOTIFY_GAS_SECRET) {
+    console.log('Notification env vars not set, skipping');
+    return;
+  }
+  const resp = await fetch(env.NOTIFY_GAS_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ secret: env.NOTIFY_GAS_SECRET, post }),
+    redirect: 'follow',
+  });
+  if (!resp.ok) {
+    const errText = await resp.text();
+    throw new Error(`Notification GAS ${resp.status}: ${errText.slice(0, 200)}`);
+  }
 }
