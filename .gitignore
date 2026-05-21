@@ -5,8 +5,6 @@ raw_urls.txt
 video_data.json
 transcript_progress.json
 yt-dlp.exe
-package.json
-package-lock.json
 voice-backend/DEPLOYED_URLS.txt
 # スクレイピング生成物（サイズ大・ビルド成果物としては不要）
 scrape_tmp/

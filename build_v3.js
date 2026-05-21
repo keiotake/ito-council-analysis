@@ -2799,21 +2799,53 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
           <input type="text" name="nickname" maxlength="20">
         </div>
         <div class="modal-form-row">
+          <label>年齢層 (任意)</label>
+          <select name="age">
+            <option value="">未指定</option>
+            <option value="10代以下">10代以下</option>
+            <option value="20代">20代</option>
+            <option value="30代">30代</option>
+            <option value="40代">40代</option>
+            <option value="50代">50代</option>
+            <option value="60代">60代</option>
+            <option value="70代">70代</option>
+            <option value="80代以上">80代以上</option>
+          </select>
+        </div>
+        <div class="modal-form-row">
           <label>居住地区 (任意)</label>
           <select name="area">
             <option value="">未指定</option>
-            <option value="湯川">湯川</option>
-            <option value="松原">松原</option>
-            <option value="玖須美">玖須美</option>
-            <option value="鎌田">鎌田</option>
-            <option value="大原">大原</option>
-            <option value="宇佐美">宇佐美</option>
-            <option value="川奈">川奈</option>
-            <option value="池">池</option>
-            <option value="十足">十足</option>
-            <option value="赤沢">赤沢</option>
+            <optgroup label="北部">
+              <option value="宇佐美">宇佐美</option>
+            </optgroup>
+            <optgroup label="中心市街地・湯川エリア">
+              <option value="湯川">湯川</option>
+              <option value="松原">松原</option>
+              <option value="玖須美">玖須美</option>
+              <option value="鎌田">鎌田</option>
+              <option value="大原">大原</option>
+              <option value="桜木町">桜木町</option>
+            </optgroup>
+            <optgroup label="中部・内陸エリア">
+              <option value="岡">岡</option>
+              <option value="吉田">吉田</option>
+              <option value="荻">荻</option>
+              <option value="鎌田原・上之山">鎌田原・上之山</option>
+              <option value="池">池</option>
+              <option value="十足">十足</option>
+            </optgroup>
+            <optgroup label="南部・伊豆高原・城ヶ崎エリア">
+              <option value="川奈">川奈</option>
+              <option value="富戸">富戸</option>
+              <option value="八幡野">八幡野</option>
+              <option value="城ヶ崎">城ヶ崎</option>
+              <option value="伊豆高原">伊豆高原</option>
+              <option value="大室高原">大室高原</option>
+              <option value="赤沢">赤沢</option>
+            </optgroup>
             <option value="伊東市内その他">伊東市内その他</option>
-            <option value="市外">市外</option>
+            <option value="市外">市外（伊東市にゆかりあり）</option>
           </select>
         </div>
         <div class="modal-agree">
@@ -3923,7 +3955,7 @@ function renderVoices(){
       +'<div class="voice-item-head">'+typeBadge+'<span class="voice-cat-pill" style="background:'+col+'">'+escHtml(v.category)+'</span></div>'
       +'<div class="voice-title">'+escHtml(v.title)+'</div>'
       +'<div class="voice-body">'+escHtml(v.body)+'</div>'
-      +'<div class="voice-meta"><span>— '+escHtml(v.nickname||'匿名')+'さん</span>'+(v.area?'<span>'+escHtml(v.area)+'</span>':'')+'<span>'+escHtml(v.date)+'</span></div>'
+      +'<div class="voice-meta"><span>— '+escHtml(v.nickname||'匿名')+'さん</span>'+(v.age?'<span>'+escHtml(v.age)+'</span>':'')+(v.area?'<span>'+escHtml(v.area)+'</span>':'')+'<span>'+escHtml(v.date)+'</span></div>'
       +'</div>';
   }).join('');
 }
@@ -3971,6 +4003,7 @@ async function submitVoice(e){
     title:fd.get('title'),
     body:fd.get('body'),
     nickname:fd.get('nickname'),
+    age:fd.get('age'),
     area:fd.get('area'),
     agreed:document.getElementById('agree').checked,
   };

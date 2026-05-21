@@ -112,7 +112,6 @@ async function main() {
     filtered = meetings.filter(m => /_R/.test(m.unid));
     console.log(`Filtered to Reiwa only: ${filtered.length}`);
   } else if (process.argv.includes('--recent')) {
-    // Heisei 27+ and Reiwa (roughly 2015-)
     filtered = meetings.filter(m => {
       const match = (m.unid||'').match(/_([RH])(\d{2})/);
       if (!match) return false;
@@ -122,6 +121,15 @@ async function main() {
       return false;
     });
     console.log(`Filtered to H27+ & Reiwa: ${filtered.length}`);
+  } else if (process.argv.includes('--pre-h27')) {
+    // 平成26年以前（昔の議員を含むため）
+    filtered = meetings.filter(m => {
+      const match = (m.unid||'').match(/_([RH])(\d{2})/);
+      if (!match) return false;
+      const era = match[1], yr = parseInt(match[2]);
+      return era === 'H' && yr < 27;
+    });
+    console.log(`Filtered to pre-H27: ${filtered.length}`);
   }
 
   // Build page context for each meeting (based on their position in the FULL meeting list, not filtered)

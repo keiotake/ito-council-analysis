@@ -1,3 +1,16 @@
 name = "ito-voice"
 main = "worker.js"
 compatibility_date = "2024-01-01"
+
+# CORS許可オリジン（公開用）
+[vars]
+ALLOWED_ORIGIN = "https://keiotake.github.io"
+
+# KVバインディング
+[[kv_namespaces]]
+binding = "POSTS_KV"
+id = "d6cc6a0288fc41dcb764d4c5015c12b6"
+
+[[kv_namespaces]]
+binding = "PAGEVIEW_KV"
+id = "8bd9161046f04164b25418668012f805"

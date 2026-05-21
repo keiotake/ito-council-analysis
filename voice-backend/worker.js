@@ -955,7 +955,7 @@ export default {
       return new Response(null, { headers: corsHeaders(env, origin) });
     }
 
-    // ====== POST /submit : 投稿受付 ======
+    // ====== POST /submit : 投稿受付（KV保存・運営者承認待ち） ======
     if (request.method === 'POST' && url.pathname === '/submit') {
       try {
         const ip = request.headers.get('cf-connecting-ip') || 'unknown';
@@ -965,32 +965,91 @@ export default {
           return jsonResp({ ok: false, error: '日本国内からのみ投稿可能です' }, 403, env, origin);
         }
         const body = await request.json();
-        const payload = { ...body, secret: env.SHARED_SECRET, ip, userAgent: ua, country };
-        const gasResp = await fetch(env.GAS_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        });
-        const text = await gasResp.text();
-        return new Response(text, {
-          status: gasResp.status,
-          headers: { 'Content-Type': 'application/json', ...corsHeaders(env, origin) },
-        });
+
+        // 入力バリデーション
+        if (!body.title || body.title.length > 50) return jsonResp({ ok: false, error: 'タイトルは1〜50文字' }, 400, env, origin);
+        if (!body.body || body.body.length > 500) return jsonResp({ ok: false, error: '本文は1〜500文字' }, 400, env, origin);
+        if (!body.category) return jsonResp({ ok: false, error: 'カテゴリ必須' }, 400, env, origin);
+        if (!body.agreed) return jsonResp({ ok: false, error: '同意必須' }, 400, env, origin);
+
+        // 簡易NGワード
+        const ngWords = ['死ね', 'バカ', '無能', 'クソ', '殺', 'kill', 'fuck'];
+        const blob = (body.title + body.body).toLowerCase();
+        for (const w of ngWords) if (blob.includes(w.toLowerCase())) {
+          return jsonResp({ ok: false, error: 'ガイドライン違反の語句が含まれています' }, 400, env, origin);
+        }
+
+        // KVに保存
+        if (!env.POSTS_KV) return jsonResp({ ok: false, error: 'ストレージが設定されていません（運営者へご連絡ください）' }, 500, env, origin);
+
+        // IP別レート制限：1日5件
+        const dateKey = new Date().toISOString().slice(0, 10);
+        const ipKey = `ratelimit:${dateKey}:${ip}`;
+        const ipCount = parseInt(await env.POSTS_KV.get(ipKey) || '0');
+        if (ipCount >= 5) return jsonResp({ ok: false, error: '1日の投稿上限(5件)に達しました' }, 429, env, origin);
+        await env.POSTS_KV.put(ipKey, String(ipCount + 1), { expirationTtl: 86400 });
+
+        const id = crypto.randomUUID();
+        const now = new Date().toISOString();
+        const post = {
+          id, createdAt: now,
+          postType: body.postType || 'good',
+          category: body.category,
+          title: body.title,
+          body: body.body,
+          nickname: body.nickname || '',
+          age: body.age || '',
+          area: body.area || '',
+          ip, userAgent: ua, country,
+          status: 'pending', // pending | approved | rejected
+        };
+        await env.POSTS_KV.put(`post:${id}`, JSON.stringify(post));
+        // インデックスにも追加（pending側）
+        const pendingList = JSON.parse(await env.POSTS_KV.get('index:pending') || '[]');
+        pendingList.unshift(id);
+        await env.POSTS_KV.put('index:pending', JSON.stringify(pendingList.slice(0, 500)));
+
+        return jsonResp({
+          ok: true,
+          message: '投稿を受け付けました。運営者の確認後に公開されます。',
+          id,
+        }, 200, env, origin);
       } catch (e) {
         return jsonResp({ ok: false, error: e.message }, 500, env, origin);
       }
     }
 
-    // ====== GET /posts : 承認済み投稿一覧 ======
+    // ====== GET /posts : 承認済み投稿一覧（KVから） ======
     if (request.method === 'GET' && url.pathname === '/posts') {
       try {
+        if (!env.POSTS_KV) return jsonResp({ ok: true, posts: [], total: 0 }, 200, env, origin);
         const cache = caches.default;
         const cacheKey = new Request(url.toString(), request);
         let cached = await cache.match(cacheKey);
         if (cached) return cached;
-        const gasResp = await fetch(env.GAS_URL, { method: 'GET' });
-        const text = await gasResp.text();
-        const resp = new Response(text, {
+
+        const approvedList = JSON.parse(await env.POSTS_KV.get('index:approved') || '[]');
+        const posts = [];
+        for (const id of approvedList.slice(0, 100)) {
+          const raw = await env.POSTS_KV.get(`post:${id}`);
+          if (raw) {
+            const p = JSON.parse(raw);
+            // 公開用に内部情報を除外
+            posts.push({
+              id: p.id,
+              date: (p.publishedAt || p.createdAt).slice(0, 10),
+              postType: p.postType,
+              category: p.category,
+              title: p.title,
+              body: p.body,
+              nickname: p.nickname,
+              age: p.age,
+              area: p.area,
+            });
+          }
+        }
+
+        const resp = new Response(JSON.stringify({ ok: true, posts, total: posts.length }), {
           status: 200,
           headers: {
             'Content-Type': 'application/json',
@@ -1001,8 +1060,53 @@ export default {
         ctx.waitUntil(cache.put(cacheKey, resp.clone()));
         return resp;
       } catch (e) {
-        return jsonResp({ posts: [], error: e.message }, 500, env, origin);
+        return jsonResp({ ok: false, posts: [], error: e.message }, 500, env, origin);
       }
+    }
+
+    // ====== /admin/posts : 運営者用 投稿一覧（pending含む） ======
+    if (url.pathname === '/admin/posts') {
+      const auth = request.headers.get('Authorization');
+      if (auth !== `Bearer ${env.ADMIN_SECRET}`) return jsonResp({ ok: false, error: '認証エラー' }, 401, env, origin);
+      if (!env.POSTS_KV) return jsonResp({ ok: false, error: 'POSTS_KV未設定' }, 500, env, origin);
+      const pending = JSON.parse(await env.POSTS_KV.get('index:pending') || '[]');
+      const approved = JSON.parse(await env.POSTS_KV.get('index:approved') || '[]');
+      const all = [...pending, ...approved];
+      const posts = [];
+      for (const id of all.slice(0, 200)) {
+        const raw = await env.POSTS_KV.get(`post:${id}`);
+        if (raw) posts.push(JSON.parse(raw));
+      }
+      return jsonResp({ ok: true, posts }, 200, env, origin);
+    }
+
+    // ====== /admin/moderate : 運営者用 承認/却下 ======
+    if (request.method === 'POST' && url.pathname === '/admin/moderate') {
+      const auth = request.headers.get('Authorization');
+      if (auth !== `Bearer ${env.ADMIN_SECRET}`) return jsonResp({ ok: false, error: '認証エラー' }, 401, env, origin);
+      if (!env.POSTS_KV) return jsonResp({ ok: false, error: 'POSTS_KV未設定' }, 500, env, origin);
+      const { id, action } = await request.json(); // action: approve | reject
+      const raw = await env.POSTS_KV.get(`post:${id}`);
+      if (!raw) return jsonResp({ ok: false, error: '投稿が見つかりません' }, 404, env, origin);
+      const post = JSON.parse(raw);
+      const pendingList = JSON.parse(await env.POSTS_KV.get('index:pending') || '[]');
+      const approvedList = JSON.parse(await env.POSTS_KV.get('index:approved') || '[]');
+      const newPending = pendingList.filter(x => x !== id);
+      let newApproved = approvedList.filter(x => x !== id);
+      if (action === 'approve') {
+        post.status = 'approved';
+        post.publishedAt = new Date().toISOString();
+        newApproved = [id, ...newApproved];
+      } else {
+        post.status = 'rejected';
+      }
+      await env.POSTS_KV.put(`post:${id}`, JSON.stringify(post));
+      await env.POSTS_KV.put('index:pending', JSON.stringify(newPending));
+      await env.POSTS_KV.put('index:approved', JSON.stringify(newApproved.slice(0, 500)));
+      // /postsキャッシュをクリア
+      const cache = caches.default;
+      ctx.waitUntil(cache.delete(`${url.origin}/posts`));
+      return jsonResp({ ok: true, post }, 200, env, origin);
     }
 
     // ====== POST /chat : 総合計画チャットボット ======
