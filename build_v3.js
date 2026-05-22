@@ -1,5 +1,22 @@
 const fs = require('fs');
 
+// === 音声認識ミス・不適切表現の自動検出（ビルド時警告） ===
+// 字幕の自動文字起こし精度の問題で、議員発言が誤って不適切な表現になることを防ぐ
+const SUSPICIOUS_PATTERNS = [
+  /即死/g, /殺害/g, /射殺/g, /虐殺/g, /処刑/g, /抹殺/g, /暗殺/g, /撲殺/g,
+];
+function auditTextForSuspicious(label, text) {
+  if (typeof text !== 'string') return;
+  for (const re of SUSPICIOUS_PATTERNS) {
+    const m = text.match(re);
+    if (m) {
+      console.warn(`[AUDIT WARN] ${label}: "${re}" がヒット (${m.length}件)`);
+      const idx = text.search(re);
+      console.warn(`  前後文脈: ...${text.substring(Math.max(0,idx-40), idx+40)}...`);
+    }
+  }
+}
+
 const analysis = JSON.parse(fs.readFileSync('analysis_data.json', 'utf-8'));
 const profiles = JSON.parse(fs.readFileSync('profiles.json', 'utf-8'));
 const topics = JSON.parse(fs.readFileSync('member_topics.json', 'utf-8'));
@@ -3257,7 +3274,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
     <div class="explain-header">
       <span class="explain-icon">💡</span>
       <div>
-        <div class="explain-label">中学生にも分かる解説</div>
+        <div class="explain-label">用語解説</div>
         <div class="explain-term" id="explain-term"></div>
       </div>
     </div>
