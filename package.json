@@ -6,6 +6,11 @@
   "scripts": {
     "build": "node build_v3.js",
     "monthly": "node monthly_check.js",
+    "audit": "node audit.js",
+    "audit:strict": "node audit.js --strict",
+    "audit:json": "node audit.js --json",
+    "audit:approve-all": "node audit.js --approve-all",
+    "audit:show-all": "node audit.js --show-allowlisted",
     "scrape:list": "node scrape_minutes.js",
     "scrape:new": "node scrape_new_only.js",
     "parse": "node parse_minutes.js",
