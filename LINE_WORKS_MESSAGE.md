@@ -45,7 +45,7 @@ LINEワークスで議員に送るメッセージのコピペ用テンプレー�
 以下のGoogleフォームよりご回答をお願いいたします。
 所要時間は3〜5分ほどです。
 
-📋 [ここにGoogleフォームURLを貼り付け]
+📋 https://docs.google.com/forms/d/e/1FAIpQLSdBn6FYIcmbBK-xnCoKeB1ETC1Tbu_Ov3Gd2grYzr5NBEVqTQ/viewform
 
 
 ご回答期限：[YYYY年MM月DD日（曜）] までにお願いいたします。
@@ -88,7 +88,7 @@ ka@oh-life.co.jp
 掲載内容についてご意向を伺いたく、
 Googleフォームを準備しました。
 
-📋 [フォームURL]
+📋 https://docs.google.com/forms/d/e/1FAIpQLSdBn6FYIcmbBK-xnCoKeB1ETC1Tbu_Ov3Gd2grYzr5NBEVqTQ/viewform
 
 所要時間3〜5分です。
 [YYYY/MM/DD] までにご回答いただけると助かります。
@@ -121,7 +121,7 @@ Googleフォームを準備しました。
 ご確認をお願いできればと思いご連絡いたしました。
 
 📋 ご回答フォーム：
-[フォームURL]
+https://docs.google.com/forms/d/e/1FAIpQLSdBn6FYIcmbBK-xnCoKeB1ETC1Tbu_Ov3Gd2grYzr5NBEVqTQ/viewform
 
 所要時間3〜5分です。
 

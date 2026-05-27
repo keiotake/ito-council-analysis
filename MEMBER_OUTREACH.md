@@ -87,7 +87,7 @@ https://all-ito-city.com/
 
 ### 方法②：Googleフォームでご回答（所要時間 約3分）
 
-🔗 [Googleフォーム URL をここに記載]
+🔗 https://docs.google.com/forms/d/e/1FAIpQLSdBn6FYIcmbBK-xnCoKeB1ETC1Tbu_Ov3Gd2grYzr5NBEVqTQ/viewform
 （フォームのURLは別途お送りいたします）
 
 ### 方法③：LINEでご返信
