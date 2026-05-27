@@ -724,10 +724,35 @@ const html = `<!DOCTYPE html>
 <meta name="twitter:description" content="伊東市議会の議員活動報告・議会情報まとめサイト">
 <meta name="twitter:image" content="https://all-ito-city.com/hero-mountain.jpg">
 <meta name="theme-color" content="#1e40af">
+<meta name="robots" content="index, follow">
+<meta name="author" content="伊東市議会議員 大竹 圭">
+<link rel="canonical" href="https://all-ito-city.com/">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icons/icon-192.png" sizes="192x192" type="image/png">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
 <title>みんなの伊東市 — 伊東市議会の活動をわかりやすく</title>
+<!-- 構造化データ（JSON-LD）- SEO・Google検索結果用 -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "みんなの伊東市",
+  "alternateName": "Minna no Ito City",
+  "url": "https://all-ito-city.com/",
+  "description": "伊東市議会の議員活動報告・議会情報まとめサイト。議員プロフィール・議会動画・質問要約・制度案内を掲載。",
+  "inLanguage": "ja",
+  "author": {
+    "@type": "Person",
+    "name": "大竹 圭",
+    "jobTitle": "伊東市議会議員",
+    "email": "ka@oh-life.co.jp"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "大竹 圭"
+  }
+}
+</script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#fafafa;--card:#fff;--text:#0a0a0a;--sub:#737373;--border:#e5e5e5;--radius:14px;--accent:#0f172a;--accent-hover:#1e293b;--brand:#2563eb;--font-scale:1;--shadow-sm:0 1px 2px rgba(0,0,0,.04);--shadow-md:0 4px 14px rgba(0,0,0,.06);--shadow-lg:0 16px 40px rgba(0,0,0,.08);--font-jp:'Hiragino Sans','Hiragino Kaku Gothic ProN','Yu Gothic Medium','Meiryo',sans-serif;--font-en:-apple-system,'SF Pro Display','Inter',sans-serif}
