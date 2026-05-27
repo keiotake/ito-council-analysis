@@ -21796,7 +21796,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
     </ul>
     <h4>7. お問い合わせ</h4>
     <p>誤り・修正・削除のご依頼: <a href="mailto:ka@oh-life.co.jp" style="color:var(--accent)">ka@oh-life.co.jp</a>（運営: 大竹圭 伊東市議会議員）</p>
-    <div class="disc-note">最終更新: 2026/5/27</div>
+    <div class="disc-note">最終更新: 2026/5/28</div>
   </div>
 </div>
 <footer>
@@ -21830,7 +21830,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
       </div>
     </div>
   </div>
-  <div class="footer-credit-line">© 2026 みんなの伊東市 ｜ 制作・運営: 伊東市議会議員 大竹圭 ｜ 最終更新: 2026/5/27</div>
+  <div class="footer-credit-line">© 2026 みんなの伊東市 ｜ 制作・運営: 伊東市議会議員 大竹圭 ｜ 最終更新: 2026/5/28</div>
 </footer>
 <!-- 用語解説ボタン（テキスト選択時に表示） -->
 <button id="explain-btn" class="explain-btn" style="display:none" onclick="openExplainModal()">💡 この言葉を解説</button>
@@ -21969,12 +21969,9 @@ function escapeHtml(s){
   return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-// === はじめてガイド ===
-(function(){
-  if(!localStorage.getItem('ito_welcomed')){
-    document.getElementById('welcome-overlay').style.display='flex';
-  }
-})();
+// === はじめてガイド（自動表示は無効化済み） ===
+// ユーザー指示により、サイトを開いた時のポップアップは表示しないようにした
+// （必要なら welcomeGo() を呼べば手動で開ける）
 function closeWelcome(dontShow){
   document.getElementById('welcome-overlay').style.display='none';
   if(dontShow) localStorage.setItem('ito_welcomed','1');

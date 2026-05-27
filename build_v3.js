@@ -3426,12 +3426,9 @@ function escapeHtml(s){
   return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-// === はじめてガイド ===
-(function(){
-  if(!localStorage.getItem('ito_welcomed')){
-    document.getElementById('welcome-overlay').style.display='flex';
-  }
-})();
+// === はじめてガイド（自動表示は無効化済み） ===
+// ユーザー指示により、サイトを開いた時のポップアップは表示しないようにした
+// （必要なら welcomeGo() を呼べば手動で開ける）
 function closeWelcome(dontShow){
   document.getElementById('welcome-overlay').style.display='none';
   if(dontShow) localStorage.setItem('ito_welcomed','1');
