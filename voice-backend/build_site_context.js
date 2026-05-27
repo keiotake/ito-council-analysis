@@ -47,7 +47,7 @@ let ctx = '';
 
 ctx += `# サイト「みんなの伊東市」について\n`;
 ctx += `静岡県伊東市議会の活動を市民に分かりやすく可視化する非公式情報サイト。\n`;
-ctx += `URL: https://keiotake.github.io/ito-council-analysis/\n`;
+ctx += `URL: https://all-ito-city.com/\n`;
 ctx += `運営: 大竹圭（伊東市議会議員・伊東未来所属）\n`;
 ctx += `\n## 掲載タブ\n`;
 ctx += `- 議員一覧: 現職20名のプロフィール・会派別表示\n`;

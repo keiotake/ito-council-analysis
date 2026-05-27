@@ -23,7 +23,7 @@
 // build_site_context.js で自動生成 → このWorkerビルド時に埋め込み
 const PLAN_CONTEXT = `# サイト「みんなの伊東市」について
 静岡県伊東市議会の活動を市民に分かりやすく可視化する非公式情報サイト。
-URL: https://keiotake.github.io/ito-council-analysis/
+URL: https://all-ito-city.com/
 運営: 大竹圭（伊東市議会議員・伊東未来所属）
 
 ## 掲載タブ
@@ -1603,12 +1603,19 @@ async function hashIP(ip) {
 }
 
 function corsHeaders(env, origin) {
-  const allowed = env.ALLOWED_ORIGIN || '*';
+  // 許可するオリジン（独自ドメインと旧GitHub Pages両方）
+  const allowedList = [
+    'https://all-ito-city.com',
+    'https://www.all-ito-city.com',
+    'https://keiotake.github.io',
+  ];
+  const allowed = allowedList.includes(origin) ? origin : allowedList[0];
   return {
     'Access-Control-Allow-Origin': allowed,
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     'Access-Control-Max-Age': '86400',
+    'Vary': 'Origin',
   };
 }
 

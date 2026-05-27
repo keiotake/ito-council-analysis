@@ -24,7 +24,7 @@
 | 項目 | 内容 |
 |---|---|
 | サイト名 | みんなの伊東市 |
-| URL | https://keiotake.github.io/ito-council-analysis/ |
+| URL | https://all-ito-city.com/ |
 | 公開日 | 2026年5月4日（公開済み） |
 | 運営形態 | 議員個人による運営 |
 | 利用料 | 無償（誰でも閲覧可能） |

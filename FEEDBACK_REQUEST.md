@@ -18,7 +18,7 @@
 みんなで考えるための場**として、ウェブサイト「みんなの伊東市」を
 試作いたしました。
 
-🔗 https://keiotake.github.io/ito-council-analysis/
+🔗 https://all-ito-city.com/
 
 正式公開の前に、信頼できる方々から事前にご意見をいただきたく、
 ご連絡を差し上げました。お時間のある時で結構ですので、
@@ -145,7 +145,7 @@
 「市民の声を集めて、伊東市の現状を一緒に考える場」として
 ウェブサイトを試作しました。正式公開前に●●さんに一度見ていただきたく…！
 
-🔗 https://keiotake.github.io/ito-council-analysis/
+🔗 https://all-ito-city.com/
 
 サイトの目的は3つ：
 ① 市民の声を集めて議会・行政に届ける
@@ -168,7 +168,7 @@
 大竹です。「市民の声を集めて、伊東市の現状をみんなで考える場」として
 サイトを試作したので、正式公開前に率直な感想を聞かせてください🙏
 
-🔗 https://keiotake.github.io/ito-council-analysis/
+🔗 https://all-ito-city.com/
 
 特に：
 ・「場」として機能しそうか
@@ -192,7 +192,7 @@
 これからの市政をみんなで考えるための場として、ウェブサイト
 「みんなの伊東市」を試作いたしました（正式公開前）。
 
-🔗 https://keiotake.github.io/ito-council-analysis/
+🔗 https://all-ito-city.com/
 
 【サイトの目的】
 ① 市民の声を集めて議会・行政に届ける窓口

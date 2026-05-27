@@ -28,7 +28,7 @@ function createOutreachForm() {
     '・公開済みの議会動画・議事録を整理して、議員別・テーマ別に検索できるようにしたものです',
     '',
     '【サイトプレビュー】',
-    'https://keiotake.github.io/ito-council-analysis/',
+    'https://all-ito-city.com/',
     '',
     '正式公開に先立ち、ご自身に関する掲載内容について、',
     'ご意向を伺いたく、ご協力をお願いいたします。',

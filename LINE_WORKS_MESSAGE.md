@@ -19,7 +19,7 @@ LINEワークスで議員に送るメッセージのコピペ用テンプレー�
 「みんなの伊東市」を、議員活動の一環として
 個人で公開する準備を進めております。
 
-🔗 https://keiotake.github.io/ito-council-analysis/
+🔗 https://all-ito-city.com/
 
 本サイトは、公開済みの議会動画・議事録を整理し直し、
 議員別・テーマ別に検索できる形にまとめたものです。
@@ -79,7 +79,7 @@ ka@oh-life.co.jp
 
 議員活動の一環で
 「みんなの伊東市」というサイトを準備しています。
-🔗 https://keiotake.github.io/ito-council-analysis/
+🔗 https://all-ito-city.com/
 
 議会動画・議事録を整理し直して
 市民が読みやすい形にしたものです。
@@ -193,7 +193,7 @@ ka@oh-life.co.jp
 いただいたご回答を反映し、
 本日より正式に公開を開始いたしました。
 
-🔗 https://keiotake.github.io/ito-council-analysis/
+🔗 https://all-ito-city.com/
 
 [議員のお名前] 様のページは以下からご確認いただけます：
 [個別ページURL]

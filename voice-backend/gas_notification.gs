@@ -43,7 +43,7 @@ function doPost(e) {
 
     const post = data.post || {};
     const typeLabel = ({ good: '👍 良いところ', improve: '💡 改善希望', idea: '💭 アイデア' })[post.postType] || post.postType;
-    const adminUrl = 'https://keiotake.github.io/ito-council-analysis/admin.html';
+    const adminUrl = 'https://all-ito-city.com/admin.html';
 
     const subject = `【みんなの伊東市】新着投稿: ${post.title}`;
 

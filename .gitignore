@@ -16,3 +16,11 @@ generate_topics.js
 # 月次チェックのログ
 logs/
 .commit_msg.tmp
+
+# Wrangler local state
+voice-backend/.wrangler/
+voice-backend/deploy_helper.html
+voice-backend/deploy_server.js
+voice-backend/worker_for_paste.txt
+voice-backend/sougoukeikaku_raw.txt
+retry_failed.js

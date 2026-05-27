@@ -2,9 +2,9 @@ name = "ito-voice"
 main = "worker.js"
 compatibility_date = "2024-01-01"
 
-# CORS許可オリジン（公開用）
+# CORS許可オリジン（公開用）※実際はworker.js内のallowedListで動的判定
 [vars]
-ALLOWED_ORIGIN = "https://keiotake.github.io"
+ALLOWED_ORIGIN = "https://all-ito-city.com"
 
 # KVバインディング
 [[kv_namespaces]]

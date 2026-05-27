@@ -715,14 +715,14 @@ const html = `<!DOCTYPE html>
 <meta property="og:title" content="みんなの伊東市 — 伊東市議会の議員活動報告・議会情報まとめ">
 <meta property="og:description" content="議員活動の透明化を目的とした、伊東市議会議員 大竹 圭による非公式の議会情報まとめサイトです。">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://keiotake.github.io/ito-council-analysis/">
-<meta property="og:image" content="https://keiotake.github.io/ito-council-analysis/hero-mountain.jpg">
+<meta property="og:url" content="https://all-ito-city.com/">
+<meta property="og:image" content="https://all-ito-city.com/hero-mountain.jpg">
 <meta property="og:image:width" content="1478">
 <meta property="og:image:height" content="1108">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="みんなの伊東市">
 <meta name="twitter:description" content="伊東市議会の議員活動報告・議会情報まとめサイト">
-<meta name="twitter:image" content="https://keiotake.github.io/ito-council-analysis/hero-mountain.jpg">
+<meta name="twitter:image" content="https://all-ito-city.com/hero-mountain.jpg">
 <meta name="theme-color" content="#1e40af">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icons/icon-192.png" sizes="192x192" type="image/png">
