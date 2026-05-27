@@ -801,6 +801,7 @@ h1,h2,h3{letter-spacing:-.01em;font-weight:800}
 .hero-topbar{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:center;padding:clamp(.8rem,2.5vw,1.4rem) clamp(1rem,4vw,2.5rem);gap:.5rem clamp(.8rem,3vw,2rem);flex-wrap:wrap;border-bottom:1px solid rgba(255,255,255,.12);min-width:0}
 .hero-brand{display:flex;align-items:baseline;gap:clamp(.45rem,1.5vw,.85rem);min-width:0}
 .hero-brand-tag{font-family:var(--font-en);font-size:clamp(.5rem,1.4vw,.62rem);font-weight:600;letter-spacing:.28em;color:rgba(255,255,255,.7);text-transform:uppercase;padding-right:clamp(.45rem,1.5vw,.85rem);border-right:1px solid rgba(255,255,255,.25);line-height:1;flex-shrink:0;white-space:nowrap}
+.hero-brand-name{font-family:var(--font-en);font-size:clamp(.85rem,2vw,1rem);font-weight:800;color:#fff;letter-spacing:.04em;line-height:1;text-shadow:0 2px 14px rgba(0,30,60,.55);white-space:nowrap}
 .hero-logo{font-size:clamp(.95rem,3vw,1.35rem);font-weight:800;color:#fff;letter-spacing:.02em;line-height:1;text-shadow:0 2px 14px rgba(0,30,60,.55);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 .hero-logo-accent{font-weight:900;letter-spacing:.04em}
 .hero-meta{display:flex;align-items:center;gap:clamp(.45rem,1.5vw,.85rem);color:#fff;line-height:1;text-shadow:0 2px 10px rgba(0,30,60,.55);min-width:0}
@@ -2157,6 +2158,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
   <div class="hero-topbar">
     <div class="hero-brand">
       <span class="hero-brand-tag">Unofficial</span>
+      <span class="hero-brand-name">All Ito City</span>
     </div>
     <div class="hero-meta">
       <span class="hero-meta-label">Operated by</span>
@@ -2165,7 +2167,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
   </div>
   <div class="hero-content">
     <h1 class="hero-title-main">
-      <span class="tm-prefix">MINNA NO ITO-SHI</span>
+      <span class="tm-prefix">ALL ITO CITY</span>
       <span class="tm-jp">みんなの伊東市</span>
     </h1>
     <p class="hero-sub">議員活動報告 ／ 議会情報のまとめサイト
