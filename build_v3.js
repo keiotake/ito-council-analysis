@@ -785,13 +785,27 @@ body.high-contrast button,body.high-contrast .pg-btn,body.high-contrast .qe-acti
 .a11y-bar{display:flex;justify-content:flex-end;align-items:center;gap:.3rem;padding:.3rem 1rem;background:#0f172a;color:#fff}
 .a11y-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#fff;border-radius:6px;padding:.2rem .55rem;font-size:.72rem;cursor:pointer;font-weight:600;transition:.15s}
 .a11y-btn:hover{background:rgba(255,255,255,.2)}
+html{scroll-behavior:smooth}
 body{font-family:var(--font-en),var(--font-jp);background:var(--bg);color:var(--text);line-height:1.75;-webkit-text-size-adjust:100%;letter-spacing:.01em;font-feature-settings:'palt' 1}
 h1,h2,h3{letter-spacing:-.01em;font-weight:800}
+
+/* 読了プログレスバー（ページ最上部） */
+.scroll-progress{position:fixed;top:0;left:0;height:3px;width:100%;z-index:9998;transform:scaleX(0);transform-origin:left;background:linear-gradient(90deg,#2563eb,#7c3aed,#2563eb);background-size:200% 100%;animation:progress-hue 6s linear infinite;pointer-events:none;transition:transform .08s linear}
+@keyframes progress-hue{from{background-position:0% 0}to{background-position:200% 0}}
+
+/* トップへ戻るボタン */
+.back-to-top{position:fixed;right:1.1rem;bottom:5.2rem;z-index:900;width:46px;height:46px;border-radius:50%;border:1px solid var(--border);background:rgba(255,255,255,.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:var(--accent);font-size:1.1rem;font-weight:700;cursor:pointer;box-shadow:var(--shadow-md);display:flex;align-items:center;justify-content:center;opacity:0;transform:translateY(14px) scale(.9);pointer-events:none;transition:opacity .35s cubic-bezier(.22,.61,.36,1),transform .35s cubic-bezier(.22,.61,.36,1),box-shadow .2s}
+.back-to-top.show{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
+.back-to-top:hover{transform:translateY(-3px) scale(1.05);box-shadow:var(--shadow-lg)}
+
+/* タブパネル切替アニメーション */
+@keyframes panel-in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 /* シネマティックなヒーローヘッダー（伊東の山並み・自然風景） */
 .hero-header{position:relative;min-height:clamp(460px,58vw,620px);background:#3d5f4a;color:#fff;overflow:hidden}
 .hero-bg{position:absolute;inset:0;z-index:0}
-/* 静止画背景（伊東の山並み） */
-.hero-bg-img{position:absolute;inset:0;background:url('hero-mountain.jpg') center/cover no-repeat,linear-gradient(180deg,#9bc7d8 0%,#8eb8a8 60%,#5a8062 100%);z-index:0}
+/* 静止画背景（伊東の山並み）— Ken Burns でゆっくり寄る */
+.hero-bg-img{position:absolute;inset:-4%;background:url('hero-mountain.jpg') center/cover no-repeat,linear-gradient(180deg,#9bc7d8 0%,#8eb8a8 60%,#5a8062 100%);z-index:0;animation:hero-kenburns 28s ease-in-out infinite alternate;will-change:transform}
+@keyframes hero-kenburns{from{transform:scale(1) translateY(0)}to{transform:scale(1.07) translateY(-1.2%)}}
 /* 文字を読みやすくするオーバーレイ（霞の質感を活かすため上下のみ暗く） */
 .hero-bg-overlay{position:absolute;inset:0;background:
   linear-gradient(180deg,rgba(8,30,20,.32) 0%,rgba(8,30,20,.08) 35%,rgba(8,30,20,.05) 60%,rgba(8,30,20,.45) 100%);
@@ -816,7 +830,19 @@ h1,h2,h3{letter-spacing:-.01em;font-weight:800}
 .hero-title-main .tm-jp{display:block}
 .hero-sub{font-size:clamp(.78rem,2.2vw,.95rem);color:rgba(245,255,250,.95);line-height:1.7;letter-spacing:.04em;text-shadow:0 2px 10px rgba(0,30,15,.6);animation:hero-fade-in 1.6s ease-out .4s both;display:flex;flex-direction:column;align-items:center;gap:.6rem;margin:0 auto;max-width:42rem}
 .hero-stats-inline{display:inline-block;padding:.4rem 1.1rem;background:rgba(255,255,255,.16);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.25);border-radius:999px;font-size:clamp(.7rem,1.8vw,.78rem);font-weight:600;white-space:nowrap}
-@keyframes hero-fade-in{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes hero-fade-in{from{opacity:0;transform:translateY(20px);filter:blur(6px)}to{opacity:1;transform:translateY(0);filter:blur(0)}}
+/* タイトル内の要素を時間差で立ち上げる */
+.hero-title-main .tm-prefix{animation:hero-fade-in 1.1s cubic-bezier(.22,.61,.36,1) .15s both}
+.hero-title-main .tm-jp{animation:hero-fade-in 1.3s cubic-bezier(.22,.61,.36,1) .35s both}
+.hero-stats-inline{position:relative;overflow:hidden}
+.hero-stats-inline::after{content:'';position:absolute;top:0;left:-80%;width:50%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-20deg);animation:hero-shine 5.5s ease-in-out 2s infinite}
+@keyframes hero-shine{0%{left:-80%}18%{left:130%}100%{left:130%}}
+
+/* スクロール誘導キュー */
+.hero-scroll-cue{position:absolute;bottom:1.1rem;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:.3rem;color:rgba(255,255,255,.85);font-family:var(--font-en);font-size:.55rem;font-weight:600;letter-spacing:.3em;text-transform:uppercase;animation:hero-fade-in 1.6s ease-out 1.2s both;pointer-events:none}
+.hero-scroll-cue::after{content:'';width:1px;height:34px;background:linear-gradient(180deg,rgba(255,255,255,.9),transparent);animation:cue-drop 2.2s cubic-bezier(.45,0,.55,1) infinite}
+@keyframes cue-drop{0%{transform:scaleY(0);transform-origin:top}45%{transform:scaleY(1);transform-origin:top}55%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+@media(max-width:480px){.hero-scroll-cue{display:none}}
 
 .hero-header .header-visitors{position:absolute;bottom:.6rem;right:1.2rem;z-index:2;font-size:.7rem;color:rgba(255,255,255,.8)}
 .hero-header .header-visitors span{color:#fff;font-weight:700}
@@ -851,8 +877,11 @@ h1,h2,h3{letter-spacing:-.01em;font-weight:800}
 .vision-title{font-size:clamp(1.2rem,3.3vw,1.85rem);font-weight:800;letter-spacing:-.01em;line-height:1.55;color:#0a0a0a;margin:0 0 clamp(2rem,5vw,3rem);max-width:48rem}
 .vision-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(.8rem,2vw,1.5rem)}
 .vision-card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:clamp(1.3rem,2.5vw,1.8rem);box-shadow:0 1px 3px rgba(0,0,0,.04);transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease;position:relative;overflow:hidden}
-.vision-card:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,0,0,.08);border-color:rgba(37,99,235,.3)}
-.vision-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#2563eb,#7c3aed)}
+.vision-card:hover{transform:translateY(-5px);box-shadow:0 14px 36px rgba(0,0,0,.1);border-color:rgba(37,99,235,.3)}
+.vision-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#2563eb,#7c3aed,#2563eb);background-size:200% 100%;transition:background-position .6s ease}
+.vision-card:hover::before{background-position:100% 0}
+.vision-card:hover .vc-num{color:rgba(37,99,235,.5);transform:translateX(2px)}
+.vision-card .vc-num{transition:color .3s,transform .3s}
 .vision-card .vc-num{font-family:var(--font-en);font-size:2.2rem;font-weight:200;color:rgba(37,99,235,.25);letter-spacing:-.02em;line-height:1;margin-bottom:.5rem}
 .vision-card .vc-label{font-family:var(--font-en);font-size:.7rem;font-weight:700;letter-spacing:.3em;color:#2563eb;margin-bottom:.3rem}
 .vision-card .vc-title{font-size:clamp(1.05rem,2.2vw,1.2rem);font-weight:800;color:#0a0a0a;margin-bottom:.7rem;letter-spacing:-.005em}
@@ -873,9 +902,11 @@ h1,h2,h3{letter-spacing:-.01em;font-weight:800}
 .header-credit{color:var(--sub);font-size:.72rem;margin-top:.5rem}
 nav{display:flex;justify-content:flex-start;gap:.4rem;padding:.7rem 1.2rem;background:rgba(255,255,255,.85);backdrop-filter:saturate(180%) blur(12px);-webkit-backdrop-filter:saturate(180%) blur(12px);position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 nav::-webkit-scrollbar{display:none}
-nav button{padding:.55rem 1.1rem;border:1.5px solid transparent;border-radius:999px;font-size:.85rem;font-weight:700;cursor:pointer;transition:all .2s;background:transparent;color:var(--sub);white-space:nowrap;flex-shrink:0;position:relative}
-nav button:hover{background:#f1f5f9;color:var(--text)}
-nav button.active{color:#fff;background:var(--accent)}
+nav button{padding:.55rem 1.1rem;border:1.5px solid transparent;border-radius:999px;font-size:.85rem;font-weight:700;cursor:pointer;transition:background .25s,color .25s,transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s;background:transparent;color:var(--sub);white-space:nowrap;flex-shrink:0;position:relative}
+nav button:hover{background:#f1f5f9;color:var(--text);transform:translateY(-1px)}
+nav button:active{transform:translateY(0) scale(.97)}
+nav button.active{color:#fff;background:var(--accent);box-shadow:0 4px 14px rgba(15,23,42,.25);animation:tab-pop .35s cubic-bezier(.34,1.56,.64,1)}
+@keyframes tab-pop{0%{transform:scale(.94)}60%{transform:scale(1.04)}100%{transform:scale(1)}}
 nav button.active::after{display:none}
 
 /* タブごとの色分け（カラーコーディング） */
@@ -939,6 +970,10 @@ nav button.active::after{display:none}
 /* ユーザーが reduced motion を選んでいる場合は無効化 */
 @media(prefers-reduced-motion:reduce){
   .reveal,.reveal-stagger>*,.m-grid .m-card{opacity:1!important;transform:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+  .hero-bg-img,.hero-title-main,.hero-title-main .tm-prefix,.hero-title-main .tm-jp,.hero-sub,.hero-scroll-cue,.hero-scroll-cue::after,.hero-stats-inline::after,.tab-panel.active,nav button.active,.scroll-progress{animation:none!important}
+  .section-title::after{transition:none!important;width:3.2rem}
+  .back-to-top,.vision-card,.v-item,nav button{transition-duration:.01s!important}
 }
 .tab-notice{font-size:.72rem;color:#6b7280;background:#f8fafc;border-left:3px solid #d1d5db;padding:.4rem .7rem;margin-bottom:.8rem;border-radius:0 6px 6px 0;line-height:1.5}
 .tab-notice a{color:var(--accent)}
@@ -988,7 +1023,7 @@ nav button.active::after{display:none}
 .section-title-former{font-size:1rem;font-weight:600;color:var(--sub);margin:2rem 0 .8rem;padding:.5rem 1rem;background:#fff;border-radius:10px;border-left:4px solid #9ca3af}
 
 .tab-panel{display:none}
-.tab-panel.active{display:block}
+.tab-panel.active{display:block;animation:panel-in .45s cubic-bezier(.22,.61,.36,1) both}
 /* 総合計画タブ */
 .plan-hero{background:linear-gradient(135deg,#1e40af,#2563eb);color:#fff;border-radius:16px;padding:1.5rem;margin-bottom:1.2rem;box-shadow:0 4px 20px rgba(37,99,235,.25)}
 .plan-hero h2{font-size:1.3rem;margin-bottom:.4rem;font-weight:700}
@@ -1092,11 +1127,13 @@ nav button.active::after{display:none}
 .cat-bar-bg{flex:1;height:18px;background:#f0f4f8;border-radius:9px;overflow:hidden}
 .cat-bar-fill{height:100%;border-radius:9px;transition:.5s}
 .cat-bar-pct{width:40px;font-size:.78rem;color:var(--sub);text-align:right;font-weight:600}
-.section-title{font-size:1.35rem;font-weight:800;margin:2rem 0 1rem;padding-left:.8rem;border-left:4px solid var(--accent);letter-spacing:-.01em;opacity:0;transform:translateY(20px);transition:opacity .65s cubic-bezier(.22,.61,.36,1),transform .65s cubic-bezier(.22,.61,.36,1)}
+.section-title{font-size:1.35rem;font-weight:800;margin:2rem 0 1rem;padding-left:.8rem;border-left:4px solid var(--accent);letter-spacing:-.01em;opacity:0;transform:translateY(20px);transition:opacity .65s cubic-bezier(.22,.61,.36,1),transform .65s cubic-bezier(.22,.61,.36,1);position:relative}
+.section-title::after{content:'';position:absolute;left:.8rem;bottom:-6px;height:2px;width:0;background:linear-gradient(90deg,#2563eb,#7c3aed);border-radius:2px;transition:width .8s cubic-bezier(.22,.61,.36,1) .25s}
 .section-title.is-visible{opacity:1;transform:translateY(0)}
+.section-title.is-visible::after{width:3.2rem}
 .v-list{display:flex;flex-direction:column;gap:.8rem}
-.v-item{display:flex;background:var(--card);border-radius:12px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06);transition:.2s}
-.v-item:hover{box-shadow:0 4px 15px rgba(0,0,0,.1)}
+.v-item{display:flex;background:var(--card);border-radius:12px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06);transition:box-shadow .25s,transform .25s cubic-bezier(.22,.61,.36,1)}
+.v-item:hover{box-shadow:0 8px 24px rgba(0,0,0,.12);transform:translateY(-2px)}
 .v-thumb{flex-shrink:0;width:180px;min-height:100px;position:relative;display:block;background:#eee}
 .v-thumb img{width:100%;height:100px;object-fit:cover}
 .v-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:36px;height:36px;background:rgba(0,0,0,.6);border-radius:50%;display:flex;align-items:center;justify-content:center}
@@ -2045,6 +2082,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
 </style>
 </head>
 <body>
+<div class="scroll-progress" id="scroll-progress" aria-hidden="true"></div>
 <a href="#main-content" class="skip-link">本文へスキップ</a>
 <!-- このデータの限界モーダル -->
 <div class="limits-overlay" id="limits-overlay" onclick="if(event.target===this)closeLimitsModal()">
@@ -2171,9 +2209,10 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
       <span class="tm-jp">みんなの伊東市</span>
     </h1>
     <p class="hero-sub">議員活動報告 ／ 議会情報のまとめサイト
-      <span class="hero-stats-inline">在任議員${currentMembersList.length}名 ｜ 議会動画${videos.length}本</span>
+      <span class="hero-stats-inline">在任議員<span class="count-up" data-count="${currentMembersList.length}">${currentMembersList.length}</span>名 ｜ 議会動画<span class="count-up" data-count="${videos.length}">${videos.length}</span>本</span>
     </p>
   </div>
+  <div class="hero-scroll-cue" aria-hidden="true">Scroll</div>
   <div class="header-visitors" id="visitor-counter" style="display:none">
     <span id="vc-total">—</span> 人が訪問 ｜ 今日 <span id="vc-today">—</span> 人
   </div>
@@ -3291,6 +3330,8 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
   </div>
   <div class="footer-credit-line">© ${new Date().getFullYear()} みんなの伊東市 ｜ 制作・運営: 伊東市議会議員 大竹圭 ｜ 最終更新: ${new Date().toLocaleDateString('ja-JP')}</div>
 </footer>
+<!-- トップへ戻る -->
+<button id="back-to-top" class="back-to-top" aria-label="ページの先頭へ戻る" title="トップへ戻る">↑</button>
 <!-- 用語解説ボタン（テキスト選択時に表示） -->
 <button id="explain-btn" class="explain-btn" style="display:none" onclick="openExplainModal()">💡 この言葉を解説</button>
 
@@ -3827,6 +3868,59 @@ document.addEventListener('DOMContentLoaded',applyPersonalize);
   }
 })();
 
+// === ページ演出（プログレスバー / トップへ戻る / 数字カウントアップ） ===
+(function(){
+  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // 読了プログレスバー
+  const bar = document.getElementById('scroll-progress');
+  if (bar) {
+    let ticking = false;
+    const update = () => {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.transform = 'scaleX(' + (max > 0 ? Math.min(window.scrollY / max, 1) : 0) + ')';
+      ticking = false;
+    };
+    window.addEventListener('scroll', () => {
+      if (!ticking) { requestAnimationFrame(update); ticking = true; }
+    }, { passive: true });
+    update();
+  }
+
+  // トップへ戻るボタン
+  const topBtn = document.getElementById('back-to-top');
+  if (topBtn) {
+    window.addEventListener('scroll', () => {
+      topBtn.classList.toggle('show', window.scrollY > 600);
+    }, { passive: true });
+    topBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+    });
+  }
+
+  // 数字カウントアップ（ヒーロー統計）
+  const counters = document.querySelectorAll('.count-up');
+  if (counters.length && 'IntersectionObserver' in window && !reduceMotion) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        io.unobserve(entry.target);
+        const el = entry.target;
+        const target = parseInt(el.dataset.count, 10) || 0;
+        const dur = 1400;
+        const t0 = performance.now();
+        const step = (now) => {
+          const p = Math.min((now - t0) / dur, 1);
+          const eased = 1 - Math.pow(1 - p, 3); // ease-out cubic
+          el.textContent = Math.round(target * eased);
+          if (p < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      });
+    }, { threshold: .6 });
+    counters.forEach(el => io.observe(el));
+  }
+})();
 
 // === PWA Service Worker 登録 ===
 if ('serviceWorker' in navigator) {
