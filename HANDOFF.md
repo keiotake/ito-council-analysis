@@ -389,3 +389,31 @@ bd48750  議事録のQ&A統合：再質問を1セッションにまとめて表�
 ---
 
 ご不明点や追加情報が必要な場合は本ファイルを更新してください。
+
+---
+
+## 📊 数字で見る伊東市（numbers/）— 2026-10-21 追加
+
+公式統計をグラフで見せる独立ページ。トップページのナビ「📈 数字で見る伊東市」からリンク。
+
+### 仕組み
+- `scripts/stats/fetch_dashboard.js` … 統計ダッシュボード（総務省統計局）のAPIから、伊東市と比較用4市（熱海・下田・伊豆・伊豆の国）の人口・財政など32指標を取得 → `data/stats/dashboard.json`。登録・APIキー不要。1件でも失敗したら既存ファイルを上書きしない
+- `scripts/stats/extract_ipss.js` … 社人研「日本の地域別将来推計人口（令和5(2023)年推計）」のExcelから5市分を抽出 → `data/stats/ipss_r5.json`（推計は数年に一度なので、抽出結果をコミットして使う）
+- `build_pages.js` … 上の2つのJSONから `numbers/index.html` を生成。「データから言えること」の文章はデータから自動計算（手入力の数字を置かない）
+- `numbers/numbers.js` … グラフ描画（Chart.js 4.4.1、cdnjs、SRIつき）。縦軸は0始まり、推計は点線＋三角で区別
+- `scripts/stats/verify_numbers.js` … グラフ・表の全数値が元データと一致するかを検査（約950件）。欠損が0になっていないかも検査
+
+### 更新手順（年1〜2回が目安）
+```bash
+npm run stats:fetch      # 統計ダッシュボードから最新を取得
+npm run build            # トップページ＋数字で見る伊東市を再生成
+npm run stats:verify     # 数値一致の検査（失敗したら公開しない）
+npm run audit            # 禁止語の点検
+git add data/stats numbers index.html && git commit && git push
+```
+社人研の推計が新しく出たら、`extract_ipss.js` の URL を新しい推計のものに変えて `npm i --no-save xlsx@0.18.5 && node scripts/stats/extract_ipss.js`。
+
+### 守っていること
+- 数値は公式統計の値のまま。値がない年はゼロにせず空ける
+- 良い・悪いの判定をしない。「データから言えること」と「読むときの注意」を分ける
+- すべてのグラフに単位・期間・出典・取得日・定義、「表で見る」「CSVで保存」「画像で保存」

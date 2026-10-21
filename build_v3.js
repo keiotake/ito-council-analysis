@@ -908,6 +908,10 @@ nav button:active{transform:translateY(0) scale(.97)}
 nav button.active{color:#fff;background:var(--accent);box-shadow:0 4px 14px rgba(15,23,42,.25);animation:tab-pop .35s cubic-bezier(.34,1.56,.64,1)}
 @keyframes tab-pop{0%{transform:scale(.94)}60%{transform:scale(1.04)}100%{transform:scale(1)}}
 nav button.active::after{display:none}
+nav a.nav-out{padding:.55rem 1.1rem;border:1.5px solid #93c5fd;border-radius:999px;font-size:.85rem;font-weight:700;white-space:nowrap;flex-shrink:0;text-decoration:none;color:#1e3a8a;background:#dbeafe}
+nav a.nav-out:hover{background:#bfdbfe}
+body.font-large nav a.nav-out{font-size:calc(.88rem * 1.15)}
+body.high-contrast nav a.nav-out{background:#222;color:#fff;border:1px solid #fff}
 
 /* タブごとの色分け（カラーコーディング） */
 /* 議員一覧 = 青系（信頼・人物） */
@@ -2256,6 +2260,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
   <button class="nav-tab nav-teal" role="tab" aria-selected="false" onclick="switchTab('plan',this)">📘 総合計画</button>
   <button class="nav-tab nav-amber" role="tab" aria-selected="false" onclick="switchTab('analysis',this)">🔎 伊東市分析</button>
   <button class="nav-tab nav-gray" role="tab" aria-selected="false" onclick="switchTab('stats',this)">📊 議会全体</button>
+  <a class="nav-out" href="numbers/">📈 数字で見る伊東市 <span aria-hidden="true">→</span></a>
 </nav>
 <div class="container" id="main-content" role="main">
   <div id="tab-members" class="tab-panel active">

@@ -4,7 +4,7 @@
   "description": "みんなの伊東市 - 伊東市議会の議論をAIで整理した非公式情報サイト",
   "private": true,
   "scripts": {
-    "build": "node build_v3.js",
+    "build": "node build_v3.js && node build_pages.js",
     "monthly": "node monthly_check.js",
     "audit": "node audit.js",
     "audit:strict": "node audit.js --strict",
@@ -15,7 +15,10 @@
     "scrape:new": "node scrape_new_only.js",
     "parse": "node parse_minutes.js",
     "integrate": "node integrate_gijiroku.js",
-    "deploy:worker": "cd voice-backend && npx wrangler deploy"
+    "deploy:worker": "cd voice-backend && npx wrangler deploy",
+    "build:pages": "node build_pages.js",
+    "stats:fetch": "node scripts/stats/fetch_dashboard.js",
+    "stats:verify": "node scripts/stats/verify_numbers.js"
   },
   "engines": {
     "node": ">=18"
