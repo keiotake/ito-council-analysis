@@ -351,6 +351,27 @@ export default {
       return jsonResp({ ok: true, posts }, 200, env, origin);
     }
 
+    // ====== /admin/feedback・/admin/subscribers : 運営者用 意見とメール登録者の一覧 ======
+    if (request.method === 'GET' && (url.pathname === '/admin/feedback' || url.pathname === '/admin/subscribers')) {
+      const auth = request.headers.get('Authorization');
+      if (auth !== `Bearer ${env.ADMIN_SECRET}`) return jsonResp({ ok: false, error: '認証エラー' }, 401, env, origin);
+      if (!env.POSTS_KV) return jsonResp({ ok: false, error: 'POSTS_KV未設定' }, 500, env, origin);
+      const prefix = url.pathname === '/admin/feedback' ? 'feedback:' : 'subscriber:';
+      const items = [];
+      let cursor;
+      do {
+        const page = await env.POSTS_KV.list({ prefix, cursor });
+        for (const k of page.keys) {
+          const raw = await env.POSTS_KV.get(k.name);
+          if (raw) items.push(JSON.parse(raw));
+          if (items.length >= 500) break;
+        }
+        cursor = page.list_complete || items.length >= 500 ? undefined : page.cursor;
+      } while (cursor);
+      items.sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
+      return jsonResp({ ok: true, count: items.length, items }, 200, env, origin);
+    }
+
     // ====== /admin/moderate : 運営者用 承認/却下 ======
     if (request.method === 'POST' && url.pathname === '/admin/moderate') {
       const auth = request.headers.get('Authorization');
@@ -491,30 +512,25 @@ export default {
           return jsonResp({ ok: false, error: 'メールアドレスが長すぎます' }, 400, env, origin);
         }
 
-        // GAS経由で登録（既存の/submitと同じパターン）
-        if (!env.GAS_URL) {
+        // KVに保存（IPアドレス等は保存しない）。配信停止はキーごと削除する
+        if (!env.POSTS_KV) {
           return jsonResp({ ok: false, error: 'サーバー設定が不完全です' }, 500, env, origin);
         }
-        const payload = {
-          type: 'email_subscription',
-          email,
-          interests,
-          action, // 'subscribe' or 'unsubscribe'
-          secret: env.SHARED_SECRET,
-          ip,
-          country,
-          timestamp: new Date().toISOString(),
-        };
-        const gasResp = await fetch(env.GAS_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        });
-        const gasText = await gasResp.text();
-        let gasJson = {};
-        try { gasJson = JSON.parse(gasText); } catch(e){}
-        if (!gasResp.ok || gasJson.ok === false) {
-          return jsonResp({ ok: false, error: gasJson.error || 'サーバー側でエラーが発生しました' }, 502, env, origin);
+        const subKey = 'subscriber:' + email;
+        const now = new Date().toISOString();
+        if (action === 'unsubscribe') {
+          await env.POSTS_KV.delete(subKey);
+        } else {
+          await env.POSTS_KV.put(subKey, JSON.stringify({ email, interests, createdAt: now }));
+        }
+        if (env.NOTIFY_GAS_URL && env.NOTIFY_GAS_SECRET) {
+          ctx.waitUntil(sendNotificationEmail(env, {
+            postType: action === 'unsubscribe' ? 'メール配信の停止' : 'メール配信の登録',
+            category: 'メール配信',
+            title: action === 'unsubscribe' ? 'メール配信の停止がありました' : 'メール配信の登録がありました',
+            body: email + (interests.length ? '\n関心: ' + interests.join('、') : ''),
+            createdAt: now,
+          }).catch(e => console.error('Notification failed:', e)));
         }
         return jsonResp({
           ok: true,
@@ -763,23 +779,22 @@ export default {
         if (feedback.length > 500) {
           return jsonResp({ ok: false, error: 'ご要望は500文字以内でお願いします' }, 400, env, origin);
         }
-        // GASに転送（市民の声と同じ仕組み）
-        const ip = request.headers.get('cf-connecting-ip') || 'unknown';
-        const ua = request.headers.get('user-agent') || 'unknown';
-        const payload = {
-          secret: env.SHARED_SECRET,
-          type: 'site_feedback',
-          category: category,
-          message: feedback,
-          ip,
-          userAgent: ua,
-          timestamp: new Date().toISOString()
-        };
-        const gasResp = await fetch(env.GAS_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        });
+        // KVに保存して運営者へメール通知（IPアドレス等は保存しない）
+        if (!env.POSTS_KV) {
+          return jsonResp({ ok: false, error: 'サーバー設定が不完全です' }, 500, env, origin);
+        }
+        const now = new Date().toISOString();
+        const fbKey = 'feedback:' + now + ':' + crypto.randomUUID();
+        await env.POSTS_KV.put(fbKey, JSON.stringify({ category: category.slice(0, 30), feedback, createdAt: now }));
+        if (env.NOTIFY_GAS_URL && env.NOTIFY_GAS_SECRET) {
+          ctx.waitUntil(sendNotificationEmail(env, {
+            postType: 'サイトへの意見',
+            category: category.slice(0, 30),
+            title: 'サイトへの意見が届きました（公開されるものではありません）',
+            body: feedback,
+            createdAt: now,
+          }).catch(e => console.error('Notification failed:', e)));
+        }
         return jsonResp({ ok: true, message: 'ご要望を受け付けました。ありがとうございます！' }, 200, env, origin);
       } catch (e) {
         return jsonResp({ ok: false, error: e.message }, 500, env, origin);
