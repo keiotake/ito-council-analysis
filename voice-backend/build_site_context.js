@@ -3,7 +3,7 @@
 // - 現職議員20名のプロフィール・統計
 // - 各議員の質問要約（動画ごと）★NEW
 // - 会派別の大綱質疑の質問要約 ★NEW
-// - 質問/動画ランキング
+// ※ 議員の質問数・動画数のランキングや件数比較は、サイトの「議員を数値化・ランキングしない」方針に合わせて出力しない
 // - 第五次総合計画（9課題/将来人口/5政策目標/施策タイトル一覧）
 // - 議員×施策マッピングの要約
 // Worker に埋め込まれるコンテキストファイルを出力する。
@@ -93,28 +93,8 @@ Object.entries(factionMembers).forEach(([f, names]) => {
     if (p.role) parts.push(p.role);
     if (p.committee) parts.push(p.committee);
     if (p.special) parts.push(p.special);
-    ctx += `- ${n} (${parts.join('・')}) 動画${s.videoCount}本・質問${s.questionCount}問\n`;
+    ctx += `- ${n} (${parts.join('・')})\n`;
   });
-});
-
-// 質問数ランキング（現職上位10）
-ctx += `\n## 質問数ランキング (現職上位10名)\n`;
-const qRank = currentNames
-  .map(n => ({ name: n, q: memberStats[n].questionCount, v: memberStats[n].videoCount, f: profiles[n].faction }))
-  .sort((a, b) => b.q - a.q)
-  .slice(0, 10);
-qRank.forEach((m, i) => {
-  ctx += `${i + 1}. ${m.name} (${m.f}) — ${m.q}問 / ${m.v}本\n`;
-});
-
-// 動画数ランキング
-ctx += `\n## 動画出演数ランキング (現職上位10名)\n`;
-const vRank = currentNames
-  .map(n => ({ name: n, q: memberStats[n].questionCount, v: memberStats[n].videoCount, f: profiles[n].faction }))
-  .sort((a, b) => b.v - a.v)
-  .slice(0, 10);
-vRank.forEach((m, i) => {
-  ctx += `${i + 1}. ${m.name} (${m.f}) — ${m.v}本 / ${m.q}問\n`;
 });
 
 // 運営者のプロフィール
@@ -128,7 +108,6 @@ if (profiles['大竹圭']) {
   ctx += `- 会派: ${p.faction || ''}\n`;
   ctx += `- 委員会: ${p.committee || ''}\n`;
   if (p.role) ctx += `- 役職: ${p.role}\n`;
-  ctx += `- 動画${s.videoCount || 0}本・質問${s.questionCount || 0}問\n`;
   ctx += `- AI活用に積極的で、本サイトを個人プロジェクトとして構築・運営している\n`;
 }
 
@@ -142,7 +121,7 @@ currentNames.forEach(name => {
   if (!ms || !ms.videos || ms.videos.length === 0) return;
 
   const s = memberStats[name] || {};
-  ctx += `\n## ${name} (${profiles[name].faction || '無会派'}・動画${s.videoCount}本・質問${s.questionCount}問)\n`;
+  ctx += `\n## ${name} (${profiles[name].faction || '無会派'})\n`;
 
   // 新しい順にソート
   const sortedVideos = [...ms.videos].sort((a, b) => (b.date || '').localeCompare(a.date || ''));

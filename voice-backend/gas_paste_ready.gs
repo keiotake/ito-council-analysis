@@ -1,6 +1,6 @@
 const CONFIG = {
   NOTIFICATION_EMAIL: '★★ここをあなたのGmailアドレスに書き換え★★@gmail.com',
-  SHARED_SECRET: '15461647cbbb695c2f83067eaeab6ecd29b5cc0f',
+  SHARED_SECRET: '＜GASのスクリプトプロパティとWorkerのSHARED_SECRETに同じ値を設定。値はここに書かない＞',
   FROM_NAME: 'みんなの伊東市',
 };
 

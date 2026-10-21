@@ -143,9 +143,9 @@ PAGEVIEW_KV            # KV Namespace（ページビューカウンター用）
 ### generate_topics.js のADMIN_SECRET
 ```javascript
 // generate_topics.js 内にハードコード（bach処理用）
-const ADMIN_SECRET = '21ce33e5e78b78704d99a863e7235c3c75e109f99e6bed10';
+const ADMIN_SECRET = '＜Cloudflare Workerの秘密設定 ADMIN_SECRET を参照。値はここに書かない＞';
 ```
-※ 公開リポジトリではないので一時的にこの形だが、**漏洩したら Worker側で再設定が必要**。
+※ このリポジトリは**公開**されている。秘密の値は絶対にファイルへ書かないこと（2026-10-21に値の露出が判明し入れ替え済み）。
 
 ### GitHub Pages
 - リポジトリ: github.com/keiotake/ito-council-analysis
