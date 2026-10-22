@@ -427,3 +427,10 @@ git add data/stats numbers compare index.html && git commit && git push
 - 比較条件は URL（`?i=指標&c=市コード,…&y=年`）で共有できる
 - 検査: `npm run stats:verify` が `verify_compare.js` も実行（別の書き方で計算し直して照合、順位を示す語・AI表記も確認）
 - 注意: サイトの `sw.js` は静的ファイルをキャッシュ優先で返す。`build_pages.js` がスクリプトの URL に内容ハッシュ（`?v=`）を付けるので、JS を直したら必ず `npm run build` し直すこと
+
+## 議会YouTube動画の追加（2026-10-22 から新方式）
+
+- 旧 `fetch_new_videos.js` は YouTube の RSS（feeds/videos.xml）を使っていたが、RSS が 404 を返すようになり、令和8年6月・9月定例会の動画が入っていなかった
+- 新しい手順: `npm run videos:fetch`（追加候補を表示するだけ）→ 内容を確認 → `node scripts/videos/fetch_channel_videos.js --write` → `npm run build` → `npm run audit`
+- チャンネルの「動画」ページを直接読み、`analysis_data.json` にない動画だけを追加する。種別（一般質問・大綱質疑・議案審議・委員会）と議員名は動画タイトルから決める。字幕の自動認識は使わない（questions は空）
+- 動画は年月しか分からないため、議員ページの日付は「2026.9」のように年月だけを表示する（以前は架空の「1日」が付いていた）

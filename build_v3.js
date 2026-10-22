@@ -429,7 +429,7 @@ function memberDetailHTML(m) {
     const gjYMs = new Set(gjQs.map(q => (q.date || '').substring(0, 7)).filter(Boolean));
     // YouTube動画で議事録未取得分を補完（カウントのみ）
     const ytAdds = (m.videos || []).filter(v => v.date && !gjYMs.has(v.date.substring(0, 7))).map(v => ({
-      date: v.date + '-01',
+      date: v.date, // 動画は年月しか分からないので日を付けない
       sessionType: v.sessionType || ''
     }));
     const qs = gjQs.concat(ytAdds);
@@ -523,7 +523,7 @@ function memberDetailHTML(m) {
           ? sums.slice(0, 8).map((s, i) => `${i+1}. ${s}`).join('\n')
           : '（要約データが利用できません。動画で直接ご確認ください）';
         ytSupplements.push({
-          date: v.date + '-01',
+          date: v.date, // 動画は年月しか分からないので日を付けない
           dateLabel: v.date,
           sessionType: v.sessionType || '',
           topic: topic.substring(0, 60),
@@ -611,7 +611,8 @@ function memberDetailHTML(m) {
           const fmtJpDateShort = (d) => {
             if (!d) return q.dateLabel || '';
             const [y, mo, da] = d.split('-');
-            if (!y || !mo || !da) return d;
+            if (!y || !mo) return d;
+            if (!da) return `${y}.${parseInt(mo)}`; // 年月だけ（動画で補った項目）
             return `${y}.${parseInt(mo)}.${parseInt(da)}`;
           };
           return `<details class="qtl-topic-card" data-date="${esc(q.date || '')}" data-type="${esc(q.sessionType || '')}">
@@ -660,6 +661,7 @@ function memberDetailHTML(m) {
               <option value="一般質問">一般質問</option>
               <option value="大綱質疑">大綱質疑</option>
               <option value="補正予算審議">補正予算審議</option>
+              <option value="議案審議">議案審議</option>
               <option value="討論">討論</option>
               <option value="委員会">委員会</option>
             </select>
@@ -2323,6 +2325,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
         <option value="一般質問">一般質問</option>
         <option value="大綱質疑">大綱質疑</option>
         <option value="補正予算審議">補正予算審議</option>
+        <option value="議案審議">議案審議</option>
         <option value="委員会">委員会</option>
       </select>
     </div>
@@ -2354,6 +2357,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
           <option value="一般質問">一般質問</option>
           <option value="大綱質疑">大綱質疑</option>
           <option value="補正予算審議">補正予算審議</option>
+          <option value="議案審議">議案審議</option>
           <option value="委員会">委員会</option>
         </select>
       </div>

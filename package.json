@@ -18,7 +18,8 @@
     "deploy:worker": "cd voice-backend && npx wrangler deploy",
     "build:pages": "node build_pages.js",
     "stats:fetch": "node scripts/stats/fetch_dashboard.js",
-    "stats:verify": "node scripts/stats/verify_numbers.js && node scripts/stats/verify_compare.js"
+    "stats:verify": "node scripts/stats/verify_numbers.js && node scripts/stats/verify_compare.js",
+    "videos:fetch": "node scripts/videos/fetch_channel_videos.js"
   },
   "engines": {
     "node": ">=18"
