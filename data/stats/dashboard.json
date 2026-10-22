@@ -5,9 +5,9 @@
   "sourceUrl": "https://dashboard.e-stat.go.jp/",
   "apiUrl": "https://dashboard.e-stat.go.jp/api/1.0/Json/getData",
   "license": "出典を明記のうえ利用。政府統計の利用条件は https://dashboard.e-stat.go.jp/ の利用規約に従う",
-  "fetchedAt": "2026-10-21T12:58:25.321Z",
+  "fetchedAt": "2026-10-22T05:43:06.695Z",
   "note": "値が公開されていない年は含めていない（ゼロとはしない）。provisional=true は速報値など暫定の値。",
-  "calls": 160
+  "calls": 170
  },
  "regions": {
   "22205": "熱海市",
@@ -26,6 +26,26 @@
    "cycle": "年",
    "definition": "本邦に常住する人口（当該住居に3か月以上にわたって住んでいるか、又は住むことになっている者）。人口推計は国勢調査による人口を基準人口とし、その後の人口動向を他の人口関連資料から得て、毎月１日現在の人口を算出したもの。\n各国のデータについては出典参照。",
    "annotation": "日本人・外国人の別不詳及び年齢不詳を含む。"
+  },
+  "jumin_pop": {
+   "code": "0201200000000010010",
+   "name": "住民基本台帳人口（総数）",
+   "shortName": "住民基本台帳人口（総数）",
+   "unit": "人",
+   "statName": "社会・人口統計体系",
+   "cycle": "年",
+   "definition": "国内の市区町村に住所を定めている者として1月1日現在（2013年以前は3月31日現在）、当該市区町村の住民基本台帳に記載されている人口。",
+   "annotation": ""
+  },
+  "area_total": {
+   "code": "0101010000000010010",
+   "name": "総面積（北方地域及び竹島を除く）",
+   "shortName": "総面積（北方地域及び竹島を除く）",
+   "unit": "ha",
+   "statName": "社会・人口統計体系",
+   "cycle": "年",
+   "definition": "北方地域及び竹島を除く日本の面積。",
+   "annotation": ""
   },
   "pop_0_14": {
    "code": "0201010010000010010",
@@ -587,6 +607,1458 @@
      "year": 2025,
      "period": "年",
      "value": 44124,
+     "provisional": false
+    }
+   ]
+  },
+  "jumin_pop": {
+   "22205": [
+    {
+     "year": 2013,
+     "period": "年",
+     "value": 39287,
+     "provisional": false
+    },
+    {
+     "year": 2014,
+     "period": "年",
+     "value": 38992,
+     "provisional": false
+    },
+    {
+     "year": 2015,
+     "period": "年",
+     "value": 38442,
+     "provisional": false
+    },
+    {
+     "year": 2016,
+     "period": "年",
+     "value": 38055,
+     "provisional": false
+    },
+    {
+     "year": 2017,
+     "period": "年",
+     "value": 37733,
+     "provisional": false
+    },
+    {
+     "year": 2018,
+     "period": "年",
+     "value": 37510,
+     "provisional": false
+    },
+    {
+     "year": 2019,
+     "period": "年",
+     "value": 37042,
+     "provisional": false
+    },
+    {
+     "year": 2020,
+     "period": "年",
+     "value": 36607,
+     "provisional": false
+    },
+    {
+     "year": 2021,
+     "period": "年",
+     "value": 36036,
+     "provisional": false
+    },
+    {
+     "year": 2022,
+     "period": "年",
+     "value": 35167,
+     "provisional": false
+    },
+    {
+     "year": 2023,
+     "period": "年",
+     "value": 34433,
+     "provisional": false
+    },
+    {
+     "year": 2024,
+     "period": "年",
+     "value": 33934,
+     "provisional": false
+    },
+    {
+     "year": 2025,
+     "period": "年",
+     "value": 33290,
+     "provisional": false
+    }
+   ],
+   "22208": [
+    {
+     "year": 2013,
+     "period": "年",
+     "value": 72816,
+     "provisional": false
+    },
+    {
+     "year": 2014,
+     "period": "年",
+     "value": 72664,
+     "provisional": false
+    },
+    {
+     "year": 2015,
+     "period": "年",
+     "value": 72134,
+     "provisional": false
+    },
+    {
+     "year": 2016,
+     "period": "年",
+     "value": 71473,
+     "provisional": false
+    },
+    {
+     "year": 2017,
+     "period": "年",
+     "value": 70682,
+     "provisional": false
+    },
+    {
+     "year": 2018,
+     "period": "年",
+     "value": 69990,
+     "provisional": false
+    },
+    {
+     "year": 2019,
+     "period": "年",
+     "value": 69215,
+     "provisional": false
+    },
+    {
+     "year": 2020,
+     "period": "年",
+     "value": 68487,
+     "provisional": false
+    },
+    {
+     "year": 2021,
+     "period": "年",
+     "value": 67718,
+     "provisional": false
+    },
+    {
+     "year": 2022,
+     "period": "年",
+     "value": 67074,
+     "provisional": false
+    },
+    {
+     "year": 2023,
+     "period": "年",
+     "value": 66286,
+     "provisional": false
+    },
+    {
+     "year": 2024,
+     "period": "年",
+     "value": 65433,
+     "provisional": false
+    },
+    {
+     "year": 2025,
+     "period": "年",
+     "value": 64438,
+     "provisional": false
+    }
+   ],
+   "22219": [
+    {
+     "year": 2013,
+     "period": "年",
+     "value": 24230,
+     "provisional": false
+    },
+    {
+     "year": 2014,
+     "period": "年",
+     "value": 24108,
+     "provisional": false
+    },
+    {
+     "year": 2015,
+     "period": "年",
+     "value": 23656,
+     "provisional": false
+    },
+    {
+     "year": 2016,
+     "period": "年",
+     "value": 23172,
+     "provisional": false
+    },
+    {
+     "year": 2017,
+     "period": "年",
+     "value": 22714,
+     "provisional": false
+    },
+    {
+     "year": 2018,
+     "period": "年",
+     "value": 22192,
+     "provisional": false
+    },
+    {
+     "year": 2019,
+     "period": "年",
+     "value": 21748,
+     "provisional": false
+    },
+    {
+     "year": 2020,
+     "period": "年",
+     "value": 21230,
+     "provisional": false
+    },
+    {
+     "year": 2021,
+     "period": "年",
+     "value": 20898,
+     "provisional": false
+    },
+    {
+     "year": 2022,
+     "period": "年",
+     "value": 20494,
+     "provisional": false
+    },
+    {
+     "year": 2023,
+     "period": "年",
+     "value": 20099,
+     "provisional": false
+    },
+    {
+     "year": 2024,
+     "period": "年",
+     "value": 19710,
+     "provisional": false
+    },
+    {
+     "year": 2025,
+     "period": "年",
+     "value": 19282,
+     "provisional": false
+    }
+   ],
+   "22222": [
+    {
+     "year": 2013,
+     "period": "年",
+     "value": 33855,
+     "provisional": false
+    },
+    {
+     "year": 2014,
+     "period": "年",
+     "value": 33526,
+     "provisional": false
+    },
+    {
+     "year": 2015,
+     "period": "年",
+     "value": 32958,
+     "provisional": false
+    },
+    {
+     "year": 2016,
+     "period": "年",
+     "value": 32376,
+     "provisional": false
+    },
+    {
+     "year": 2017,
+     "period": "年",
+     "value": 31842,
+     "provisional": false
+    },
+    {
+     "year": 2018,
+     "period": "年",
+     "value": 31411,
+     "provisional": false
+    },
+    {
+     "year": 2019,
+     "period": "年",
+     "value": 30952,
+     "provisional": false
+    },
+    {
+     "year": 2020,
+     "period": "年",
+     "value": 30360,
+     "provisional": false
+    },
+    {
+     "year": 2021,
+     "period": "年",
+     "value": 29784,
+     "provisional": false
+    },
+    {
+     "year": 2022,
+     "period": "年",
+     "value": 29319,
+     "provisional": false
+    },
+    {
+     "year": 2023,
+     "period": "年",
+     "value": 28872,
+     "provisional": false
+    },
+    {
+     "year": 2024,
+     "period": "年",
+     "value": 28271,
+     "provisional": false
+    },
+    {
+     "year": 2025,
+     "period": "年",
+     "value": 27748,
+     "provisional": false
+    }
+   ],
+   "22225": [
+    {
+     "year": 2013,
+     "period": "年",
+     "value": 50052,
+     "provisional": false
+    },
+    {
+     "year": 2014,
+     "period": "年",
+     "value": 50044,
+     "provisional": false
+    },
+    {
+     "year": 2015,
+     "period": "年",
+     "value": 49904,
+     "provisional": false
+    },
+    {
+     "year": 2016,
+     "period": "年",
+     "value": 49829,
+     "provisional": false
+    },
+    {
+     "year": 2017,
+     "period": "年",
+     "value": 49498,
+     "provisional": false
+    },
+    {
+     "year": 2018,
+     "period": "年",
+     "value": 49200,
+     "provisional": false
+    },
+    {
+     "year": 2019,
+     "period": "年",
+     "value": 48860,
+     "provisional": false
+    },
+    {
+     "year": 2020,
+     "period": "年",
+     "value": 48476,
+     "provisional": false
+    },
+    {
+     "year": 2021,
+     "period": "年",
+     "value": 48016,
+     "provisional": false
+    },
+    {
+     "year": 2022,
+     "period": "年",
+     "value": 47583,
+     "provisional": false
+    },
+    {
+     "year": 2023,
+     "period": "年",
+     "value": 47261,
+     "provisional": false
+    },
+    {
+     "year": 2024,
+     "period": "年",
+     "value": 46664,
+     "provisional": false
+    },
+    {
+     "year": 2025,
+     "period": "年",
+     "value": 45983,
+     "provisional": false
+    }
+   ]
+  },
+  "area_total": {
+   "22205": [
+    {
+     "year": 1981,
+     "period": "年",
+     "value": 6242,
+     "provisional": false
+    },
+    {
+     "year": 1982,
+     "period": "年",
+     "value": 6242,
+     "provisional": false
+    },
+    {
+     "year": 1983,
+     "period": "年",
+     "value": 6243,
+     "provisional": false
+    },
+    {
+     "year": 1984,
+     "period": "年",
+     "value": 6243,
+     "provisional": false
+    },
+    {
+     "year": 1985,
+     "period": "年",
+     "value": 6245,
+     "provisional": false
+    },
+    {
+     "year": 1986,
+     "period": "年",
+     "value": 6245,
+     "provisional": false
+    },
+    {
+     "year": 1987,
+     "period": "年",
+     "value": 6252,
+     "provisional": false
+    },
+    {
+     "year": 1988,
+     "period": "年",
+     "value": 6153,
+     "provisional": false
+    },
+    {
+     "year": 1989,
+     "period": "年",
+     "value": 6153,
+     "provisional": false
+    },
+    {
+     "year": 1990,
+     "period": "年",
+     "value": 6153,
+     "provisional": false
+    },
+    {
+     "year": 1991,
+     "period": "年",
+     "value": 6155,
+     "provisional": false
+    },
+    {
+     "year": 1992,
+     "period": "年",
+     "value": 6155,
+     "provisional": false
+    },
+    {
+     "year": 1993,
+     "period": "年",
+     "value": 6155,
+     "provisional": false
+    },
+    {
+     "year": 1994,
+     "period": "年",
+     "value": 6155,
+     "provisional": false
+    },
+    {
+     "year": 1995,
+     "period": "年",
+     "value": 6155,
+     "provisional": false
+    },
+    {
+     "year": 1996,
+     "period": "年",
+     "value": 6155,
+     "provisional": false
+    },
+    {
+     "year": 1997,
+     "period": "年",
+     "value": 6155,
+     "provisional": false
+    },
+    {
+     "year": 1998,
+     "period": "年",
+     "value": 6155,
+     "provisional": false
+    },
+    {
+     "year": 1999,
+     "period": "年",
+     "value": 6155,
+     "provisional": false
+    },
+    {
+     "year": 2000,
+     "period": "年",
+     "value": 6155,
+     "provisional": false
+    },
+    {
+     "year": 2001,
+     "period": "年",
+     "value": 6155,
+     "provisional": false
+    },
+    {
+     "year": 2002,
+     "period": "年",
+     "value": 6155,
+     "provisional": false
+    },
+    {
+     "year": 2003,
+     "period": "年",
+     "value": 6155,
+     "provisional": false
+    },
+    {
+     "year": 2004,
+     "period": "年",
+     "value": 6156,
+     "provisional": false
+    },
+    {
+     "year": 2005,
+     "period": "年",
+     "value": 6156,
+     "provisional": false
+    },
+    {
+     "year": 2006,
+     "period": "年",
+     "value": 6156,
+     "provisional": false
+    },
+    {
+     "year": 2007,
+     "period": "年",
+     "value": 6156,
+     "provisional": false
+    },
+    {
+     "year": 2008,
+     "period": "年",
+     "value": 6156,
+     "provisional": false
+    },
+    {
+     "year": 2009,
+     "period": "年",
+     "value": 6160,
+     "provisional": false
+    },
+    {
+     "year": 2010,
+     "period": "年",
+     "value": 6161,
+     "provisional": false
+    },
+    {
+     "year": 2011,
+     "period": "年",
+     "value": 6161,
+     "provisional": false
+    },
+    {
+     "year": 2012,
+     "period": "年",
+     "value": 6161,
+     "provisional": false
+    },
+    {
+     "year": 2013,
+     "period": "年",
+     "value": 6161,
+     "provisional": false
+    },
+    {
+     "year": 2014,
+     "period": "年",
+     "value": 6178,
+     "provisional": false
+    },
+    {
+     "year": 2015,
+     "period": "年",
+     "value": 6178,
+     "provisional": false
+    },
+    {
+     "year": 2016,
+     "period": "年",
+     "value": 6178,
+     "provisional": false
+    },
+    {
+     "year": 2017,
+     "period": "年",
+     "value": 6178,
+     "provisional": false
+    },
+    {
+     "year": 2018,
+     "period": "年",
+     "value": 6178,
+     "provisional": false
+    },
+    {
+     "year": 2019,
+     "period": "年",
+     "value": 6178,
+     "provisional": false
+    },
+    {
+     "year": 2020,
+     "period": "年",
+     "value": 6178,
+     "provisional": false
+    },
+    {
+     "year": 2021,
+     "period": "年",
+     "value": 6177,
+     "provisional": false
+    },
+    {
+     "year": 2022,
+     "period": "年",
+     "value": 6177,
+     "provisional": false
+    },
+    {
+     "year": 2023,
+     "period": "年",
+     "value": 6177,
+     "provisional": false
+    },
+    {
+     "year": 2024,
+     "period": "年",
+     "value": 6170,
+     "provisional": false
+    }
+   ],
+   "22208": [
+    {
+     "year": 1981,
+     "period": "年",
+     "value": 12420,
+     "provisional": false
+    },
+    {
+     "year": 1982,
+     "period": "年",
+     "value": 12420,
+     "provisional": false
+    },
+    {
+     "year": 1983,
+     "period": "年",
+     "value": 12420,
+     "provisional": false
+    },
+    {
+     "year": 1984,
+     "period": "年",
+     "value": 12424,
+     "provisional": false
+    },
+    {
+     "year": 1985,
+     "period": "年",
+     "value": 12424,
+     "provisional": false
+    },
+    {
+     "year": 1986,
+     "period": "年",
+     "value": 12429,
+     "provisional": false
+    },
+    {
+     "year": 1987,
+     "period": "年",
+     "value": 12429,
+     "provisional": false
+    },
+    {
+     "year": 1988,
+     "period": "年",
+     "value": 12410,
+     "provisional": false
+    },
+    {
+     "year": 1989,
+     "period": "年",
+     "value": 12410,
+     "provisional": false
+    },
+    {
+     "year": 1990,
+     "period": "年",
+     "value": 12410,
+     "provisional": false
+    },
+    {
+     "year": 1991,
+     "period": "年",
+     "value": 12410,
+     "provisional": false
+    },
+    {
+     "year": 1992,
+     "period": "年",
+     "value": 12410,
+     "provisional": false
+    },
+    {
+     "year": 1993,
+     "period": "年",
+     "value": 12410,
+     "provisional": false
+    },
+    {
+     "year": 1994,
+     "period": "年",
+     "value": 12410,
+     "provisional": false
+    },
+    {
+     "year": 1995,
+     "period": "年",
+     "value": 12410,
+     "provisional": false
+    },
+    {
+     "year": 1996,
+     "period": "年",
+     "value": 12410,
+     "provisional": false
+    },
+    {
+     "year": 1997,
+     "period": "年",
+     "value": 12411,
+     "provisional": false
+    },
+    {
+     "year": 1998,
+     "period": "年",
+     "value": 12412,
+     "provisional": false
+    },
+    {
+     "year": 1999,
+     "period": "年",
+     "value": 12412,
+     "provisional": false
+    },
+    {
+     "year": 2000,
+     "period": "年",
+     "value": 12412,
+     "provisional": false
+    },
+    {
+     "year": 2001,
+     "period": "年",
+     "value": 12412,
+     "provisional": false
+    },
+    {
+     "year": 2002,
+     "period": "年",
+     "value": 12412,
+     "provisional": false
+    },
+    {
+     "year": 2003,
+     "period": "年",
+     "value": 12413,
+     "provisional": false
+    },
+    {
+     "year": 2004,
+     "period": "年",
+     "value": 12413,
+     "provisional": false
+    },
+    {
+     "year": 2005,
+     "period": "年",
+     "value": 12413,
+     "provisional": false
+    },
+    {
+     "year": 2006,
+     "period": "年",
+     "value": 12413,
+     "provisional": false
+    },
+    {
+     "year": 2007,
+     "period": "年",
+     "value": 12413,
+     "provisional": false
+    },
+    {
+     "year": 2008,
+     "period": "年",
+     "value": 12413,
+     "provisional": false
+    },
+    {
+     "year": 2009,
+     "period": "年",
+     "value": 12413,
+     "provisional": false
+    },
+    {
+     "year": 2010,
+     "period": "年",
+     "value": 12413,
+     "provisional": false
+    },
+    {
+     "year": 2011,
+     "period": "年",
+     "value": 12413,
+     "provisional": false
+    },
+    {
+     "year": 2012,
+     "period": "年",
+     "value": 12413,
+     "provisional": false
+    },
+    {
+     "year": 2013,
+     "period": "年",
+     "value": 12413,
+     "provisional": false
+    },
+    {
+     "year": 2014,
+     "period": "年",
+     "value": 12410,
+     "provisional": false
+    },
+    {
+     "year": 2015,
+     "period": "年",
+     "value": 12410,
+     "provisional": false
+    },
+    {
+     "year": 2016,
+     "period": "年",
+     "value": 12410,
+     "provisional": false
+    },
+    {
+     "year": 2017,
+     "period": "年",
+     "value": 12410,
+     "provisional": false
+    },
+    {
+     "year": 2018,
+     "period": "年",
+     "value": 12410,
+     "provisional": false
+    },
+    {
+     "year": 2019,
+     "period": "年",
+     "value": 12410,
+     "provisional": false
+    },
+    {
+     "year": 2020,
+     "period": "年",
+     "value": 12410,
+     "provisional": false
+    },
+    {
+     "year": 2021,
+     "period": "年",
+     "value": 12402,
+     "provisional": false
+    },
+    {
+     "year": 2022,
+     "period": "年",
+     "value": 12402,
+     "provisional": false
+    },
+    {
+     "year": 2023,
+     "period": "年",
+     "value": 12402,
+     "provisional": false
+    },
+    {
+     "year": 2024,
+     "period": "年",
+     "value": 12402,
+     "provisional": false
+    }
+   ],
+   "22219": [
+    {
+     "year": 1981,
+     "period": "年",
+     "value": 10460,
+     "provisional": false
+    },
+    {
+     "year": 1982,
+     "period": "年",
+     "value": 10461,
+     "provisional": false
+    },
+    {
+     "year": 1983,
+     "period": "年",
+     "value": 10461,
+     "provisional": false
+    },
+    {
+     "year": 1984,
+     "period": "年",
+     "value": 10462,
+     "provisional": false
+    },
+    {
+     "year": 1985,
+     "period": "年",
+     "value": 10462,
+     "provisional": false
+    },
+    {
+     "year": 1986,
+     "period": "年",
+     "value": 10462,
+     "provisional": false
+    },
+    {
+     "year": 1987,
+     "period": "年",
+     "value": 10462,
+     "provisional": false
+    },
+    {
+     "year": 1988,
+     "period": "年",
+     "value": 10464,
+     "provisional": false
+    },
+    {
+     "year": 1989,
+     "period": "年",
+     "value": 10464,
+     "provisional": false
+    },
+    {
+     "year": 1990,
+     "period": "年",
+     "value": 10467,
+     "provisional": false
+    },
+    {
+     "year": 1991,
+     "period": "年",
+     "value": 10467,
+     "provisional": false
+    },
+    {
+     "year": 1992,
+     "period": "年",
+     "value": 10467,
+     "provisional": false
+    },
+    {
+     "year": 1993,
+     "period": "年",
+     "value": 10467,
+     "provisional": false
+    },
+    {
+     "year": 1994,
+     "period": "年",
+     "value": 10467,
+     "provisional": false
+    },
+    {
+     "year": 1995,
+     "period": "年",
+     "value": 10467,
+     "provisional": false
+    },
+    {
+     "year": 1996,
+     "period": "年",
+     "value": 10467,
+     "provisional": false
+    },
+    {
+     "year": 1997,
+     "period": "年",
+     "value": 10467,
+     "provisional": false
+    },
+    {
+     "year": 1998,
+     "period": "年",
+     "value": 10467,
+     "provisional": false
+    },
+    {
+     "year": 1999,
+     "period": "年",
+     "value": 10467,
+     "provisional": false
+    },
+    {
+     "year": 2000,
+     "period": "年",
+     "value": 10467,
+     "provisional": false
+    },
+    {
+     "year": 2001,
+     "period": "年",
+     "value": 10467,
+     "provisional": false
+    },
+    {
+     "year": 2002,
+     "period": "年",
+     "value": 10470,
+     "provisional": false
+    },
+    {
+     "year": 2003,
+     "period": "年",
+     "value": 10470,
+     "provisional": false
+    },
+    {
+     "year": 2004,
+     "period": "年",
+     "value": 10470,
+     "provisional": false
+    },
+    {
+     "year": 2005,
+     "period": "年",
+     "value": 10470,
+     "provisional": false
+    },
+    {
+     "year": 2006,
+     "period": "年",
+     "value": 10470,
+     "provisional": false
+    },
+    {
+     "year": 2007,
+     "period": "年",
+     "value": 10470,
+     "provisional": false
+    },
+    {
+     "year": 2008,
+     "period": "年",
+     "value": 10470,
+     "provisional": false
+    },
+    {
+     "year": 2009,
+     "period": "年",
+     "value": 10470,
+     "provisional": false
+    },
+    {
+     "year": 2010,
+     "period": "年",
+     "value": 10470,
+     "provisional": false
+    },
+    {
+     "year": 2011,
+     "period": "年",
+     "value": 10470,
+     "provisional": false
+    },
+    {
+     "year": 2012,
+     "period": "年",
+     "value": 10471,
+     "provisional": false
+    },
+    {
+     "year": 2013,
+     "period": "年",
+     "value": 10471,
+     "provisional": false
+    },
+    {
+     "year": 2014,
+     "period": "年",
+     "value": 10471,
+     "provisional": false
+    },
+    {
+     "year": 2015,
+     "period": "年",
+     "value": 10438,
+     "provisional": false
+    },
+    {
+     "year": 2016,
+     "period": "年",
+     "value": 10438,
+     "provisional": false
+    },
+    {
+     "year": 2017,
+     "period": "年",
+     "value": 10438,
+     "provisional": false
+    },
+    {
+     "year": 2018,
+     "period": "年",
+     "value": 10438,
+     "provisional": false
+    },
+    {
+     "year": 2019,
+     "period": "年",
+     "value": 10438,
+     "provisional": false
+    },
+    {
+     "year": 2020,
+     "period": "年",
+     "value": 10438,
+     "provisional": false
+    },
+    {
+     "year": 2021,
+     "period": "年",
+     "value": 10438,
+     "provisional": false
+    },
+    {
+     "year": 2022,
+     "period": "年",
+     "value": 10438,
+     "provisional": false
+    },
+    {
+     "year": 2023,
+     "period": "年",
+     "value": 10438,
+     "provisional": false
+    },
+    {
+     "year": 2024,
+     "period": "年",
+     "value": 10438,
+     "provisional": false
+    }
+   ],
+   "22222": [
+    {
+     "year": 2004,
+     "period": "年",
+     "value": 36397,
+     "provisional": false
+    },
+    {
+     "year": 2005,
+     "period": "年",
+     "value": 36397,
+     "provisional": false
+    },
+    {
+     "year": 2006,
+     "period": "年",
+     "value": 36397,
+     "provisional": false
+    },
+    {
+     "year": 2007,
+     "period": "年",
+     "value": 36397,
+     "provisional": false
+    },
+    {
+     "year": 2008,
+     "period": "年",
+     "value": 36397,
+     "provisional": false
+    },
+    {
+     "year": 2009,
+     "period": "年",
+     "value": 36397,
+     "provisional": false
+    },
+    {
+     "year": 2010,
+     "period": "年",
+     "value": 36397,
+     "provisional": false
+    },
+    {
+     "year": 2011,
+     "period": "年",
+     "value": 36397,
+     "provisional": false
+    },
+    {
+     "year": 2012,
+     "period": "年",
+     "value": 36397,
+     "provisional": false
+    },
+    {
+     "year": 2013,
+     "period": "年",
+     "value": 36397,
+     "provisional": false
+    },
+    {
+     "year": 2014,
+     "period": "年",
+     "value": 36397,
+     "provisional": false
+    },
+    {
+     "year": 2015,
+     "period": "年",
+     "value": 36397,
+     "provisional": false
+    },
+    {
+     "year": 2016,
+     "period": "年",
+     "value": 36397,
+     "provisional": false
+    },
+    {
+     "year": 2017,
+     "period": "年",
+     "value": 36397,
+     "provisional": false
+    },
+    {
+     "year": 2018,
+     "period": "年",
+     "value": 36397,
+     "provisional": false
+    },
+    {
+     "year": 2019,
+     "period": "年",
+     "value": 36397,
+     "provisional": false
+    },
+    {
+     "year": 2020,
+     "period": "年",
+     "value": 36397,
+     "provisional": false
+    },
+    {
+     "year": 2021,
+     "period": "年",
+     "value": 36397,
+     "provisional": false
+    },
+    {
+     "year": 2022,
+     "period": "年",
+     "value": 36397,
+     "provisional": false
+    },
+    {
+     "year": 2023,
+     "period": "年",
+     "value": 36397,
+     "provisional": false
+    },
+    {
+     "year": 2024,
+     "period": "年",
+     "value": 36397,
+     "provisional": false
+    }
+   ],
+   "22225": [
+    {
+     "year": 2005,
+     "period": "年",
+     "value": 9471,
+     "provisional": false
+    },
+    {
+     "year": 2006,
+     "period": "年",
+     "value": 9471,
+     "provisional": false
+    },
+    {
+     "year": 2007,
+     "period": "年",
+     "value": 9471,
+     "provisional": false
+    },
+    {
+     "year": 2008,
+     "period": "年",
+     "value": 9471,
+     "provisional": false
+    },
+    {
+     "year": 2009,
+     "period": "年",
+     "value": 9471,
+     "provisional": false
+    },
+    {
+     "year": 2010,
+     "period": "年",
+     "value": 9471,
+     "provisional": false
+    },
+    {
+     "year": 2011,
+     "period": "年",
+     "value": 9471,
+     "provisional": false
+    },
+    {
+     "year": 2012,
+     "period": "年",
+     "value": 9471,
+     "provisional": false
+    },
+    {
+     "year": 2013,
+     "period": "年",
+     "value": 9471,
+     "provisional": false
+    },
+    {
+     "year": 2014,
+     "period": "年",
+     "value": 9462,
+     "provisional": false
+    },
+    {
+     "year": 2015,
+     "period": "年",
+     "value": 9462,
+     "provisional": false
+    },
+    {
+     "year": 2016,
+     "period": "年",
+     "value": 9462,
+     "provisional": false
+    },
+    {
+     "year": 2017,
+     "period": "年",
+     "value": 9462,
+     "provisional": false
+    },
+    {
+     "year": 2018,
+     "period": "年",
+     "value": 9462,
+     "provisional": false
+    },
+    {
+     "year": 2019,
+     "period": "年",
+     "value": 9462,
+     "provisional": false
+    },
+    {
+     "year": 2020,
+     "period": "年",
+     "value": 9462,
+     "provisional": false
+    },
+    {
+     "year": 2021,
+     "period": "年",
+     "value": 9462,
+     "provisional": false
+    },
+    {
+     "year": 2022,
+     "period": "年",
+     "value": 9462,
+     "provisional": false
+    },
+    {
+     "year": 2023,
+     "period": "年",
+     "value": 9462,
+     "provisional": false
+    },
+    {
+     "year": 2024,
+     "period": "年",
+     "value": 9462,
      "provisional": false
     }
    ]

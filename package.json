@@ -18,7 +18,7 @@
     "deploy:worker": "cd voice-backend && npx wrangler deploy",
     "build:pages": "node build_pages.js",
     "stats:fetch": "node scripts/stats/fetch_dashboard.js",
-    "stats:verify": "node scripts/stats/verify_numbers.js"
+    "stats:verify": "node scripts/stats/verify_numbers.js && node scripts/stats/verify_compare.js"
   },
   "engines": {
     "node": ">=18"

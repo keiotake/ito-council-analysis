@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>他のまちと比べる｜みんなの伊東市</title>
+<meta name="description" content="伊東市と、熱海市・下田市・伊豆市・伊豆の国市の人口と財政を、国の公式統計で比べられるページです。順位づけはせず、同じ年・年度どうしで比べます。">
+<link rel="canonical" href="https://all-ito-city.com/compare/">
+<meta property="og:title" content="他のまちと比べる｜みんなの伊東市">
+<meta property="og:description" content="伊東市と伊豆の4市を、公式統計で並べて比べられます。出典つき。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://all-ito-city.com/compare/">
+<style>
+:root{--bg:#fafafa;--card:#fff;--text:#0a0a0a;--sub:#525252;--border:#e5e5e5;--brand:#2563eb;--brand-d:#1e40af;--fact:#065f46;--fact-bg:#ecfdf5;--warn:#78350f;--warn-bg:#fffbeb;--radius:14px}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;font-size:16px;line-height:1.8}
+a{color:var(--brand-d)}
+.skip{position:absolute;left:-999px}.skip:focus{left:8px;top:8px;background:#fff;padding:8px;z-index:9}
+header.top{background:linear-gradient(135deg,#1e3a8a,#2563eb);color:#fff;padding:20px 16px 28px}
+header.top .wrap,main,footer .wrap{max-width:1040px;margin:0 auto}
+.crumb a{color:#dbeafe;font-size:14px}
+h1{font-size:28px;margin:8px 0 6px;line-height:1.4}
+header.top p{margin:0;color:#e0e7ff;font-size:15px}
+.principles{background:rgba(255,255,255,.12);border-radius:12px;padding:12px 14px;margin-top:14px;font-size:14px}
+.principles ul{margin:4px 0 0;padding-left:1.2em}
+nav.toc{display:flex;gap:8px;flex-wrap:wrap;padding:14px 16px;max-width:1040px;margin:0 auto}
+nav.toc a{background:#fff;border:1px solid var(--border);border-radius:999px;padding:6px 14px;text-decoration:none;font-weight:700;font-size:15px}
+main{padding:0 16px 40px}
+h2{font-size:24px;margin:32px 0 4px;padding-left:10px;border-left:6px solid var(--brand)}
+.seclead{color:var(--sub);margin:4px 0 16px}
+.grid{display:grid;gap:16px}
+@media(min-width:900px){.grid{grid-template-columns:1fr 1fr}.card.wide{grid-column:1/-1}}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;min-width:0}
+.card h3{font-size:19px;margin:0 0 4px;line-height:1.5}
+.lead{margin:0 0 10px;color:var(--sub);font-size:15px}
+.chartbox{position:relative;height:280px}
+.chartbox.tall{height:420px}
+@media(min-width:900px){.chartbox{height:300px}}
+.unitnote{margin:4px 0 0;font-size:13px;color:var(--sub);text-align:right}
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.btn,.yearbtns button{font:inherit;font-size:14px;border:1px solid var(--border);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;min-height:40px}
+.btn:hover,.yearbtns button:hover{border-color:var(--brand)}
+.yearbtns{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.yearbtns button[aria-pressed=true]{background:var(--brand);color:#fff;border-color:var(--brand)}
+.insight{background:#f8fafc;border-radius:12px;padding:12px 14px;margin-top:8px}
+.insight h4{margin:0 0 6px;font-size:16px}
+.insight ul{margin:0 0 8px;padding-left:1.2em;font-size:15px}
+.tag{display:inline-block;font-size:13px;font-weight:700;border-radius:6px;padding:1px 8px;margin:4px 0}
+.tag.fact{background:var(--fact-bg);color:var(--fact)}
+.tag.caution{background:var(--warn-bg);color:var(--warn)}
+details{margin-top:8px;border-top:1px solid var(--border);padding-top:6px}
+summary{cursor:pointer;font-weight:700;font-size:15px;color:var(--brand-d);min-height:36px;display:flex;align-items:center}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;font-size:14px;width:100%;margin-top:6px}
+th,td{border:1px solid var(--border);padding:4px 8px;text-align:right;white-space:nowrap}
+th[scope=col]{background:#f1f5f9;text-align:center}
+th[scope=row]{text-align:left;background:#fafafa}
+.src ul{padding-left:1.2em;font-size:13px;margin:6px 0}
+.def{color:var(--sub)}
+.glossary dl{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:8px 16px;margin:0}
+.glossary dt{font-weight:700;margin-top:10px}
+.glossary dd{margin:0 0 6px;font-size:15px}
+footer{border-top:1px solid var(--border);padding:20px 16px;font-size:13px;color:var(--sub)}
+:focus-visible{outline:3px solid #f59e0b;outline-offset:2px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.panel{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-top:20px}
+.panel fieldset{border:0;padding:0;margin:0 0 14px;min-width:0}
+.panel legend{font-weight:700;margin-bottom:6px;padding:0}
+.cities{display:flex;flex-wrap:wrap;gap:8px}
+.cities label{display:flex;align-items:center;gap:6px;border:1px solid var(--border);border-radius:999px;padding:6px 14px;min-height:44px;cursor:pointer;font-size:15px;background:#fff}
+.cities input{width:20px;height:20px;margin:0}
+.cities .sw{display:inline-block;width:12px;height:12px;border-radius:3px}
+.panel label.lbl{display:block;font-weight:700;margin-bottom:6px}
+select{font:inherit;font-size:16px;padding:8px 10px;border-radius:8px;border:1px solid var(--border);width:100%;max-width:560px;min-height:44px;background:#fff;color:var(--text)}
+.desc{margin:10px 0 0;font-size:15px}
+.calc{display:inline-block;font-size:13px;font-weight:700;border-radius:6px;padding:1px 8px;margin-left:6px;background:#eef2ff;color:#3730a3;vertical-align:middle}
+.yearsel{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 8px}
+.yearsel select{width:auto;min-width:9em}
+.share{font-size:14px;color:var(--fact);min-height:1.5em;margin:0}
+td.na{color:var(--sub)}
+.notice{background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:12px 14px;font-size:15px;margin-top:20px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">本文へ移動</a>
+<header class="top"><div class="wrap">
+  <div class="crumb"><a href="../">← みんなの伊東市トップへ</a>　<a href="../numbers/">📊 数字で見る伊東市</a></div>
+  <h1>🗾 他のまちと比べる</h1>
+  <p>伊東市と、同じ伊豆地域の4市を、国の公式統計で並べて見られます。</p>
+  <div class="principles"><strong>このページの約束</strong><ul>
+    <li>順位や総合点は作りません。市の並び順は、値の大きさにかかわらずいつも同じです。</li>
+    <li>同じ年・年度どうしで比べます。値が公表されていない市は「値なし」と表示します（0として扱いません）。</li>
+    <li>金額は人口1人あたりに直して、人口の大きさの違いをならしています（このページで計算した値です）。</li>
+  </ul></div>
+</div></header>
+<main id="main">
+  <div class="panel" role="region" aria-label="比べる条件">
+    <fieldset><legend>比べる市（伊東市はいつも表示します）</legend><div class="cities" id="cities"></div></fieldset>
+    <label class="lbl" for="ind">比べる指標</label>
+    <select id="ind"></select>
+    <p class="desc" id="indDesc"></p>
+  </div>
+  <div class="grid" style="margin-top:16px">
+    <article class="card wide" aria-labelledby="t-line">
+      <h3 id="t-line">年ごとの移り変わり</h3>
+      <p class="lead" id="lineLead"></p>
+      <div class="chartbox"><canvas id="cv-line" role="img" aria-label="選んだ指標の、市ごとの年ごとの移り変わり。数値は下の「表で見る」から確認できます。"></canvas></div>
+      <p class="unitnote" id="unitLine"></p>
+    </article>
+    <article class="card wide" aria-labelledby="t-bar">
+      <h3 id="t-bar">同じ年で並べる</h3>
+      <div class="yearsel"><label for="year">表示する年</label><select id="year"></select></div>
+      <div class="chartbox"><canvas id="cv-bar" role="img" aria-label="選んだ指標を、同じ年で市ごとに並べたグラフ。数値は下の「表で見る」から確認できます。"></canvas></div>
+      <p class="unitnote" id="unitBar"></p>
+      <div class="tools">
+        <button type="button" class="btn" id="csv">CSVで保存</button>
+        <button type="button" class="btn" id="pngLine">移り変わりのグラフを画像で保存</button>
+        <button type="button" class="btn" id="pngBar">並べたグラフを画像で保存</button>
+        <button type="button" class="btn" id="copy">この比較のリンクをコピー</button>
+      </div>
+      <p class="share" id="shareMsg" aria-live="polite"></p>
+      <section class="insight" aria-label="読むときの注意">
+        <h4>読むときの注意</h4>
+        <ul id="cautions"></ul>
+      </section>
+      <details class="table"><summary>表で見る</summary><div class="tablewrap" id="table"></div></details>
+      <details class="src"><summary>出典と定義</summary><ul id="sources"></ul></details>
+    </article>
+  </div>
+  <div class="notice">
+    <strong>なぜこの4市なの？</strong> 伊東市と同じ静岡県の伊豆地域にあり、観光が大きな産業という点で共通する近くの市だからです。人口の規模や地形などは市ごとに違うため、数字の差だけで良し悪しは決められません。
+  </div>
+</main>
+<footer><div class="wrap">
+  <p>データの取得日：2026年10月22日（統計ダッシュボード）。国の統計は公表まで時間がかかるため、最新の年度・年が含まれていない場合があります。</p>
+  <p>出典：統計ダッシュボード（総務省統計局）。このページは出典の数値をもとに「みんなの伊東市」が作成・加工したもので、出典元の公式見解ではありません。「計算値」と付いた指標は、このページで計算した値です。</p>
+  <p>このページはAIを活用して作成し、運営者が内容を確認しています（本人確認済み）。数値は公式統計から機械的に取り込んでいます。誤りに気づいた方は、トップページの「市民の声」からお知らせください。</p>
+  <p>© 2026 みんなの伊東市（非公式の市民向け情報サイト）｜制作・運営：伊東市議会議員 大竹圭</p>
+</div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" integrity="sha512-CQBWl4fJHWbryGE+Pc7UAxWMUMNMWzWxF4SQo9CgkJIN1kx6djDQZjh3Y8SZ1d+6I+1zze6Z7kHXO7q3UyZAWw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>window.COMPARE={"cities":[{"code":"22208","name":"伊東市"},{"code":"22205","name":"熱海市"},{"code":"22219","name":"下田市"},{"code":"22222","name":"伊豆市"},{"code":"22225","name":"伊豆の国市"}],"indicators":[{"key":"pop_index","group":"人口","name":"人口の変化（2005年＝100）","unit":"2005年＝100","period":"年","calc":true,"years":[2005,2010,2015,2020,2025],"values":{"22205":[100,96.1,91.1,83,76],"22208":[100,98.6,94.3,90.4,84.5],"22219":[100,94.2,86.3,76,67.4],"22222":[100,93.4,85.5,77,70.2],"22225":[100,98.5,96.3,93.6,88.2]},"desc":"国勢調査の総人口を、それぞれの市の2005年の人口を100として表しています。人口の大きさが違う市どうしでも、増え方・減り方を比べられます。","cautions":["値はこのページで計算したものです（各年の人口 ÷ 2005年の人口 × 100）。","伊豆市（2004年）と伊豆の国市（2005年4月）は合併でできた市のため、2005年からそろえています。","国勢調査は5年ごと（10月1日時点）です。"],"sources":[{"label":"総人口","org":"統計ダッシュボード（総務省統計局）","stat":"国勢調査","unit":"人","period":"1980〜2025年（市によって公表されている期間が違います）","url":"https://dashboard.e-stat.go.jp/","fetchedAt":"2026年10月22日","definition":"本邦に常住する人口（当該住居に3か月以上にわたって住んでいるか、又は住むことになっている者）。人口推計は国勢調査による人口を基準人口とし、その後の人口動向を他の人口関連資料から得て、毎月１日現在の人口を算出したもの。\n各国のデータについては出典参照。","annotation":"日本人・外国人の別不詳及び年齢不詳を含む。"}]},{"key":"share_65over","group":"人口","name":"高齢化率（65歳以上の割合）","unit":"%","period":"年","years":[2005,2010,2015,2020,2025],"values":{"22205":[31.8,38.6,44.7,48.71,50.3],"22208":[27.2,33.3,39.7,43.49,45.7],"22219":[28.6,33.1,38.9,42.45,44.5],"22222":[28,31.6,37.7,42.57,45.3],"22225":[21.7,25.9,30.8,33.92,35.1]},"desc":"人口に占める65歳以上の人の割合です（国勢調査）。","cautions":["国勢調査は5年ごと（10月1日時点）です。","年齢が分からない人を除いて計算された割合です。"],"sources":[{"label":"65 over 総人口割合","org":"統計ダッシュボード（総務省統計局）","stat":"国勢調査","unit":"%","period":"2005〜2025年（市によって公表されている期間が違います）","url":"https://dashboard.e-stat.go.jp/","fetchedAt":"2026年10月22日","definition":"本邦に常住する人口（当該住居に3か月以上にわたって住んでいるか、又は住むことになっている者）。人口推計は国勢調査による人口を基準人口とし、その後の人口動向を他の人口関連資料から得て、毎月１日現在の人口を算出したもの。\n各国のデータについては出典参照。","annotation":""}]},{"key":"share_0_14","group":"人口","name":"子どもの割合（0〜14歳）","unit":"%","period":"年","years":[2005,2010,2015,2020,2025],"values":{"22205":[9.3,8.1,7.1,5.93,4.8],"22208":[12.4,11.3,10.1,8.56,6.9],"22219":[11.4,10.6,9.8,8.38,7.3],"22222":[12.3,10.6,9.4,8.26,7],"22225":[13.8,13,12.3,11.47,10.3]},"desc":"人口に占める0〜14歳の子どもの割合です（国勢調査）。","cautions":["国勢調査は5年ごと（10月1日時点）です。","年齢が分からない人を除いて計算された割合です。"],"sources":[{"label":"0-14 総人口割合","org":"統計ダッシュボード（総務省統計局）","stat":"国勢調査","unit":"%","period":"2005〜2025年（市によって公表されている期間が違います）","url":"https://dashboard.e-stat.go.jp/","fetchedAt":"2026年10月22日","definition":"本邦に常住する人口（当該住居に3か月以上にわたって住んでいるか、又は住むことになっている者）。人口推計は国勢調査による人口を基準人口とし、その後の人口動向を他の人口関連資料から得て、毎月１日現在の人口を算出したもの。\n各国のデータについては出典参照。","annotation":""}]},{"key":"fin_index","group":"財政","name":"財政力指数","unit":"指数","period":"年度","years":[1980,1981,1982,1983,1984,1985,1986,1987,1988,1989,1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"values":{"22205":[1.25,1.23,1.22,1.22,1.23,1.22,1.2,1.2,1.23,1.23,1.23,1.27,1.3,1.36,1.35,1.37,1.33,1.32,1.28,1.24,1.16,1.1,1.06,1.04,1.02,1.02,1.03,1.04,1.03,1,0.96,0.93,0.91,0.91,0.91,0.91,0.92,0.92,0.92,0.92,0.92,0.9,0.87],"22208":[1.01,1.01,1,1.01,1.05,1.08,1.07,1.08,1.14,1.21,1.27,1.27,1.28,1.29,1.32,1.3,1.26,1.22,1.17,1.11,1.04,1,0.96,0.95,0.92,0.91,0.89,0.89,0.88,0.87,0.84,0.81,0.78,0.77,0.77,0.77,0.76,0.75,0.75,0.74,0.73,0.7,0.68],"22219":[0.61,0.59,0.62,0.66,0.71,0.71,0.72,0.72,0.75,0.73,0.7,0.67,0.66,0.68,0.68,0.69,0.67,0.66,0.63,0.61,0.58,0.56,0.56,0.57,0.57,0.57,0.57,0.56,0.56,0.55,0.53,0.52,0.51,0.5,0.49,0.49,0.5,0.5,0.5,0.5,0.49,0.47,0.46],"22222":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,0.52,0.56,0.59,0.62,0.62,0.62,0.6,0.59,0.58,0.57,0.57,0.56,0.54,0.52,0.51,0.5,0.5,0.48,0.46],"22225":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,0.76,0.8,0.83,0.85,0.83,0.8,0.76,0.76,0.76,0.75,0.76,0.75,0.75,0.72,0.71,0.7,0.68,0.65]},"desc":"標準的な行政サービスの費用を、自前の収入でどのくらいまかなえるかを示す指数です。1に近いほど自前でまかなえる計算になります。","cautions":["指数の高い・低いだけで、財政の良し悪しや市の努力を判断することはできません。","3年間の平均の値です。"],"sources":[{"label":"財政力指数（市町村財政）","org":"統計ダッシュボード（総務省統計局）","stat":"社会・人口統計体系","unit":"","period":"1980〜2022年度（市によって公表されている期間が違います）","url":"https://dashboard.e-stat.go.jp/","fetchedAt":"2026年10月22日","definition":"地方公共団体の財政力を示す指数で、基準財政収入額を基準財政需要額で除して得た数値の過去３年間の平均値","annotation":""}]},{"key":"current_ratio","group":"財政","name":"経常収支比率","unit":"%","period":"年度","years":[2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"values":{"22205":[88.9,90.7,93.6,88.5,86.4,90,86.4,87.5,85.8,85.8,83.9,87.7,88.2,87.8,87.7,85.5,83.3,85.8,83,85.1,89.9,84.5,84.5],"22208":[90.4,88.8,84.6,83.6,85.7,83.3,85.4,88.7,86.3,85.9,85.5,86.6,83.4,83.9,86.1,83.6,83.2,82.9,86.8,88.8,90.4,83.1,88.8],"22219":[83.6,85.6,88.9,87.4,89.8,89.9,87.8,90.4,88.6,88.5,84.7,87.2,88.9,86.8,86.4,82.5,85.6,87.9,90.5,88.9,85.8,80.3,83.3],"22222":[null,null,null,null,84.6,85.9,82.6,86.7,88.7,85.4,81.6,82.4,81.8,79.4,82.2,84,86.5,88.3,89.8,91.1,89.9,85.5,87],"22225":[null,null,null,null,null,77.9,82,85.9,89.9,85,74.1,82.3,87.5,84.5,83.2,86.1,84.8,84.9,84.9,86.6,86.4,83.7,88.3]},"desc":"毎年決まって入るお金のうち、人件費・福祉・借金の返済など毎年決まって出ていく費用に使われる割合です。","cautions":["一時的な収入や支出の変化でも上下します。1年だけでなく、数年の流れで見ることが大切です。"],"sources":[{"label":"経常収支比率（市町村財政）","org":"統計ダッシュボード（総務省統計局）","stat":"社会・人口統計体系","unit":"%","period":"2000〜2022年度（市によって公表されている期間が違います）","url":"https://dashboard.e-stat.go.jp/","fetchedAt":"2026年10月22日","definition":"経常経費充当一般財源÷（経常一般財源＋減収補填債特例分＋臨時財政対策債）","annotation":""}]},{"key":"debt_service_ratio","group":"財政","name":"実質公債費比率","unit":"%","period":"年度","years":[2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"values":{"22205":[9.3,8.7,7.7,7.2,7.7,8.4,8.1,6.5,5.4,4.4,3.5,2.9,3,3.4,4],"22208":[9,9.1,9.5,9.7,9.7,9.3,8.7,8,7,6.4,6.1,6.1,5.9,5.7,5.6],"22219":[16.7,15.4,13.8,12.8,12.1,11.4,10.2,8.6,7.3,7,7.3,7,6.4,5.9,6.2],"22222":[14.4,13.2,11.2,9.9,8.5,7.1,5.8,5.5,5.5,6,6.4,6.7,6.9,6.8,6.9],"22225":[13.4,12.7,11.1,9.7,8.8,8.7,8.6,8.5,8.2,7.7,7.2,7,6.9,6.8,7.1]},"desc":"収入に対する借金の返済の重さです（3年間の平均）。","cautions":["法律で決められた市町村の「早期健全化基準」は25%です。18%以上になると、新たな借金に許可が必要になります。","借金は長く使う施設の費用を将来の世代と分け合う仕組みでもあり、低いほど良いとは限りません。"],"sources":[{"label":"実質公債費比率（市町村財政）","org":"統計ダッシュボード（総務省統計局）","stat":"社会・人口統計体系","unit":"%","period":"2008〜2022年度（市によって公表されている期間が違います）","url":"https://dashboard.e-stat.go.jp/","fetchedAt":"2026年10月22日","definition":"地方公共団体における公債費及び公債費に準じるものによる財政負担の度合いを判断する指標で、起債に協議を要する団体と許可を要する団体の判定に用いられる過去3年間の平均値","annotation":""}]},{"key":"future_burden_ratio","group":"財政","name":"将来負担比率","unit":"%","period":"年度","years":[2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"values":{"22205":[59.9,44.1,51.1,34,23.7,6.3,9.2,10.1,17,12.5,11.5,null],"22208":[39.8,45.5,23,23.3,12.6,15.7,11.4,9.9,11.3,16,14,1.6],"22219":[76.9,70.1,62.8,52.8,56.8,45.7,38.9,60.1,66.1,57.5,58,48.9],"22222":[18.4,10.9,16.7,7.9,3.8,2.2,0.9,15.8,37.9,40.6,41.8,49.4],"22225":[60.6,66.3,54.7,47.6,46.2,38.2,37.7,36.4,50.4,50.8,40.3,36.7]},"desc":"将来負担しなければならない借金などの重さです。","cautions":["基金（貯金）などが借金を上回る場合などに、値が公表されないことがあります。その年は「値なし」と表示します。","法律で決められた市町村の「早期健全化基準」は350%です。"],"sources":[{"label":"将来負担比率（市町村財政）","org":"統計ダッシュボード（総務省統計局）","stat":"社会・人口統計体系","unit":"%","period":"2011〜2022年度（市によって公表されている期間が違います）","url":"https://dashboard.e-stat.go.jp/","fetchedAt":"2026年10月22日","definition":"地方公共団体の借入金（地方債）など現在抱えている負債の大きさを、その地方公共団体の財政規模に対する割合で表したもの","annotation":""}]},{"key":"pc_expenditure","group":"お金の使い方（1人あたり）","name":"歳出の合計（1人あたり）","unit":"円","period":"年度","calc":true,"years":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"values":{"22205":[462163,513381,459903,464443,467691,475665,508060,548356,623676,578544,592736],"22208":[353721,352176,361536,360261,383002,371680,379436,398627,518749,461568,454612],"22219":[385439,444916,407606,460704,447685,451984,478242,541453,700281,623099,604324],"22222":[458016,486387,500639,498163,512062,505367,632766,604216,732350,765589,780686],"22225":[360593,365074,373387,385997,400316,375354,390193,488754,566573,528083,486045]},"desc":"1年間の支出（決算）の合計を、人口1人あたりにした金額です。","cautions":["「1人あたり」は、このページで計算した値です。決算額（千円）÷ 住民基本台帳人口。年度（4月〜翌年3月）の決算には、その年度の中の1月1日の人口（2022年度なら2023年1月1日）を使っています。2012年度だけは、出典の都合で2013年3月31日の人口を使っています。","人口が少ない市ほど、1人あたりの金額は大きくなりやすい傾向があります。"],"sources":[{"label":"歳出決算総額（市町村財政）","org":"統計ダッシュボード（総務省統計局）","stat":"社会・人口統計体系","unit":"千円","period":"1980〜2022年度（市によって公表されている期間が違います）","url":"https://dashboard.e-stat.go.jp/","fetchedAt":"2026年10月22日","definition":"１会計年度における一切の支出の決算後の合算額","annotation":""},{"label":"住民基本台帳人口（総数）","org":"統計ダッシュボード（総務省統計局）","stat":"社会・人口統計体系","unit":"人","period":"2013〜2025年（市によって公表されている期間が違います）","url":"https://dashboard.e-stat.go.jp/","fetchedAt":"2026年10月22日","definition":"国内の市区町村に住所を定めている者として1月1日現在（2013年以前は3月31日現在）、当該市区町村の住民基本台帳に記載されている人口。","annotation":""}]},{"key":"pc_local_tax","group":"お金の使い方（1人あたり）","name":"地方税の収入（1人あたり）","unit":"円","period":"年度","calc":true,"years":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"values":{"22205":[249218,251164,259274,256539,258595,260046,267226,272656,259302,254980,288405],"22208":[153876,154321,157695,154032,157434,160081,159477,159905,157093,153654,161707],"22219":[122223,123202,127013,127523,128976,131373,131787,134868,134525,135228,144302],"22222":[130538,132999,135528,134820,135352,137715,139511,142456,141185,138316,144610],"22225":[130179,134778,148924,134827,136943,138371,140811,140358,139551,136178,144744]},"desc":"市税などの地方税の収入（決算）を、人口1人あたりにした金額です。","cautions":["「1人あたり」は、このページで計算した値です。決算額（千円）÷ 住民基本台帳人口。年度（4月〜翌年3月）の決算には、その年度の中の1月1日の人口（2022年度なら2023年1月1日）を使っています。2012年度だけは、出典の都合で2013年3月31日の人口を使っています。","別荘やホテルなどが多いまちでは、その市に住んでいない人や会社が納める固定資産税なども含まれます。"],"sources":[{"label":"地方税（市町村財政）","org":"統計ダッシュボード（総務省統計局）","stat":"社会・人口統計体系","unit":"千円","period":"1980〜2022年度（市によって公表されている期間が違います）","url":"https://dashboard.e-stat.go.jp/","fetchedAt":"2026年10月22日","definition":"当該地域に居住する住民が拠出する租税。道府県税と市町村税から成る。","annotation":"東京都と特別区は、事務配分の特例に対応して、税源配分、税制の特例が設けられている。"},{"label":"住民基本台帳人口（総数）","org":"統計ダッシュボード（総務省統計局）","stat":"社会・人口統計体系","unit":"人","period":"2013〜2025年（市によって公表されている期間が違います）","url":"https://dashboard.e-stat.go.jp/","fetchedAt":"2026年10月22日","definition":"国内の市区町村に住所を定めている者として1月1日現在（2013年以前は3月31日現在）、当該市区町村の住民基本台帳に記載されている人口。","annotation":""}]},{"key":"pc_minsei","group":"お金の使い方（1人あたり）","name":"民生費＝福祉（1人あたり）","unit":"円","period":"年度","calc":true,"years":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"values":{"22205":[142865,141979,148252,154646,157809,163917,164026,175482,178420,215702,190821],"22208":[130190,135813,143904,147779,162837,153837,156965,158949,165398,190282,185868],"22219":[132966,163455,141845,149874,154498,161003,151584,164836,165122,188397,196430],"22222":[116029,119877,123276,136526,145581,135235,155502,155432,160161,174701,168077],"22225":[128939,124130,139594,136263,135312,138233,147126,144772,149595,172140,164157]},"desc":"子育て・高齢者・障害のある人への支援や生活保護など、福祉にかかる支出の1人あたりです。","cautions":["「1人あたり」は、このページで計算した値です。決算額（千円）÷ 住民基本台帳人口。年度（4月〜翌年3月）の決算には、その年度の中の1月1日の人口（2022年度なら2023年1月1日）を使っています。2012年度だけは、出典の都合で2013年3月31日の人口を使っています。","子育て世帯への臨時の給付金など、国の制度による給付で大きく動く年があります。"],"sources":[{"label":"民生費（市町村財政）","org":"統計ダッシュボード（総務省統計局）","stat":"社会・人口統計体系","unit":"千円","period":"2000〜2022年度（市によって公表されている期間が違います）","url":"https://dashboard.e-stat.go.jp/","fetchedAt":"2026年10月22日","definition":"児童、高齢者、障害者等のための福祉施設の整備、運営、生活保護等の実施等を行っており、これらの諸施策に要する地方公共団体の経費","annotation":""},{"label":"住民基本台帳人口（総数）","org":"統計ダッシュボード（総務省統計局）","stat":"社会・人口統計体系","unit":"人","period":"2013〜2025年（市によって公表されている期間が違います）","url":"https://dashboard.e-stat.go.jp/","fetchedAt":"2026年10月22日","definition":"国内の市区町村に住所を定めている者として1月1日現在（2013年以前は3月31日現在）、当該市区町村の住民基本台帳に記載されている人口。","annotation":""}]},{"key":"pc_kyoiku","group":"お金の使い方（1人あたり）","name":"教育費（1人あたり）","unit":"円","period":"年度","calc":true,"years":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"values":{"22205":[45430,64684,43338,39863,38856,41694,57783,62989,47141,41375,44907],"22208":[28830,24717,30976,36063,45496,32815,31849,38633,36074,44760,41696],"22219":[22906,29450,28764,67041,36181,29594,38121,53389,91993,90726,39720],"22222":[48644,46123,47524,42189,54532,58538,42604,55478,54874,70685,111401],"22225":[35677,34766,42887,46121,50485,36762,38604,46496,52758,44721,45047]},"desc":"学校や社会教育などにかかる支出の1人あたりです。","cautions":["「1人あたり」は、このページで計算した値です。決算額（千円）÷ 住民基本台帳人口。年度（4月〜翌年3月）の決算には、その年度の中の1月1日の人口（2022年度なら2023年1月1日）を使っています。2012年度だけは、出典の都合で2013年3月31日の人口を使っています。","校舎の建て替えなど大きな工事がある年は、一時的に大きくなります。"],"sources":[{"label":"教育費（市町村財政）","org":"統計ダッシュボード（総務省統計局）","stat":"社会・人口統計体系","unit":"千円","period":"2000〜2022年度（市によって公表されている期間が違います）","url":"https://dashboard.e-stat.go.jp/","fetchedAt":"2026年10月22日","definition":"","annotation":""},{"label":"住民基本台帳人口（総数）","org":"統計ダッシュボード（総務省統計局）","stat":"社会・人口統計体系","unit":"人","period":"2013〜2025年（市によって公表されている期間が違います）","url":"https://dashboard.e-stat.go.jp/","fetchedAt":"2026年10月22日","definition":"国内の市区町村に住所を定めている者として1月1日現在（2013年以前は3月31日現在）、当該市区町村の住民基本台帳に記載されている人口。","annotation":""}]},{"key":"pc_doboku","group":"お金の使い方（1人あたり）","name":"土木費（1人あたり）","unit":"円","period":"年度","calc":true,"years":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"values":{"22205":[70427,52673,48339,46802,55712,55804,70123,65201,61271,54811,62396],"22208":[32037,28498,29397,30617,34442,34265,36563,36893,35413,39756,37851],"22219":[40085,40324,46558,45611,46575,47330,53624,62391,56108,61052,71086],"22222":[61953,73898,58824,55542,51576,54617,74075,75832,69086,65054,75410],"22225":[42412,41183,31676,33593,32757,35785,35774,38007,36480,32923,39069]},"desc":"道路・橋・公園・まちづくりなどにかかる支出の1人あたりです。","cautions":["「1人あたり」は、このページで計算した値です。決算額（千円）÷ 住民基本台帳人口。年度（4月〜翌年3月）の決算には、その年度の中の1月1日の人口（2022年度なら2023年1月1日）を使っています。2012年度だけは、出典の都合で2013年3月31日の人口を使っています。","大きな工事がある年は、一時的に大きくなります。"],"sources":[{"label":"土木費（市町村財政）","org":"統計ダッシュボード（総務省統計局）","stat":"社会・人口統計体系","unit":"千円","period":"2000〜2022年度（市によって公表されている期間が違います）","url":"https://dashboard.e-stat.go.jp/","fetchedAt":"2026年10月22日","definition":"","annotation":""},{"label":"住民基本台帳人口（総数）","org":"統計ダッシュボード（総務省統計局）","stat":"社会・人口統計体系","unit":"人","period":"2013〜2025年（市によって公表されている期間が違います）","url":"https://dashboard.e-stat.go.jp/","fetchedAt":"2026年10月22日","definition":"国内の市区町村に住所を定めている者として1月1日現在（2013年以前は3月31日現在）、当該市区町村の住民基本台帳に記載されている人口。","annotation":""}]},{"key":"pc_shoko","group":"お金の使い方（1人あたり）","name":"商工費＝観光・産業（1人あたり）","unit":"円","period":"年度","calc":true,"years":[2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022],"values":{"22205":[15837,14515,14528,18150,23157,18974,21105,23899,34689,29404,25618],"22208":[7809,8639,8996,12374,10880,12205,9816,13381,31682,16789,21010],"22219":[8082,8200,9202,12631,11410,12611,12865,13198,38379,34390,26759],"22222":[23788,26518,29779,26161,30432,25693,36423,35580,25494,29438,37130],"22225":[10818,9106,7069,10419,8104,7546,7861,19283,18961,15261,26108]},"desc":"観光や商業・工業の振興にかかる支出の1人あたりです。","cautions":["「1人あたり」は、このページで計算した値です。決算額（千円）÷ 住民基本台帳人口。年度（4月〜翌年3月）の決算には、その年度の中の1月1日の人口（2022年度なら2023年1月1日）を使っています。2012年度だけは、出典の都合で2013年3月31日の人口を使っています。","市によって、観光の費用を商工費以外（土木費など）に入れている場合があります。"],"sources":[{"label":"商工費（市町村財政）","org":"統計ダッシュボード（総務省統計局）","stat":"社会・人口統計体系","unit":"千円","period":"2000〜2022年度（市によって公表されている期間が違います）","url":"https://dashboard.e-stat.go.jp/","fetchedAt":"2026年10月22日","definition":"","annotation":""},{"label":"住民基本台帳人口（総数）","org":"統計ダッシュボード（総務省統計局）","stat":"社会・人口統計体系","unit":"人","period":"2013〜2025年（市によって公表されている期間が違います）","url":"https://dashboard.e-stat.go.jp/","fetchedAt":"2026年10月22日","definition":"国内の市区町村に住所を定めている者として1月1日現在（2013年以前は3月31日現在）、当該市区町村の住民基本台帳に記載されている人口。","annotation":""}]}]};</script>
+<script src="compare.js?v=f77599cb87"></script>
+</body>
+</html>

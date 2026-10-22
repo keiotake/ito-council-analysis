@@ -7,6 +7,10 @@
 //   - 事実と、読むときの注意（解釈）を分けて書き、良い・悪いの判定はしない
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
+// サイトの Service Worker（sw.js）は静的ファイルを「キャッシュ優先」で返すため、
+// 中身が変わったら URL も変わるよう、スクリプトに内容のハッシュを付ける
+const ver = rel => crypto.createHash('sha256').update(fs.readFileSync(path.join(__dirname, rel))).digest('hex').slice(0, 10);
 
 const D = require('./data/stats/dashboard.json');
 const P = require('./data/stats/ipss_r5.json');
@@ -469,7 +473,7 @@ footer{border-top:1px solid var(--border);padding:20px 16px;font-size:13px;color
 <body>
 <a class="skip" href="#main">本文へ移動</a>
 <header class="top"><div class="wrap">
-  <div class="crumb"><a href="../">← みんなの伊東市トップへ</a></div>
+  <div class="crumb"><a href="../">← みんなの伊東市トップへ</a>　<a href="../compare/">🗾 他のまちと比べる</a></div>
   <h1>📊 数字で見る伊東市</h1>
   <p>伊東市の人口とお金の流れを、国の公式統計でたどります。</p>
   <div class="principles"><strong>このページの約束</strong><ul>
@@ -498,7 +502,7 @@ ${SECTIONS.map(s => `<section id="sec-${s.id}" aria-labelledby="h-${s.id}">
 </div></footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" integrity="sha512-CQBWl4fJHWbryGE+Pc7UAxWMUMNMWzWxF4SQo9CgkJIN1kx6djDQZjh3Y8SZ1d+6I+1zze6Z7kHXO7q3UyZAWw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>window.NUMBERS=${payload};</script>
-<script src="numbers.js"></script>
+<script src="numbers.js?v=${ver('numbers/numbers.js')}"></script>
 </body>
 </html>
 `;
@@ -506,3 +510,188 @@ ${SECTIONS.map(s => `<section id="sec-${s.id}" aria-labelledby="h-${s.id}">
 fs.mkdirSync(OUT_DIR, { recursive: true });
 fs.writeFileSync(path.join(OUT_DIR, 'index.html'), html, 'utf8');
 console.log(`✓ numbers/index.html を生成（グラフ ${charts.length} 件、${Math.round(html.length / 1024)}KB）`);
+
+// ======================================================================
+// 「他のまちと比べる」ページ（compare/index.html）
+//   - 順位や総合点は作らない。市の並びは固定（伊東市→市町村コード順）で、値の大きさで並べ替えない
+//   - 同じ年・年度どうしで比べる。値が公表されていない市は「値なし」（ゼロにしない）
+//   - 金額は人口1人あたりに直す（N年度の決算 ÷ その年度の終わりに近い住民基本台帳人口）
+// ======================================================================
+const CITY_ORDER = [ITO, ...Object.keys(D.regions).filter(c => c !== ITO).sort()];
+const val = (key, city, year) => { const r = (D.data[key][city] || []).find(x => x.year === year); return r ? r.value : null; };
+const yearsOf = key => [...new Set(CITY_ORDER.flatMap(c => (D.data[key][c] || []).map(r => r.year)))].sort((a, b) => a - b);
+const direct = key => {
+  const years = yearsOf(key);
+  return { years, values: Object.fromEntries(CITY_ORDER.map(c => [c, years.map(y => val(key, c, y))])) };
+};
+// N年度の決算 ÷ 住民基本台帳人口（統計ダッシュボードの「N+1年」の値＝N+1年1月1日時点。2013年の値のみ3月31日時点）
+const perCapita = amountKey => {
+  const years = yearsOf(amountKey).filter(y => yearsOf('jumin_pop').includes(y + 1));
+  return {
+    years,
+    values: Object.fromEntries(CITY_ORDER.map(c => [c, years.map(y => {
+      const a = val(amountKey, c, y), p = val('jumin_pop', c, y + 1);
+      return a == null || p == null ? null : Math.round(a * 1000 / p);
+    })])),
+  };
+};
+const indexBase = (key, base) => {
+  const years = yearsOf(key).filter(y => y >= base);
+  return {
+    years,
+    values: Object.fromEntries(CITY_ORDER.map(c => {
+      const b = val(key, c, base);
+      return [c, years.map(y => { const v = val(key, c, y); return v == null || b == null ? null : Math.round(v / b * 1000) / 10; })];
+    })),
+  };
+};
+const cSource = keys => keys.map(k => {
+  const i = ind(k), ys = yearsOf(k);
+  const p = (D.data[k][ITO] || [])[0];
+  return {
+    label: i.shortName, org: D.meta.source, stat: i.statName, unit: i.unit,
+    period: ys.length ? `${ys[0]}〜${ys[ys.length - 1]}${p ? p.period : ''}（市によって公表されている期間が違います）` : '値なし',
+    url: D.meta.sourceUrl, fetchedAt: fetchedDate(D.meta.fetchedAt), definition: i.definition, annotation: i.annotation,
+  };
+});
+const PER_CAPITA_NOTE = '「1人あたり」は、このページで計算した値です。決算額（千円）÷ 住民基本台帳人口。年度（4月〜翌年3月）の決算には、その年度の中の1月1日の人口（2022年度なら2023年1月1日）を使っています。2012年度だけは、出典の都合で2013年3月31日の人口を使っています。';
+const C_INDICATORS = [
+  { key: 'pop_index', group: '人口', name: '人口の変化（2005年＝100）', unit: '2005年＝100', period: '年', calc: true, src: ['pop_total'], ...indexBase('pop_total', 2005),
+    desc: '国勢調査の総人口を、それぞれの市の2005年の人口を100として表しています。人口の大きさが違う市どうしでも、増え方・減り方を比べられます。',
+    cautions: ['値はこのページで計算したものです（各年の人口 ÷ 2005年の人口 × 100）。', '伊豆市（2004年）と伊豆の国市（2005年4月）は合併でできた市のため、2005年からそろえています。', '国勢調査は5年ごと（10月1日時点）です。'] },
+  { key: 'share_65over', group: '人口', name: '高齢化率（65歳以上の割合）', unit: '%', period: '年', src: ['share_65over'], ...direct('share_65over'),
+    desc: '人口に占める65歳以上の人の割合です（国勢調査）。',
+    cautions: ['国勢調査は5年ごと（10月1日時点）です。', '年齢が分からない人を除いて計算された割合です。'] },
+  { key: 'share_0_14', group: '人口', name: '子どもの割合（0〜14歳）', unit: '%', period: '年', src: ['share_0_14'], ...direct('share_0_14'),
+    desc: '人口に占める0〜14歳の子どもの割合です（国勢調査）。',
+    cautions: ['国勢調査は5年ごと（10月1日時点）です。', '年齢が分からない人を除いて計算された割合です。'] },
+  { key: 'fin_index', group: '財政', name: '財政力指数', unit: '指数', period: '年度', src: ['fin_index'], ...direct('fin_index'),
+    desc: '標準的な行政サービスの費用を、自前の収入でどのくらいまかなえるかを示す指数です。1に近いほど自前でまかなえる計算になります。',
+    cautions: ['指数の高い・低いだけで、財政の良し悪しや市の努力を判断することはできません。', '3年間の平均の値です。'] },
+  { key: 'current_ratio', group: '財政', name: '経常収支比率', unit: '%', period: '年度', src: ['current_ratio'], ...direct('current_ratio'),
+    desc: '毎年決まって入るお金のうち、人件費・福祉・借金の返済など毎年決まって出ていく費用に使われる割合です。',
+    cautions: ['一時的な収入や支出の変化でも上下します。1年だけでなく、数年の流れで見ることが大切です。'] },
+  { key: 'debt_service_ratio', group: '財政', name: '実質公債費比率', unit: '%', period: '年度', src: ['debt_service_ratio'], ...direct('debt_service_ratio'),
+    desc: '収入に対する借金の返済の重さです（3年間の平均）。',
+    cautions: ['法律で決められた市町村の「早期健全化基準」は25%です。18%以上になると、新たな借金に許可が必要になります。', '借金は長く使う施設の費用を将来の世代と分け合う仕組みでもあり、低いほど良いとは限りません。'] },
+  { key: 'future_burden_ratio', group: '財政', name: '将来負担比率', unit: '%', period: '年度', src: ['future_burden_ratio'], ...direct('future_burden_ratio'),
+    desc: '将来負担しなければならない借金などの重さです。',
+    cautions: ['基金（貯金）などが借金を上回る場合などに、値が公表されないことがあります。その年は「値なし」と表示します。', '法律で決められた市町村の「早期健全化基準」は350%です。'] },
+  { key: 'pc_expenditure', group: 'お金の使い方（1人あたり）', name: '歳出の合計（1人あたり）', unit: '円', period: '年度', calc: true, src: ['expenditure_total', 'jumin_pop'], ...perCapita('expenditure_total'),
+    desc: '1年間の支出（決算）の合計を、人口1人あたりにした金額です。',
+    cautions: [PER_CAPITA_NOTE, '人口が少ない市ほど、1人あたりの金額は大きくなりやすい傾向があります。'] },
+  { key: 'pc_local_tax', group: 'お金の使い方（1人あたり）', name: '地方税の収入（1人あたり）', unit: '円', period: '年度', calc: true, src: ['local_tax', 'jumin_pop'], ...perCapita('local_tax'),
+    desc: '市税などの地方税の収入（決算）を、人口1人あたりにした金額です。',
+    cautions: [PER_CAPITA_NOTE, '別荘やホテルなどが多いまちでは、その市に住んでいない人や会社が納める固定資産税なども含まれます。'] },
+  { key: 'pc_minsei', group: 'お金の使い方（1人あたり）', name: '民生費＝福祉（1人あたり）', unit: '円', period: '年度', calc: true, src: ['purpose_030', 'jumin_pop'], ...perCapita('purpose_030'),
+    desc: '子育て・高齢者・障害のある人への支援や生活保護など、福祉にかかる支出の1人あたりです。',
+    cautions: [PER_CAPITA_NOTE, '子育て世帯への臨時の給付金など、国の制度による給付で大きく動く年があります。'] },
+  { key: 'pc_kyoiku', group: 'お金の使い方（1人あたり）', name: '教育費（1人あたり）', unit: '円', period: '年度', calc: true, src: ['purpose_110', 'jumin_pop'], ...perCapita('purpose_110'),
+    desc: '学校や社会教育などにかかる支出の1人あたりです。',
+    cautions: [PER_CAPITA_NOTE, '校舎の建て替えなど大きな工事がある年は、一時的に大きくなります。'] },
+  { key: 'pc_doboku', group: 'お金の使い方（1人あたり）', name: '土木費（1人あたり）', unit: '円', period: '年度', calc: true, src: ['purpose_080', 'jumin_pop'], ...perCapita('purpose_080'),
+    desc: '道路・橋・公園・まちづくりなどにかかる支出の1人あたりです。',
+    cautions: [PER_CAPITA_NOTE, '大きな工事がある年は、一時的に大きくなります。'] },
+  { key: 'pc_shoko', group: 'お金の使い方（1人あたり）', name: '商工費＝観光・産業（1人あたり）', unit: '円', period: '年度', calc: true, src: ['purpose_070', 'jumin_pop'], ...perCapita('purpose_070'),
+    desc: '観光や商業・工業の振興にかかる支出の1人あたりです。',
+    cautions: [PER_CAPITA_NOTE, '市によって、観光の費用を商工費以外（土木費など）に入れている場合があります。'] },
+].map(({ src, ...i }) => ({ ...i, sources: cSource(src) }));
+
+const cPayload = JSON.stringify({ cities: CITY_ORDER.map(c => ({ code: c, name: D.regions[c] })), indicators: C_INDICATORS }).replace(/</g, '\\u003c');
+const BASE_CSS = html.match(/<style>([\s\S]*?)<\/style>/)[1];
+const cHtml = `<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>他のまちと比べる｜みんなの伊東市</title>
+<meta name="description" content="伊東市と、熱海市・下田市・伊豆市・伊豆の国市の人口と財政を、国の公式統計で比べられるページです。順位づけはせず、同じ年・年度どうしで比べます。">
+<link rel="canonical" href="https://all-ito-city.com/compare/">
+<meta property="og:title" content="他のまちと比べる｜みんなの伊東市">
+<meta property="og:description" content="伊東市と伊豆の4市を、公式統計で並べて比べられます。出典つき。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://all-ito-city.com/compare/">
+<style>${BASE_CSS}
+.panel{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-top:20px}
+.panel fieldset{border:0;padding:0;margin:0 0 14px;min-width:0}
+.panel legend{font-weight:700;margin-bottom:6px;padding:0}
+.cities{display:flex;flex-wrap:wrap;gap:8px}
+.cities label{display:flex;align-items:center;gap:6px;border:1px solid var(--border);border-radius:999px;padding:6px 14px;min-height:44px;cursor:pointer;font-size:15px;background:#fff}
+.cities input{width:20px;height:20px;margin:0}
+.cities .sw{display:inline-block;width:12px;height:12px;border-radius:3px}
+.panel label.lbl{display:block;font-weight:700;margin-bottom:6px}
+select{font:inherit;font-size:16px;padding:8px 10px;border-radius:8px;border:1px solid var(--border);width:100%;max-width:560px;min-height:44px;background:#fff;color:var(--text)}
+.desc{margin:10px 0 0;font-size:15px}
+.calc{display:inline-block;font-size:13px;font-weight:700;border-radius:6px;padding:1px 8px;margin-left:6px;background:#eef2ff;color:#3730a3;vertical-align:middle}
+.yearsel{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 8px}
+.yearsel select{width:auto;min-width:9em}
+.share{font-size:14px;color:var(--fact);min-height:1.5em;margin:0}
+td.na{color:var(--sub)}
+.notice{background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:12px 14px;font-size:15px;margin-top:20px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">本文へ移動</a>
+<header class="top"><div class="wrap">
+  <div class="crumb"><a href="../">← みんなの伊東市トップへ</a>　<a href="../numbers/">📊 数字で見る伊東市</a></div>
+  <h1>🗾 他のまちと比べる</h1>
+  <p>伊東市と、同じ伊豆地域の4市を、国の公式統計で並べて見られます。</p>
+  <div class="principles"><strong>このページの約束</strong><ul>
+    <li>順位や総合点は作りません。市の並び順は、値の大きさにかかわらずいつも同じです。</li>
+    <li>同じ年・年度どうしで比べます。値が公表されていない市は「値なし」と表示します（0として扱いません）。</li>
+    <li>金額は人口1人あたりに直して、人口の大きさの違いをならしています（このページで計算した値です）。</li>
+  </ul></div>
+</div></header>
+<main id="main">
+  <div class="panel" role="region" aria-label="比べる条件">
+    <fieldset><legend>比べる市（伊東市はいつも表示します）</legend><div class="cities" id="cities"></div></fieldset>
+    <label class="lbl" for="ind">比べる指標</label>
+    <select id="ind"></select>
+    <p class="desc" id="indDesc"></p>
+  </div>
+  <div class="grid" style="margin-top:16px">
+    <article class="card wide" aria-labelledby="t-line">
+      <h3 id="t-line">年ごとの移り変わり</h3>
+      <p class="lead" id="lineLead"></p>
+      <div class="chartbox"><canvas id="cv-line" role="img" aria-label="選んだ指標の、市ごとの年ごとの移り変わり。数値は下の「表で見る」から確認できます。"></canvas></div>
+      <p class="unitnote" id="unitLine"></p>
+    </article>
+    <article class="card wide" aria-labelledby="t-bar">
+      <h3 id="t-bar">同じ年で並べる</h3>
+      <div class="yearsel"><label for="year">表示する年</label><select id="year"></select></div>
+      <div class="chartbox"><canvas id="cv-bar" role="img" aria-label="選んだ指標を、同じ年で市ごとに並べたグラフ。数値は下の「表で見る」から確認できます。"></canvas></div>
+      <p class="unitnote" id="unitBar"></p>
+      <div class="tools">
+        <button type="button" class="btn" id="csv">CSVで保存</button>
+        <button type="button" class="btn" id="pngLine">移り変わりのグラフを画像で保存</button>
+        <button type="button" class="btn" id="pngBar">並べたグラフを画像で保存</button>
+        <button type="button" class="btn" id="copy">この比較のリンクをコピー</button>
+      </div>
+      <p class="share" id="shareMsg" aria-live="polite"></p>
+      <section class="insight" aria-label="読むときの注意">
+        <h4>読むときの注意</h4>
+        <ul id="cautions"></ul>
+      </section>
+      <details class="table"><summary>表で見る</summary><div class="tablewrap" id="table"></div></details>
+      <details class="src"><summary>出典と定義</summary><ul id="sources"></ul></details>
+    </article>
+  </div>
+  <div class="notice">
+    <strong>なぜこの4市なの？</strong> 伊東市と同じ静岡県の伊豆地域にあり、観光が大きな産業という点で共通する近くの市だからです。人口の規模や地形などは市ごとに違うため、数字の差だけで良し悪しは決められません。
+  </div>
+</main>
+<footer><div class="wrap">
+  <p>データの取得日：${fmtFetched}（統計ダッシュボード）。国の統計は公表まで時間がかかるため、最新の年度・年が含まれていない場合があります。</p>
+  <p>出典：統計ダッシュボード（総務省統計局）。このページは出典の数値をもとに「みんなの伊東市」が作成・加工したもので、出典元の公式見解ではありません。「計算値」と付いた指標は、このページで計算した値です。</p>
+  <p>このページはAIを活用して作成し、運営者が内容を確認しています（本人確認済み）。数値は公式統計から機械的に取り込んでいます。誤りに気づいた方は、トップページの「市民の声」からお知らせください。</p>
+  <p>© 2026 みんなの伊東市（非公式の市民向け情報サイト）｜制作・運営：伊東市議会議員 大竹圭</p>
+</div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" integrity="sha512-CQBWl4fJHWbryGE+Pc7UAxWMUMNMWzWxF4SQo9CgkJIN1kx6djDQZjh3Y8SZ1d+6I+1zze6Z7kHXO7q3UyZAWw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>window.COMPARE=${cPayload};</script>
+<script src="compare.js?v=${ver('compare/compare.js')}"></script>
+</body>
+</html>
+`;
+fs.mkdirSync(path.join(__dirname, 'compare'), { recursive: true });
+fs.writeFileSync(path.join(__dirname, 'compare', 'index.html'), cHtml, 'utf8');
+console.log(`✓ compare/index.html を生成（指標 ${C_INDICATORS.length} 件、${CITY_ORDER.length} 市、${Math.round(cHtml.length / 1024)}KB）`);

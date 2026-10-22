@@ -2261,6 +2261,7 @@ footer{padding:2.5rem 1.5rem 1.5rem;color:var(--sub);font-size:.82rem;background
   <button class="nav-tab nav-amber" role="tab" aria-selected="false" onclick="switchTab('analysis',this)">🔎 伊東市分析</button>
   <button class="nav-tab nav-gray" role="tab" aria-selected="false" onclick="switchTab('stats',this)">📊 議会全体</button>
   <a class="nav-out" href="numbers/">📈 数字で見る伊東市 <span aria-hidden="true">→</span></a>
+  <a class="nav-out" href="compare/">🗾 他のまちと比べる <span aria-hidden="true">→</span></a>
 </nav>
 <div class="container" id="main-content" role="main">
   <div id="tab-members" class="tab-panel active">
