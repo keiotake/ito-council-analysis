@@ -409,7 +409,7 @@ npm run stats:fetch      # 統計ダッシュボードから最新を取得
 npm run build            # トップページ＋数字で見る伊東市を再生成
 npm run stats:verify     # 数値一致の検査（失敗したら公開しない）
 npm run audit            # 禁止語の点検
-git add data/stats numbers index.html && git commit && git push
+git add data/stats numbers compare index.html && git commit && git push
 ```
 社人研の推計が新しく出たら、`extract_ipss.js` の URL を新しい推計のものに変えて `npm i --no-save xlsx@0.18.5 && node scripts/stats/extract_ipss.js`。
 
@@ -417,3 +417,13 @@ git add data/stats numbers index.html && git commit && git push
 - 数値は公式統計の値のまま。値がない年はゼロにせず空ける
 - 良い・悪いの判定をしない。「データから言えること」と「読むときの注意」を分ける
 - すべてのグラフに単位・期間・出典・取得日・定義、「表で見る」「CSVで保存」「画像で保存」
+
+## 他のまちと比べる（/compare/）
+
+- 生成: `build_pages.js` の後半（`compare/index.html`）。画面の動きは `compare/compare.js`
+- 対象: 伊東市・熱海市・下田市・伊豆市・伊豆の国市（`fetch_dashboard.js` の REGIONS）。13指標（人口3・財政4・1人あたりの金額6）
+- 1人あたり = N年度の決算額（千円）×1000 ÷ 住民基本台帳人口（統計ダッシュボードの N+1 年の値＝N+1年1月1日。2013年の値のみ3月31日）。ページ上は「計算値」と表示
+- 順位・総合点は作らない。市の並びは固定（伊東市→市町村コード順）。値がない市・年は「値なし」
+- 比較条件は URL（`?i=指標&c=市コード,…&y=年`）で共有できる
+- 検査: `npm run stats:verify` が `verify_compare.js` も実行（別の書き方で計算し直して照合、順位を示す語・AI表記も確認）
+- 注意: サイトの `sw.js` は静的ファイルをキャッシュ優先で返す。`build_pages.js` がスクリプトの URL に内容ハッシュ（`?v=`）を付けるので、JS を直したら必ず `npm run build` し直すこと
