@@ -81,6 +81,19 @@ try { itoAnalysis = JSON.parse(fs.readFileSync('ito_analysis.json', 'utf-8')); }
 // 議事録由来のQ&Aデータ（ground truth）
 let gijirokuData = null;
 try { gijirokuData = JSON.parse(fs.readFileSync('gijiroku_integrated.json', 'utf-8')); } catch(e) { console.warn('gijiroku_integrated.json not found'); }
+// 後から追加で取り込んだ会議（scripts/gijiroku/update_minutes.js が作る。git で管理）を合わせる
+try {
+  const addedGj = JSON.parse(fs.readFileSync('data/gijiroku/added_meetings.json', 'utf-8'));
+  if (gijirokuData && gijirokuData.memberData) {
+    for (const [name, m] of Object.entries(addedGj.memberData || {})) {
+      const target = gijirokuData.memberData[name] || (gijirokuData.memberData[name] = { name, questions: [] });
+      const seen = new Set(target.questions.map(q => q.fino + '|' + (q.question || '').slice(0, 50)));
+      target.questions.push(...m.questions.filter(q => !seen.has(q.fino + '|' + (q.question || '').slice(0, 50))));
+      target.questions.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+    }
+    console.log(`追加の会議録を統合: ${(addedGj.meta.finos || []).length}会議・${addedGj.meta.totalQaPairs}件`);
+  }
+} catch (e) { if (e.code !== 'ENOENT') throw e; }
 
 const { videos, memberSummary } = analysis;
 

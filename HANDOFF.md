@@ -434,3 +434,13 @@ git add data/stats numbers compare index.html && git commit && git push
 - 新しい手順: `npm run videos:fetch`（追加候補を表示するだけ）→ 内容を確認 → `node scripts/videos/fetch_channel_videos.js --write` → `npm run build` → `npm run audit`
 - チャンネルの「動画」ページを直接読み、`analysis_data.json` にない動画だけを追加する。種別（一般質問・大綱質疑・議案審議・委員会）と議員名は動画タイトルから決める。字幕の自動認識は使わない（questions は空）
 - 動画は年月しか分からないため、議員ページの日付は「2026.9」のように年月だけを表示する（以前は架空の「1日」が付いていた）
+
+## 会議録の追加取り込み（2026-10-22 から新方式）
+
+- 以前の本文キャッシュ（scrape_tmp/minutes）と中間データ gijiroku_data.json は失われているため、全件の作り直しはせず「足りない会議だけ」を取り込む
+- 手順: `npm run minutes:update`（新しい会議を表示するだけ）→ `node scripts/gijiroku/update_minutes.js --fetch` → `npm run build` → `npm run audit`
+- 追加分は `data/gijiroku/added_meetings.json`（git管理）に保存し、`build_v3.js` が `gijiroku_integrated.json`（80MB・git管理外）と合わせて読む。80MB のファイルは書き換えない
+- 本文の解析は `parse_minutes.js` の `processMeeting`、統合の規則は `integrate_gijiroku.js` と同じ。見出し（topic）は正規表現による抽出（AI生成ではない）
+- 動画は「同じ議員・同じ年月・同じ種別」のときだけ結び付ける。`--fetch` のたびに結び付けをやり直すので、動画を後から追加した場合も `--fetch` を1回実行する
+- 2026-10-22 時点で令和8年3月定例会（9会議）・6月定例会（5会議）の質疑84件を追加済み。9月定例会は会議録の公開待ち
+- `monthly_check.js` はまだ旧方式（scrape_minutes.js → parse_minutes.js → integrate_gijiroku.js）のままなので使わないこと

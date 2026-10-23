@@ -359,4 +359,6 @@ function main() {
   console.log(`Saved to ${OUTPUT_FILE}`);
 }
 
-main();
+// 単独実行では全件を解析。scripts/gijiroku/update_minutes.js からは解析部分だけを使う
+if (require.main === module) main();
+module.exports = { processMeeting };
